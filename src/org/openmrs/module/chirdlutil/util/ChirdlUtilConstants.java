@@ -140,6 +140,7 @@ public final class ChirdlUtilConstants {
 	public static final String FORM_ATTR_DEFAULT_PRINTER = "defaultPrinter";
 	public static final String FORM_ATTR_USE_ALTERNATE_PRINTER = "useAlternatePrinter";
 	public static final String FORM_ATTR_ALTERNATE_PRINTER = "alternatePrinter";
+	public static final String FORM_ATTR_DISPLAY_AND_UPDATE_PREVIOUS_VALUES = "displayAndUpdatePreviousValues";
 	/*
 	 * 
 	 */
