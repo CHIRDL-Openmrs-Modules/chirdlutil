@@ -225,6 +225,7 @@ public final class ChirdlUtilConstants {
 	public static final String PARAMETER_LOCATION_ID = "locationId";
 	public static final String PARAMETER_VALUE_PRODUCE = "PRODUCE";
 	public static final String PARAMETER_VALUE_CONSUME = "CONSUME";
+	public static final String PARAMETER_MODE = "mode";
 	/*
 	 * 
 	 */
@@ -286,14 +287,6 @@ public final class ChirdlUtilConstants {
 	 */
 	public static final String GLOBAL_PROPERTY_SCHEDULER_USERNAME = "scheduler.username";
 	public static final String GLOBAL_PROPERTY_SCHEDULER_PASSWORD = "scheduler.password";
-
-	/*
-	 * Parameter constants
-	 */
-	public static final String PARAMETER_MODE = "mode";
-	/*
-	 * 
-	 */
 	
 	/*
 	 * Concept information
