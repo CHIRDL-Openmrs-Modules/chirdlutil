@@ -116,10 +116,17 @@ public class PrintServices {
         	return;
         }
         
-        PrintService selectedService = printServices[0];
-        PrinterJob printJob = PrinterJob.getPrinterJob();
-	    printJob.setPrintService(selectedService);
-	    PDDocument document = PDDocument.load(pdfFile);
-	    document.silentPrint(printJob);
+        PDDocument document = null;
+        try {
+	        PrintService selectedService = printServices[0];
+	        PrinterJob printJob = PrinterJob.getPrinterJob();
+		    printJob.setPrintService(selectedService);
+		    document = PDDocument.load(pdfFile);
+		    document.silentPrint(printJob);
+        } finally {
+        	if (document != null) {
+        		document.close();
+        	}
+        }
     }
 }
