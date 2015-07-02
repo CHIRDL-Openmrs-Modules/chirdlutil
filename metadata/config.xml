@@ -134,6 +134,11 @@
         <description>Location of the server configuration file.
         </description>
     </globalProperty>
+    <globalProperty>
+        <property>chirdlutil.printerThreadPoolSize</property>
+        <defaultValue>1</defaultValue>
+        <description>The number of available threads for each printer pool in the PrinterThreadManager to use.</description>
+    </globalProperty>
 	
 	<!-- Internationalization -->
 	<!-- All message codes should start with @MODULE_ID@.* -->

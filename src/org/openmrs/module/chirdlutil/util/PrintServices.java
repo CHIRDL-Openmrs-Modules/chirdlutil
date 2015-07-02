@@ -83,10 +83,11 @@ public class PrintServices {
      * Prints a specified PDF file to a specified printer.  This method uses a thread to execute the print job.
      * 
      * @param printerName The name of the printer to use to print the PDF file.
+     * @param jobName The name of the printer job.  This can be null.
      * @param pdfFile The PDF File to print.
      */
-    public static void printPDFFileAsynchronous(String printerName, File pdfFile) {
-    	Runnable printRunnable = new PDFPrintRunnable(printerName, pdfFile);
+    public static void printPDFFileAsynchronous(String printerName, String jobName, File pdfFile) {
+    	Runnable printRunnable = new PDFPrintRunnable(printerName, jobName, pdfFile);
     	Thread printThread = new Thread(printRunnable);
     	printThread.start();
     }
@@ -95,11 +96,12 @@ public class PrintServices {
      * Prints a specified PDF file to a specified printer.  This is a synchronous print job.
      * 
      * @param printerName The name of the printer to use to print the PDF file.
+     * @param jobName The name of the printer job.  This can be null.
      * @param pdfFile The PDF File to print.
      * @throws IOException
      * @throws PrinterException
      */
-    public static void printPDFFileSynchronous(String printerName, File pdfFile) throws IOException, PrinterException {
+    public static void printPDFFileSynchronous(String printerName, String jobName, File pdfFile) throws IOException, PrinterException {
     	if (printerName == null || printerName.trim().length() == 0) {
     		log.error("A valid printerName parameter was not provided: " + printerName);
     		throw new IllegalArgumentException("A valid printerName parameter was not provided: " + printerName);
@@ -121,6 +123,10 @@ public class PrintServices {
 	        PrintService selectedService = printServices[0];
 	        PrinterJob printJob = PrinterJob.getPrinterJob();
 		    printJob.setPrintService(selectedService);
+		    if (jobName != null && jobName.trim().length() > 0) {
+		    	printJob.setJobName(jobName);
+		    }
+		    
 		    document = PDDocument.load(pdfFile);
 		    document.silentPrint(printJob);
         } finally {

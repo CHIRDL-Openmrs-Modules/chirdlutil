@@ -19,60 +19,44 @@ import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 /**
- * A simple demonstration application showing how to create a bar chart.
+ * Used to generate a chart with thread pool usage.
  *
  */
 public class ThreadPoolChartGenerator {
-
-    public JFreeChart getChart() {
-    	final CategoryDataset dataset = createDataset();
-        final JFreeChart chart = createChart(dataset);
-        return chart;
-    }
-
-    private CategoryDataset createDataset() {
-		ThreadManager threadManager = ThreadManager.getInstance();
-		Map<String, Integer> threadStats = threadManager.getThreadPoolUsage();
-		// Testing purposes only
-//		Random generator = new Random();
-//		threadStats.put(ThreadManager.MAIN_POOL, generator.nextInt(10));
-//		threadStats.put("PCC", generator.nextInt(10));
-//		threadStats.put("PEPS", generator.nextInt(10));
-//		threadStats.put("BBPS", generator.nextInt(10));
-//		threadStats.put("FMPS", generator.nextInt(10));
-        
-        // row keys...
-        final String series1 = "Tasks";
-        
-        // create the dataset...
-        final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-        // put the main pool at the front of the list.
-        Integer mainPoolSize = threadStats.get(ThreadManager.MAIN_POOL);
-        if (mainPoolSize != null) {
-        	dataset.addValue(mainPoolSize, series1, ThreadManager.MAIN_POOL);
-        }
-        
-        threadStats.remove(ThreadManager.MAIN_POOL);
-        Set<Entry<String, Integer>> entrySet = threadStats.entrySet();
-		Iterator<Entry<String, Integer>> iter = entrySet.iterator();
-		while (iter.hasNext()) {
-			Entry<String, Integer> entry = iter.next();
-			String location = entry.getKey();
-			Integer count = entry.getValue();
-			dataset.addValue(count, series1, location);
+	
+	public static final String POOL_TYPE_PROCESS = "process";
+	public static final String POOL_TYPE_PRINTER = "printer";
+	
+    public JFreeChart getChart(String poolType) {
+    	CategoryDataset dataset = null;
+    	String chartTitle = null;
+    	String domainLabel = null;
+    	String rangeLabel = null;
+    	if (POOL_TYPE_PRINTER.equals(poolType)) {
+			PrinterThreadManager printerThreadManager = PrinterThreadManager.getInstance();
+			Map<String, Integer> threadStats = printerThreadManager.getThreadPoolUsage();
+			dataset = createDataset(threadStats, "Print Jobs");
+			chartTitle = "Printer Pool Monitor";
+			domainLabel = "Printer";
+			rangeLabel = "Print Jobs in Queue";
+		} else if (POOL_TYPE_PROCESS.equals(poolType)) {
+			ThreadManager threadManager = ThreadManager.getInstance();
+			Map<String, Integer> threadStats = threadManager.getThreadPoolUsage();
+			dataset = createDataset(threadStats, "Tasks");
+			chartTitle = "Thread Pool Monitor";
+			domainLabel = "Pool";
+			rangeLabel = "# Tasks in Queue";
 		}
-        
-        threadStats.clear();
-        return dataset;
-    }
-    
-    private JFreeChart createChart(final CategoryDataset dataset) {
-        
+    	
+    	if (dataset == null) {
+    		return null;
+    	}
+    	
         // create the chart...
         final JFreeChart chart = ChartFactory.createBarChart3D(
-            "Thread Pool Monitor",    // chart title
-            "Clinic",                 // domain axis label
-            "# Tasks in Queue",       // range axis label
+            chartTitle,    			  // chart title
+            domainLabel,              // domain axis label
+            rangeLabel,               // range axis label
             dataset,                  // data
             PlotOrientation.VERTICAL, // orientation
             false,                    // include legend
@@ -114,6 +98,22 @@ public class ThreadPoolChartGenerator {
         
         return chart;
         
+    }
+    
+    private CategoryDataset createDataset(Map<String, Integer> threadStats, String xAxisName) {
+        // create the dataset...
+        final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        Set<Entry<String, Integer>> entrySet = threadStats.entrySet();
+		Iterator<Entry<String, Integer>> iter = entrySet.iterator();
+		while (iter.hasNext()) {
+			Entry<String, Integer> entry = iter.next();
+			String printer = entry.getKey();
+			Integer count = entry.getValue();
+			dataset.addValue(count, xAxisName, printer);
+		}
+        
+        threadStats.clear();
+        return dataset;
     }
 }
 

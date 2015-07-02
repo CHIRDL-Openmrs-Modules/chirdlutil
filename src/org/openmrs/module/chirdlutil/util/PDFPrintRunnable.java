@@ -30,16 +30,19 @@ public class PDFPrintRunnable implements Runnable {
 	
 	private static Log log = LogFactory.getLog(PDFPrintRunnable.class);
 	private String printerName;
+	private String jobName;
 	private File pdfFile;
 	
 	/**
 	 * Constructor method
 	 * 
 	 * @param printerName The printer where the print job will be sent.
+	 * @param jobName The name of the printer job.  This can be null.
 	 * @param pdfFile The PDF file to print.
 	 */
-	public PDFPrintRunnable(String printerName, File pdfFile) {
+	public PDFPrintRunnable(String printerName, String jobName, File pdfFile) {
 		this.printerName = printerName;
+		this.jobName = jobName;
 		this.pdfFile = pdfFile;
 	}
 
@@ -48,7 +51,7 @@ public class PDFPrintRunnable implements Runnable {
 	 */
     public void run() {
 	    try {
-	    	PrintServices.printPDFFileSynchronous(printerName, pdfFile);
+	    	PrintServices.printPDFFileSynchronous(printerName, jobName, pdfFile);
         }
         catch (PrinterException e) {
             log.error("Error printing PDF file " + pdfFile.getAbsolutePath() + " to printer " + printerName, e);

@@ -42,7 +42,7 @@ public class PrintFile {
 	 */
     public boolean printFile(String printerName, File fileToPrint) throws IOException, PrintException, PrinterException {
     	if (fileToPrint.getAbsolutePath().toLowerCase().endsWith(ChirdlUtilConstants.FILE_EXTENSION_PDF)) {
-    		PrintServices.printPDFFileSynchronous(printerName, fileToPrint);
+    		PrintServices.printPDFFileSynchronous(printerName, null, fileToPrint);
     	} else {
     		PrintServices.printFile(printerName, fileToPrint);
     	}
