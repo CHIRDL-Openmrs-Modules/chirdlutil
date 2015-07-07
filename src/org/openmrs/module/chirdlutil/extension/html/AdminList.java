@@ -32,6 +32,7 @@ public class AdminList extends AdministrationSectionExt {
 		map.put("module/chirdlutil/memoryLeakMonitor.form", "Memory Leak Monitor");
 		map.put("module/chirdlutil/logViewer.form", "Event Log Viewer");
 		map.put("module/chirdlutil/threadPoolMonitor.form", "Thread Pool Monitor");
+		map.put("module/chirdlutil/printerThreadPoolMonitor.form", "Printer Queue Monitor");
 
 		return map;
 	}

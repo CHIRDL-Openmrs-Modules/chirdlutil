@@ -33,6 +33,8 @@ import javax.print.attribute.standard.PrinterName;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.openmrs.module.chirdlutil.threadmgmt.ChirdlPrintJobRunnable;
+import org.openmrs.module.chirdlutil.threadmgmt.PrinterThreadManager;
 
 /**
  * Utility class for printing needs.
@@ -87,9 +89,9 @@ public class PrintServices {
      * @param pdfFile The PDF File to print.
      */
     public static void printPDFFileAsynchronous(String printerName, String jobName, File pdfFile) {
-    	Runnable printRunnable = new PDFPrintRunnable(printerName, jobName, pdfFile);
-    	Thread printThread = new Thread(printRunnable);
-    	printThread.start();
+    	ChirdlPrintJobRunnable printRunnable = new PDFPrintRunnable(printerName, jobName, pdfFile.getAbsolutePath());
+    	PrinterThreadManager threadManager = PrinterThreadManager.getInstance();
+    	threadManager.execute(printRunnable);
     }
     
     /**
@@ -110,16 +112,19 @@ public class PrintServices {
     		throw new IllegalArgumentException("A valid printerName parameter was not provided: " + pdfFile);
     	}
     	
-    	PrintServiceAttributeSet printServiceAttributeSet = new HashPrintServiceAttributeSet();
-        printServiceAttributeSet.add(new PrinterName(printerName, null)); 
-        PrintService[] printServices = PrintServiceLookup.lookupPrintServices(DocFlavor.INPUT_STREAM.AUTOSENSE, printServiceAttributeSet);
-        if (printServices == null || printServices.length == 0) {
-        	log.error("No printers found for " + printerName);
-        	return;
-        }
-        
         PDDocument document = null;
         try {
+        	// Load the document first to eliminate time between finding a printer and using it.
+        	document = PDDocument.load(pdfFile);
+        	
+        	PrintServiceAttributeSet printServiceAttributeSet = new HashPrintServiceAttributeSet();
+            printServiceAttributeSet.add(new PrinterName(printerName, null)); 
+            PrintService[] printServices = PrintServiceLookup.lookupPrintServices(DocFlavor.INPUT_STREAM.AUTOSENSE, printServiceAttributeSet);
+            if (printServices == null || printServices.length == 0) {
+            	log.error("No printers found for " + printerName);
+            	return;
+            }
+            
 	        PrintService selectedService = printServices[0];
 	        PrinterJob printJob = PrinterJob.getPrinterJob();
 		    printJob.setPrintService(selectedService);
@@ -127,7 +132,6 @@ public class PrintServices {
 		    	printJob.setJobName(jobName);
 		    }
 		    
-		    document = PDDocument.load(pdfFile);
 		    document.silentPrint(printJob);
         } finally {
         	if (document != null) {

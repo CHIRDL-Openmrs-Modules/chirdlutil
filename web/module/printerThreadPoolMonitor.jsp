@@ -16,13 +16,11 @@
            
            function timer() {
                var chartDiv = document.getElementById('chartDiv');
+               var randomNumber = Math.floor((Math.random() * 10000) + 1);
                chartDiv.innerHTML = '<img src="' + context + 
                   '/moduleResources/chirdlutil/ajax-loader.gif"/>';
                chartDiv.innerHTML = '<img src="' + context + 
-                  '/moduleServlet/chirdlutil/threadPoolMonitor?poolType=printer"/>';
-               //var chart = document.getElementById('chart');
-               //chart.src = context + '/moduleResources/chirdlutil/ajax-loader.gif';
-               //chart.src = context + '/moduleServlet/chirdlutil/threadPoolMonitor';
+                  '/moduleServlet/chirdlutil/threadPoolMonitor?poolType=printer&randomNumber=' + randomNumber + '"/>';
                setTimeout("timer()", refreshRate);
            }
         </script>

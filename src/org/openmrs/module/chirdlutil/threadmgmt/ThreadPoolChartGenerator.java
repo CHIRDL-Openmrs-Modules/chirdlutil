@@ -24,9 +24,15 @@ import org.jfree.data.category.DefaultCategoryDataset;
  */
 public class ThreadPoolChartGenerator {
 	
-	public static final String POOL_TYPE_PROCESS = "process";
+	public static final String POOL_TYPE_TASK = "task";
 	public static final String POOL_TYPE_PRINTER = "printer";
 	
+	/**
+	 * Generates a chart for a thread pool display.
+	 * 
+	 * @param poolType The type of pool to display.
+	 * @return JFreeChart object containing the thread pool information.
+	 */
     public JFreeChart getChart(String poolType) {
     	CategoryDataset dataset = null;
     	String chartTitle = null;
@@ -36,13 +42,15 @@ public class ThreadPoolChartGenerator {
 			PrinterThreadManager printerThreadManager = PrinterThreadManager.getInstance();
 			Map<String, Integer> threadStats = printerThreadManager.getThreadPoolUsage();
 			dataset = createDataset(threadStats, "Print Jobs");
-			chartTitle = "Printer Pool Monitor";
+			threadStats.clear();
+			chartTitle = "Printer Queue Monitor";
 			domainLabel = "Printer";
-			rangeLabel = "Print Jobs in Queue";
-		} else if (POOL_TYPE_PROCESS.equals(poolType)) {
+			rangeLabel = "# Print Jobs in Queue";
+		} else if (POOL_TYPE_TASK.equals(poolType)) {
 			ThreadManager threadManager = ThreadManager.getInstance();
 			Map<String, Integer> threadStats = threadManager.getThreadPoolUsage();
 			dataset = createDataset(threadStats, "Tasks");
+			threadStats.clear();
 			chartTitle = "Thread Pool Monitor";
 			domainLabel = "Pool";
 			rangeLabel = "# Tasks in Queue";
@@ -100,6 +108,13 @@ public class ThreadPoolChartGenerator {
         
     }
     
+    /**
+     * Creates a chart dataset with the provided thread information.
+     * 
+     * @param threadStats Map of data point name to the number value.
+     * @param xAxisName The x axis data label.
+     * @return CategoryDataset object used to build a chart.
+     */
     private CategoryDataset createDataset(Map<String, Integer> threadStats, String xAxisName) {
         // create the dataset...
         final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
@@ -112,7 +127,6 @@ public class ThreadPoolChartGenerator {
 			dataset.addValue(count, xAxisName, printer);
 		}
         
-        threadStats.clear();
         return dataset;
     }
 }
