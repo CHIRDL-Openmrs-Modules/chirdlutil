@@ -45,14 +45,19 @@ public class ThreadPoolMonitorServlet extends HttpServlet {
 	public void genGraph(HttpServletRequest req, HttpServletResponse resp) {
 		resp.setHeader(ChirdlUtilConstants.HTTP_HEADER_CACHE_CONTROL, ChirdlUtilConstants.HTTP_HEADER_CACHE_CONTROL_NO_CACHE);
 		resp.setDateHeader(ChirdlUtilConstants.HTTP_HEADER_EXPIRES, 0);
+		int width = 625;
 		String poolType = req.getParameter(PARAM_POOL_TYPE);
+		if (ThreadPoolChartGenerator.POOL_TYPE_PRINTER.equals(poolType)) {
+			width = 900;
+		}
+		
 		try {
 			OutputStream out = resp.getOutputStream();
 			ThreadPoolChartGenerator barChart = new ThreadPoolChartGenerator();
 			JFreeChart chart = barChart.getChart(poolType);
 			if (chart != null) {
 				resp.setContentType(ChirdlUtilConstants.HTTP_CONTENT_TYPE_IMAGE_PNG);
-			    ChartUtilities.writeChartAsPNG(out, chart, 625, 500);
+			    ChartUtilities.writeChartAsPNG(out, chart, width, 500);
 			} else {
 				resp.setContentType(ChirdlUtilConstants.HTTP_CONTENT_TYPE_TEXT_HTML);
 				PrintWriter pw = resp.getWriter();
