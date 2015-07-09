@@ -136,7 +136,7 @@
 	<target name="package-tools" depends="package-module" description="Packages all tools into a jar file">
 	        <!-- Create distributable jar file -->
 	        <jar destfile="dist/tools.jar">
-	            <fileset dir="build" includes="org/openmrs/module/${module.id}/tools/**/*"/>
+	            <fileset dir="build" includes="org/openmrs/module/${module.id}/**/*"/>
 	        </jar>
 	 </target>
 	<target name="bind"> 

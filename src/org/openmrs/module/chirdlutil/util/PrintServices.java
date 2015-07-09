@@ -13,8 +13,6 @@
  */
 package org.openmrs.module.chirdlutil.util;
 
-import java.awt.print.PrinterException;
-import java.awt.print.PrinterJob;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -32,7 +30,7 @@ import javax.print.attribute.standard.PrinterName;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.pdfbox.pdmodel.PDDocument;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.chirdlutil.threadmgmt.ChirdlPrintJobRunnable;
 import org.openmrs.module.chirdlutil.threadmgmt.PrinterThreadManager;
 
@@ -43,6 +41,7 @@ import org.openmrs.module.chirdlutil.threadmgmt.PrinterThreadManager;
  */
 public class PrintServices {
 
+	private static final String CHIRDLUTIL_SUMATRA_PDF_EXECUTABLE = "chirdlutil.SumatraPDFExecutable";
 	private static Log log = LogFactory.getLog(PrintServices.class);
 	
 	/**
@@ -100,10 +99,9 @@ public class PrintServices {
      * @param printerName The name of the printer to use to print the PDF file.
      * @param jobName The name of the printer job.  This can be null.
      * @param pdfFile The PDF File to print.
-     * @throws IOException
-     * @throws PrinterException
+     * @throws Exception
      */
-    public static void printPDFFileSynchronous(String printerName, String jobName, File pdfFile) throws IOException, PrinterException {
+    public static void printPDFFileSynchronous(String printerName, String jobName, File pdfFile) throws Exception {
     	if (printerName == null || printerName.trim().length() == 0) {
     		log.error("A valid printerName parameter was not provided: " + printerName);
     		throw new IllegalArgumentException("A valid printerName parameter was not provided: " + printerName);
@@ -112,31 +110,29 @@ public class PrintServices {
     		throw new IllegalArgumentException("A valid printerName parameter was not provided: " + pdfFile);
     	}
     	
-        PDDocument document = null;
-        try {
-        	// Load the document first to eliminate time between finding a printer and using it.
-        	document = PDDocument.load(pdfFile);
-        	
-        	PrintServiceAttributeSet printServiceAttributeSet = new HashPrintServiceAttributeSet();
-            printServiceAttributeSet.add(new PrinterName(printerName, null)); 
-            PrintService[] printServices = PrintServiceLookup.lookupPrintServices(DocFlavor.INPUT_STREAM.AUTOSENSE, printServiceAttributeSet);
-            if (printServices == null || printServices.length == 0) {
-            	log.error("No printers found for " + printerName);
-            	return;
-            }
-            
-	        PrintService selectedService = printServices[0];
-	        PrinterJob printJob = PrinterJob.getPrinterJob();
-		    printJob.setPrintService(selectedService);
-		    if (jobName != null && jobName.trim().length() > 0) {
-		    	printJob.setJobName(jobName);
-		    }
-		    
-		    document.silentPrint(printJob);
-        } finally {
-        	if (document != null) {
-        		document.close();
-        	}
-        }
+    	try {
+	    	String sumatraPDFExecutable = Context.getAdministrationService().getGlobalProperty(CHIRDLUTIL_SUMATRA_PDF_EXECUTABLE);
+	    	if (sumatraPDFExecutable == null || sumatraPDFExecutable.trim().length() == 0) {
+	    		log.error("Unable to print PDF files.  Please set a value for the " + CHIRDLUTIL_SUMATRA_PDF_EXECUTABLE + " global property.");
+	    		return;
+	    	}
+	    	
+	    	ProcessBuilder pb = new ProcessBuilder("\"" + sumatraPDFExecutable + "\"", "-silent", "-print-to", "\"" + printerName + 
+	    		"\"", "-print-settings", "\"duplexshort\"", "\"" + pdfFile.getAbsolutePath() + "\"");
+	    	Process p = pb.start();
+	    	int exitValue = p.waitFor();
+	    	if (exitValue != 0) {
+	    		log.error("The SumatraPDF command returned error code: " + exitValue + " printing job " + jobName + " file " + 
+	    				pdfFile.getAbsolutePath() + " to printer " + printerName);
+	    		String errorString = IOUtil.output(p.getErrorStream());
+		    	if (errorString.trim().length() > 0) {
+		    		log.error("Error running SumatraPDF for printing job " + jobName + " file " + 
+		    				pdfFile.getAbsolutePath() + " to printer " + printerName + " " + errorString);
+		    	}
+	    	}
+    	} catch (Exception e) {
+    		log.error("Error running SumatraPDF for printing job " + jobName + " file " + 
+	    				pdfFile.getAbsolutePath() + " to printer " + printerName, e);
+    	}
     }
 }

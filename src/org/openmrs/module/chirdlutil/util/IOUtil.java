@@ -5,6 +5,7 @@ package org.openmrs.module.chirdlutil.util;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -12,6 +13,7 @@ import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
@@ -546,5 +548,28 @@ public class IOUtil
 
 		}
 		return null;
+	}
+	
+	/**
+     * Creates a String from an input stream.
+     * 
+     * @param inputStream The input stream to convert to a string.
+     * @return String containing the information from the input stream.
+     * @throws IOException
+     */
+    public static String output(InputStream inputStream) throws IOException {
+		StringBuilder sb = new StringBuilder();
+		BufferedReader br = null;
+		try {
+			br = new BufferedReader(new InputStreamReader(inputStream));
+			String line = null;
+			while ((line = br.readLine()) != null) {
+				sb.append(line + System.getProperty("line.separator"));
+			}
+		} finally {
+			br.close();
+		}
+		
+		return sb.toString();
 	}
 }
