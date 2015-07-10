@@ -221,6 +221,12 @@ public final class ChirdlUtilConstants {
 	public static final String PARAMETER_FORM_NAME = "formName";
 	public static final String PARAMETER_TRIGGER = "trigger";
 	public static final String PARAMETER_AUTO_PRINT = "autoPrint";
+	public static final String PARAMETER_ENCOUNTER_ID = "encounterId";
+	public static final String PARAMETER_LOCATION = "location";
+	public static final String PARAMETER_LOCATION_ID = "locationId";
+	public static final String PARAMETER_VALUE_PRODUCE = "PRODUCE";
+	public static final String PARAMETER_VALUE_CONSUME = "CONSUME";
+	public static final String PARAMETER_MODE = "mode";
 	/*
 	 * 
 	 */
@@ -282,9 +288,6 @@ public final class ChirdlUtilConstants {
 	 */
 	public static final String GLOBAL_PROPERTY_SCHEDULER_USERNAME = "scheduler.username";
 	public static final String GLOBAL_PROPERTY_SCHEDULER_PASSWORD = "scheduler.password";
-	/*
-	 * 
-	 */
 	
 	/*
 	 * Concept information
