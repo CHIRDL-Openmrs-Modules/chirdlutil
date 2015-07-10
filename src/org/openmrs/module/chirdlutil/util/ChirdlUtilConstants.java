@@ -237,9 +237,12 @@ public final class ChirdlUtilConstants {
 	public static final String HTTP_HEADER_AUTHENTICATE_BASIC_CHICA = "BASIC realm=\"chica\"";
 	public static final String HTTP_HEADER_CACHE_CONTROL = "Cache-Control";
 	public static final String HTTP_HEADER_CACHE_CONTROL_NO_CACHE = "no-cache";
+	public static final String HTTP_HEADER_EXPIRES = "Expires";
 	public static final String HTTP_AUTHORIZATION_HEADER = "Authorization";
 	public static final String HTTP_HEADER_CONTENT_DISPOSITION = "Content-Disposition";
 	public static final String HTTP_CONTENT_TYPE_TEXT_XML = "text/xml";
+	public static final String HTTP_CONTENT_TYPE_TEXT_HTML = "text/html";
+	public static final String HTTP_CONTENT_TYPE_IMAGE_PNG = "image/png";
 	public static final String HTTP_CONTENT_TYPE_APPLICATION_PDF = "application/pdf";
 	public static final String HTTP_CACHE_CONTROL_PUBLIC = "public";
 	public static final String HTTP_CACHE_CONTROL_MAX_AGE = "max-age";
