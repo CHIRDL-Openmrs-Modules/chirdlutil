@@ -6,7 +6,7 @@
 	<!-- chirdlutil Module Properties -->
 	<id>chirdlutil</id>
 	<name>chirdlutil</name>
-	<version>1.8.2</version>
+	<version>1.8.4</version>
 	<package>org.openmrs.module.@MODULE_ID@</package>
 	<author>Tammy Dugan</author>
 	<description>
@@ -134,6 +134,22 @@
         <description>Location of the server configuration file.
         </description>
     </globalProperty>
+    <globalProperty>
+        <property>chirdlutil.printerThreadPoolSize</property>
+        <defaultValue>1</defaultValue>
+        <description>The number of available threads for each printer pool in the PrinterThreadManager to use.</description>
+    </globalProperty>
+    <globalProperty>
+        <property>chirdlutil.SumatraPDFExecutable</property>
+        <description>The location of the SumatraPDF executable for PDF printing.</description>
+    </globalProperty>
+    
+    <!-- Servlets -->
+    <!-- Accessed through the url /pageContext()/moduleServlet/<moduleId>/<servlet-name> -->
+    <servlet>
+        <servlet-name>threadPoolMonitor</servlet-name>
+        <servlet-class>@MODULE_PACKAGE@.web.ThreadPoolMonitorServlet</servlet-class>
+    </servlet>
 	
 	<!-- Internationalization -->
 	<!-- All message codes should start with @MODULE_ID@.* -->
@@ -146,12 +162,5 @@
 	<mappingFiles>
 		event_log.hbm.xml
 	</mappingFiles>
-	
-	<!-- Servlets -->
-    <!-- Accessed through the url /pageContext()/moduleServlet/<moduleId>/<servlet-name> -->
-    <servlet>
-        <servlet-name>threadPoolMonitor</servlet-name>
-        <servlet-class>@MODULE_PACKAGE@.web.ThreadPoolMonitorServlet</servlet-class>
-    </servlet>
 </module>
 

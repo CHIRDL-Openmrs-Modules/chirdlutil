@@ -13,51 +13,72 @@
  */
 package org.openmrs.module.chirdlutil.util;
 
-import java.awt.print.PrinterException;
 import java.io.File;
-import java.io.IOException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
+import org.openmrs.api.AdministrationService;
+import org.openmrs.api.context.Context;
+import org.openmrs.module.chirdlutil.threadmgmt.ChirdlPrintJobRunnable;
 
 /**
- * Thread used to do auto-printing of PDF files.
+ * Print job Runnable for PDF files.
  * 
  * @author Steve McKee
  */
-public class PDFPrintRunnable implements Runnable {
+public class PDFPrintRunnable implements ChirdlPrintJobRunnable {
 	
 	private static Log log = LogFactory.getLog(PDFPrintRunnable.class);
+	
 	private String printerName;
-	private File pdfFile;
+	private String pdfLocation;
 	
 	/**
 	 * Constructor method
 	 * 
-	 * @param printerName The printer where the print job will be sent.
-	 * @param pdfFile The PDF file to print.
+	 * @param printerName The name of the printer to print the job.
+	 * @param pdfLocation The location of the PDF file to print.
 	 */
-	public PDFPrintRunnable(String printerName, File pdfFile) {
+	public PDFPrintRunnable(String printerName, String pdfLocation) {
 		this.printerName = printerName;
-		this.pdfFile = pdfFile;
+		this.pdfLocation = pdfLocation;
 	}
-
+	
 	/**
 	 * @see java.lang.Runnable#run()
 	 */
-    public void run() {
-	    try {
-	    	PrintServices.printPDFFileSynchronous(printerName, pdfFile);
-        }
-        catch (PrinterException e) {
-            log.error("Error printing PDF file " + pdfFile.getAbsolutePath() + " to printer " + printerName, e);
-        } 
-	    catch (IOException e) {
-            log.error("Error loading PDF file to print " + pdfFile.getAbsolutePath(), e);
-        }
-	    catch (IllegalArgumentException e) {
-            log.error("Invalid parameter print PDF file " + pdfFile.getAbsolutePath(), e);
-        }
+	public void run() {
+		Context.openSession();
+		try {
+			AdministrationService adminService = Context.getAdministrationService();
+			Context.authenticate(adminService
+					.getGlobalProperty(ChirdlUtilConstants.GLOBAL_PROPERTY_SCHEDULER_USERNAME), adminService
+					.getGlobalProperty(ChirdlUtilConstants.GLOBAL_PROPERTY_SCHEDULER_PASSWORD));
+			File pdfFile = new File(pdfLocation);
+			PrintServices.printPDFFileSynchronous(printerName, pdfFile);
+		}
+		catch (IllegalArgumentException e) {
+			log.error("Invalid parameter print PDF file " + pdfLocation + " to printer " + printerName, e);
+		}
+		catch (Exception e) {
+			log.error("Unknown error occurred printing PDF file " + pdfLocation + " to printer " + printerName, e);
+		}
+		finally {
+			Context.closeSession();
+		}
+	}
+	
+	/**
+	 * @see org.openmrs.module.chirdlutil.threadmgmt.ChirdlPrintJobRunnable#getPrinterName()
+	 */
+	public String getPrinterName() {
+		return printerName;
+	}
+
+	/**
+	 * @see org.openmrs.module.chirdlutil.threadmgmt.ChirdlPrintJobRunnable#getPDFFileLocation()
+	 */
+    public String getPDFFileLocation() {
+	    return pdfLocation;
     }
 }

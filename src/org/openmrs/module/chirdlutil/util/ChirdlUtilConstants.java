@@ -220,6 +220,12 @@ public final class ChirdlUtilConstants {
 	public static final String PARAMETER_FORM_NAME = "formName";
 	public static final String PARAMETER_TRIGGER = "trigger";
 	public static final String PARAMETER_AUTO_PRINT = "autoPrint";
+	public static final String PARAMETER_ENCOUNTER_ID = "encounterId";
+	public static final String PARAMETER_LOCATION = "location";
+	public static final String PARAMETER_LOCATION_ID = "locationId";
+	public static final String PARAMETER_VALUE_PRODUCE = "PRODUCE";
+	public static final String PARAMETER_VALUE_CONSUME = "CONSUME";
+	public static final String PARAMETER_MODE = "mode";
 	/*
 	 * 
 	 */
@@ -231,9 +237,12 @@ public final class ChirdlUtilConstants {
 	public static final String HTTP_HEADER_AUTHENTICATE_BASIC_CHICA = "BASIC realm=\"chica\"";
 	public static final String HTTP_HEADER_CACHE_CONTROL = "Cache-Control";
 	public static final String HTTP_HEADER_CACHE_CONTROL_NO_CACHE = "no-cache";
+	public static final String HTTP_HEADER_EXPIRES = "Expires";
 	public static final String HTTP_AUTHORIZATION_HEADER = "Authorization";
 	public static final String HTTP_HEADER_CONTENT_DISPOSITION = "Content-Disposition";
 	public static final String HTTP_CONTENT_TYPE_TEXT_XML = "text/xml";
+	public static final String HTTP_CONTENT_TYPE_TEXT_HTML = "text/html";
+	public static final String HTTP_CONTENT_TYPE_IMAGE_PNG = "image/png";
 	public static final String HTTP_CONTENT_TYPE_APPLICATION_PDF = "application/pdf";
 	public static final String HTTP_CACHE_CONTROL_PUBLIC = "public";
 	public static final String HTTP_CACHE_CONTROL_MAX_AGE = "max-age";
@@ -281,9 +290,6 @@ public final class ChirdlUtilConstants {
 	 */
 	public static final String GLOBAL_PROPERTY_SCHEDULER_USERNAME = "scheduler.username";
 	public static final String GLOBAL_PROPERTY_SCHEDULER_PASSWORD = "scheduler.password";
-	/*
-	 * 
-	 */
 	
 	/*
 	 * Concept information

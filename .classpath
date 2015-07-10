@@ -85,6 +85,5 @@
 	<classpathentry kind="lib" path="lib/opencsv-2.3.jar"/>
 	<classpathentry kind="lib" path="lib/icepdf-viewer.jar"/>
 	<classpathentry kind="lib" path="lib-common/chirdlutilbackports-2.2.0.jar"/>
-	<classpathentry kind="lib" path="lib/pdfbox-app-1.8.9.jar"/>
 	<classpathentry kind="output" path="build"/>
 </classpath>
