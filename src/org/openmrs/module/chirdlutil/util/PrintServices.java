@@ -84,11 +84,10 @@ public class PrintServices {
      * Prints a specified PDF file to a specified printer.  This method uses a thread to execute the print job.
      * 
      * @param printerName The name of the printer to use to print the PDF file.
-     * @param jobName The name of the printer job.  This can be null.
      * @param pdfFile The PDF File to print.
      */
-    public static void printPDFFileAsynchronous(String printerName, String jobName, File pdfFile) {
-    	ChirdlPrintJobRunnable printRunnable = new PDFPrintRunnable(printerName, jobName, pdfFile.getAbsolutePath());
+    public static void printPDFFileAsynchronous(String printerName, File pdfFile) {
+    	ChirdlPrintJobRunnable printRunnable = new PDFPrintRunnable(printerName, pdfFile.getAbsolutePath());
     	PrinterThreadManager threadManager = PrinterThreadManager.getInstance();
     	threadManager.execute(printRunnable);
     }
@@ -97,11 +96,10 @@ public class PrintServices {
      * Prints a specified PDF file to a specified printer.  This is a synchronous print job.
      * 
      * @param printerName The name of the printer to use to print the PDF file.
-     * @param jobName The name of the printer job.  This can be null.
      * @param pdfFile The PDF File to print.
      * @throws Exception
      */
-    public static void printPDFFileSynchronous(String printerName, String jobName, File pdfFile) throws Exception {
+    public static void printPDFFileSynchronous(String printerName, File pdfFile) throws Exception {
     	if (printerName == null || printerName.trim().length() == 0) {
     		log.error("A valid printerName parameter was not provided: " + printerName);
     		throw new IllegalArgumentException("A valid printerName parameter was not provided: " + printerName);
@@ -122,16 +120,16 @@ public class PrintServices {
 	    	Process p = pb.start();
 	    	int exitValue = p.waitFor();
 	    	if (exitValue != 0) {
-	    		log.error("The SumatraPDF command returned error code: " + exitValue + " printing job " + jobName + " file " + 
+	    		log.error("The SumatraPDF command returned error code: " + exitValue + " printing file " + 
 	    				pdfFile.getAbsolutePath() + " to printer " + printerName);
 	    		String errorString = IOUtil.output(p.getErrorStream());
 		    	if (errorString.trim().length() > 0) {
-		    		log.error("Error running SumatraPDF for printing job " + jobName + " file " + 
+		    		log.error("Error running SumatraPDF for printing file " + 
 		    				pdfFile.getAbsolutePath() + " to printer " + printerName + " " + errorString);
 		    	}
 	    	}
     	} catch (Exception e) {
-    		log.error("Error running SumatraPDF for printing job " + jobName + " file " + 
+    		log.error("Error running SumatraPDF for printing file " + 
 	    				pdfFile.getAbsolutePath() + " to printer " + printerName, e);
     	}
     }

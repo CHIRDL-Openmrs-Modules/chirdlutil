@@ -1,8 +1,6 @@
 package org.openmrs.module.chirdlutil.threadmgmt;
 
-import java.sql.Timestamp;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -89,17 +87,17 @@ public class PrinterThreadManager {
 			}
 		}
 		
-		String printJobName = runnable.getPrintJobName();
+		String pdfLocation = runnable.getPDFFileLocation();
 		try {
 			// Add the runnable to the pool so it can eventually get executed.
 			printerJobExecutor.execute(runnable);
 			log.info("Added the following to the Printer Thread Manager's execution queue - printer: " + printerName + 
-				" - job name: " + printJobName);
+				" - file: " + pdfLocation);
 		} catch (RejectedExecutionException ree) {
 			log.error("Printer Thread Manager no longer accepting new threads.  This thread has been rejected - printer: " + 
-				printerName + " - job name: " + printJobName, ree);
+				printerName + " - file: " + pdfLocation, ree);
 		} catch (Exception e) {
-			log.error("Error executing Printer Thread Manager thread - printer: " + printerName + " - job name: " + printJobName, e);
+			log.error("Error executing Printer Thread Manager thread - printer: " + printerName + " - file: " + pdfLocation, e);
 		}
 	}
 	
@@ -222,7 +220,7 @@ public class PrinterThreadManager {
 			if (r instanceof ChirdlPrintJobRunnable) {
 				ChirdlPrintJobRunnable cpr = (ChirdlPrintJobRunnable)r;
 				log.info("Printer Thread Manager before execute - printer: " + cpr.getPrinterName() + 
-					" - job name: " + cpr.getPrintJobName() + " - time: " + new Timestamp(new Date().getTime()) + 
+					" - file: " + cpr.getPDFFileLocation() + 
 					" - active threads: " + getActiveCount() + " - threads in pool: " + getPoolSize() + 
 					" - tasks in queue: " + getQueue().size());
 			}
@@ -235,7 +233,7 @@ public class PrinterThreadManager {
 			if (r instanceof ChirdlPrintJobRunnable) {
 				ChirdlPrintJobRunnable cpr = (ChirdlPrintJobRunnable)r;
 				log.info("Printer Thread Manager after execute - printer: " + cpr.getPrinterName() + 
-					" - job name: " + cpr.getPrintJobName() + " - time: " + new Timestamp(new Date().getTime()) + 
+					" - file: " + cpr.getPDFFileLocation() + 
 					" - active threads: " + getActiveCount() + " - threads in pool: " + getPoolSize() + 
 					" - tasks in queue: " + getQueue().size());
 			}

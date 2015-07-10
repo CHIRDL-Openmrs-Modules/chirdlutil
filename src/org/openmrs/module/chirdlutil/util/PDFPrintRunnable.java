@@ -31,19 +31,16 @@ public class PDFPrintRunnable implements ChirdlPrintJobRunnable {
 	private static Log log = LogFactory.getLog(PDFPrintRunnable.class);
 	
 	private String printerName;
-	private String printJobName;
 	private String pdfLocation;
 	
 	/**
 	 * Constructor method
 	 * 
 	 * @param printerName The name of the printer to print the job.
-	 * @param printJobName The name of the print job.
 	 * @param pdfLocation The location of the PDF file to print.
 	 */
-	public PDFPrintRunnable(String printerName, String printJobName, String pdfLocation) {
+	public PDFPrintRunnable(String printerName, String pdfLocation) {
 		this.printerName = printerName;
-		this.printJobName = printJobName;
 		this.pdfLocation = pdfLocation;
 	}
 	
@@ -58,7 +55,7 @@ public class PDFPrintRunnable implements ChirdlPrintJobRunnable {
 					.getGlobalProperty(ChirdlUtilConstants.GLOBAL_PROPERTY_SCHEDULER_USERNAME), adminService
 					.getGlobalProperty(ChirdlUtilConstants.GLOBAL_PROPERTY_SCHEDULER_PASSWORD));
 			File pdfFile = new File(pdfLocation);
-			PrintServices.printPDFFileSynchronous(printerName, printJobName, pdfFile);
+			PrintServices.printPDFFileSynchronous(printerName, pdfFile);
 		}
 		catch (IllegalArgumentException e) {
 			log.error("Invalid parameter print PDF file " + pdfLocation + " to printer " + printerName, e);
@@ -77,12 +74,11 @@ public class PDFPrintRunnable implements ChirdlPrintJobRunnable {
 	public String getPrinterName() {
 		return printerName;
 	}
-	
+
 	/**
-	 * @see org.openmrs.module.chirdlutil.threadmgmt.ChirdlPrintJobRunnable#getPrintJobName()
+	 * @see org.openmrs.module.chirdlutil.threadmgmt.ChirdlPrintJobRunnable#getPDFFileLocation()
 	 */
-	public String getPrintJobName() {
-		return printJobName;
-	}
-	
+    public String getPDFFileLocation() {
+	    return pdfLocation;
+    }
 }

@@ -28,10 +28,10 @@ public interface ChirdlPrintJobRunnable extends Runnable {
 	public String getPrinterName();
 	
 	/**
-	 * Returns the name of the print job.
-	 *  
-	 * @return The name of the print job.
+	 * Returns the location of the PDF file to print.
+	 * 
+	 * @return The location of the PDF file to print.
 	 */
-	public String getPrintJobName();
+	public String getPDFFileLocation();
 }
 
