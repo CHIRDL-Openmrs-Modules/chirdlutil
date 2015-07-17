@@ -106,8 +106,8 @@ public class PrintFile {
 	    		System.exit(1);
 	    	}
 	    	
-	    	ProcessBuilder pb = new ProcessBuilder("\"" + sumatraExeLocation + "\"", "-silent", "-print-to", "\"" + printerName + 
-	    		"\"", "-print-settings", "\"duplexshort\"", "\"" + pdfFileToPrint.getAbsolutePath() + "\"");
+	    	ProcessBuilder pb = new ProcessBuilder("\"" + sumatraExeLocation + "\"", "-silent", "-print-to", printerName, 
+	    		"-print-settings", "\"duplexshort\"", pdfFileToPrint.getAbsolutePath());
 	    	Process p = pb.start();
 	    	int exitValue = p.waitFor();
 	    	if (exitValue != 0) {
