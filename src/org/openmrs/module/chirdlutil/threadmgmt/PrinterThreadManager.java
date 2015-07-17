@@ -80,7 +80,7 @@ public class PrinterThreadManager {
 			synchronized(printerNameToThreadExecutorMap) {
 				int poolSize = getThreadPoolSize();
 				// Create the thread queue/pool
-				BlockingQueue poolQueue = new PriorityBlockingQueue(poolSize);
+				BlockingQueue poolQueue = new PriorityBlockingQueue(poolSize, new ChirdlPrintJobComparator());
 				printerJobExecutor = new ChirdlUtilPrinterThreadPoolExecutor(poolSize, poolSize, 1L, TimeUnit.MILLISECONDS, poolQueue);
 				printerJobExecutor.allowCoreThreadTimeOut(true);
 				printerNameToThreadExecutorMap.put(printerName, printerJobExecutor);
