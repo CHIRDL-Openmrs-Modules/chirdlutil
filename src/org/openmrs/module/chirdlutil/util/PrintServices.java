@@ -118,6 +118,7 @@ public class PrintServices {
 	    	ProcessBuilder pb = new ProcessBuilder("\"" + sumatraPDFExecutable + "\"", "-silent", "-print-to", "\"" + printerName + 
 	    		"\"", "-print-settings", "\"duplexshort\"", "\"" + pdfFile.getAbsolutePath() + "\"");
 	    	Process p = pb.start();
+	    	pb.redirectErrorStream();
 	    	int exitValue = p.waitFor();
 	    	if (exitValue != 0) {
 	    		log.error("The SumatraPDF command returned error code: " + exitValue + " printing file " + 
