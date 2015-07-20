@@ -194,6 +194,8 @@ public final class ChirdlUtilConstants {
 	public static final String GLOBAL_PROP_PAGER_BASE_URL = "chica.pagerBaseURL";
 	public static final String GLOBAL_PROP_PAGER_WAIT_TIME_BEFORE_REPAGE = "chica.pagerWaitTimeBeforeRepage";
 	public static final String GLOBAL_PROP_G3_ENCRYPTION_KEY = "chica.g3EncryptionKey";
+	public static final String GLOBAL_PROP_QUERY_MEDS = "chica.queryMeds";
+	public static final String GLOBAL_PROP_IMMUNIZATION_QUERY_ACTIVATED = "chica.ImmunizationQueryActivated";
 	/*
 	 * 
 	 */
@@ -203,6 +205,8 @@ public final class ChirdlUtilConstants {
 	 */
 	public static final String GENERAL_INFO_COMMA = ",";
 	public static final String GENERAL_INFO_UNDERSCORE = "_";
+	public static final String GENERAL_INFO_TRUE = "true";
+	public static final String GENERAL_INFO_FALSE = "false";
 	/*
 	 * 
 	 */
