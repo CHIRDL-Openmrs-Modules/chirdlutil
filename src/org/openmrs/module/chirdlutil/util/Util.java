@@ -12,11 +12,16 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.security.DigestException;
+import java.security.InvalidKeyException;
+import java.security.Key;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -28,6 +33,13 @@ import java.util.StringTokenizer;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.SecretKeySpec;
+
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.icepdf.core.exceptions.PDFException;
@@ -897,5 +909,106 @@ public class Util
 		concept.setDatatype(conceptDatatypeObj);
 		
 		return conceptService.saveConcept(concept);
+	}
+	
+	/**
+	 * Decrypts an encrypted value with the provided key.
+	 * 
+	 * @param encryptedValue The value to decrypt
+	 * @param base64DecodeValue if true, the encryptedValue will be decoded before being decrypted
+	 * @param key The key used to decrypt the value
+	 * @return The decrypted value or null if it can't be decrypted
+	 */
+	public static String decryptValue(String encryptedValue, boolean base64DecodeValue, String key) {
+		// Decrypt the password
+		Cipher cipher;
+        try {
+	        cipher = Cipher.getInstance(ChirdlUtilConstants.ENCRYPTION_AES);
+	        byte[] keyBytes = key.getBytes(ChirdlUtilConstants.ENCODING_UTF8);
+	        keyBytes = Arrays.copyOf(keyBytes, 16);
+			Key secretKey = new SecretKeySpec(keyBytes, ChirdlUtilConstants.ENCRYPTION_AES);
+			cipher.init(Cipher.DECRYPT_MODE, secretKey);
+			if (base64DecodeValue) {
+        		return new String(cipher.doFinal(Base64.decodeBase64(encryptedValue.getBytes())));
+        	} else {
+        		return new String(cipher.doFinal(encryptedValue.getBytes()));
+        	}
+        }
+        catch (NoSuchAlgorithmException e) {
+	        log.error("Error creating " + ChirdlUtilConstants.ENCRYPTION_AES + " Cipher instance", e);
+	        return null;
+        }
+        catch (NoSuchPaddingException e) {
+	        log.error("Error creating " + ChirdlUtilConstants.ENCRYPTION_AES + " Cipher instance", e);
+	        return null;
+        }
+        catch (UnsupportedEncodingException e) {
+	        log.error("Unsupported Encoding: " + ChirdlUtilConstants.ENCODING_UTF8, e);
+	        return null;
+        }
+        catch (InvalidKeyException e) {
+	        log.error("Invalid Cipher Key", e);
+	        return null;
+        }
+		catch (IllegalBlockSizeException e) {
+	        log.error("Illegal Block Size", e);
+	        return null;
+        }
+        catch (BadPaddingException e) {
+	        log.error("Bad Padding", e);
+	        return null;
+        }
+	}
+	
+	/**
+	 * Encrypts a value with the provided key.
+	 * 
+	 * @param value The value to encrypt
+	 * @param base64EncodeValue if true, the value will be encoded after being encrypted
+	 * @param key The key used to encrypt the value
+	 * @return The encrypted value or null if there was a problem encrypting the value
+	 */
+	public static String encryptValue(String value, boolean base64EncodeValue, String key) {
+		byte[] keyBytes;
+        try {
+	        keyBytes = key.getBytes(ChirdlUtilConstants.ENCODING_UTF8);
+	        keyBytes = Arrays.copyOf(keyBytes, 16);  // Reduce to 128 bit
+			Key secretKey = new SecretKeySpec(keyBytes, ChirdlUtilConstants.ENCRYPTION_AES);
+	    
+			Cipher cipher = Cipher.getInstance(ChirdlUtilConstants.ENCRYPTION_AES);
+			cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+			byte[] encryptedBytes = cipher.doFinal(value.getBytes(ChirdlUtilConstants.ENCODING_UTF8));
+			if (base64EncodeValue) {
+				return new String(Base64.encodeBase64(encryptedBytes));
+			}
+			
+			return new String (encryptedBytes);
+        }
+        catch (UnsupportedEncodingException e) {
+        	log.error("Unsupported Encoding: " + ChirdlUtilConstants.ENCODING_UTF8, e);
+	        return null;
+        }
+        catch (NoSuchAlgorithmException e) {
+        	log.error("Error creating " + ChirdlUtilConstants.ENCRYPTION_AES + " Cipher instance", e);
+	        return null;
+        }
+        catch (NoSuchPaddingException e) {
+        	log.error("Error creating " + ChirdlUtilConstants.ENCRYPTION_AES + " Cipher instance", e);
+	        return null;
+        }
+        catch (InvalidKeyException e) {
+        	log.error("Invalid Cipher Key", e);
+	        return null;
+        }
+        catch (IllegalBlockSizeException e) {
+        	log.error("Illegal Block Size", e);
+	        return null;
+        }
+        catch (BadPaddingException e) {
+        	log.error("Bad Padding", e);
+	        return null;
+        }
+        
+		
 	}
 }
