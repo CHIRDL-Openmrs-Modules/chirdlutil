@@ -206,7 +206,7 @@ public class VoiceSystemUtil {
 		data += "&" + URLEncoder.encode("filetext", "UTF-8") + "=" + URLEncoder.encode(fileText + patientFileText, "UTF-8");
 		
 		// Perform the POST
-		String result = HttpUtil.postSecure("SSLv3", host, url, data, connectionTimeout, port);
+		String result = HttpUtil.postSecure("TLSv1.2", host, url, data, connectionTimeout, port);
 		return result;
 	}
 	
