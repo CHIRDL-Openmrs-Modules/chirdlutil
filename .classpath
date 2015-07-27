@@ -54,8 +54,8 @@
 	<classpathentry kind="lib" path="lib-common/junit/dbunit-2.2.jar"/>
 	<classpathentry kind="lib" path="lib-common/junit/hsqldb.jar"/>
 	<classpathentry kind="lib" path="lib-common/junit/junit-4.4.jar"/>
-	<classpathentry kind="lib" path="lib-common/logic-0.5.jar"/>
-	<classpathentry kind="lib" path="lib-common/openmrs-api-1.7.2.19959-dev.jar"/>
+	<classpathentry kind="lib" path="lib-common/logic-0.5.0.1.jar"/>
+	<classpathentry kind="lib" path="lib-common/openmrs-api-1.7.3.0-dev.jar"/>
 	<classpathentry kind="lib" path="lib-common/tests-openmrs-api-1.7.2.19959-dev.jar"/>
 	<classpathentry kind="lib" path="lib-common/web-openmrs-api-1.7.2.19959-dev.jar"/>
 	<classpathentry kind="lib" path="lib-common/jibx/bcel.jar"/>
@@ -84,6 +84,6 @@
 	<classpathentry kind="lib" path="lib/zxing-javase-2.2.jar"/>
 	<classpathentry kind="lib" path="lib/opencsv-2.3.jar"/>
 	<classpathentry kind="lib" path="lib/icepdf-viewer.jar"/>
-	<classpathentry kind="lib" path="lib-common/chirdlutilbackports-2.2.0.jar"/>
+	<classpathentry kind="lib" path="lib-common/chirdlutilbackports-2.3.0.jar"/>
 	<classpathentry kind="output" path="build"/>
 </classpath>
