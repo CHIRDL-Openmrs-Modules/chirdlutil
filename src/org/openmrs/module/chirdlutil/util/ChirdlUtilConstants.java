@@ -52,6 +52,7 @@ public final class ChirdlUtilConstants {
 	public static final String PERSON_ATTRIBUTE_CITIZENSHIP = "Citizenship";
 	public static final String PERSON_ATTRIBUTE_RACE = "Race";
 	public static final String PERSON_ATTRIBUTE_SSN = "SSN";
+	public static final String PERSON_ATTRIBUTE_PATIENT_ACCOUNT_NUMBER = "Patient Account Number";
 
 	/*
 	 * 
