@@ -97,6 +97,8 @@ public class Util
 	public static final String MEASUREMENT_IN = "in";
 	public static final String MEASUREMENT_CM = "cm";
 	public static final String MEASUREMENT_KG = "kg";
+	public static final String MEASUREMENT_CELSIUS = "celsius";
+	public static final String MEASUREMENT_fAHRENHEIT = "fahrenheit";
 	
 	public static final String YEAR_ABBR = "yo";
 	public static final String MONTH_ABBR = "mo";
@@ -134,6 +136,10 @@ public class Util
 		{
 			measurement = measurement * 0.45359237; // convert pounds to kilograms
 		}
+		if (measurementUnits.equalsIgnoreCase(MEASUREMENT_CELSIUS))
+		{
+			measurement = (measurement - 32)*(5/9.0); // convert fahrenheit to celsius
+		}
 		return measurement; // truncate to one decimal
 												  // place
 	}
@@ -161,6 +167,11 @@ public class Util
 		if (measurementUnits.equalsIgnoreCase(MEASUREMENT_KG))
 		{
 			measurement = measurement * 2.20462262; // convert kilograms to pounds
+		}
+		
+		if (measurementUnits.equalsIgnoreCase(MEASUREMENT_CELSIUS))
+		{
+			measurement = (measurement *  (9/5.0)) + 32; // convert celsius to fahrenheit
 		}
 		return measurement; // truncate to one decimal
 												  // place
