@@ -98,7 +98,7 @@ public class Util
 	public static final String MEASUREMENT_CM = "cm";
 	public static final String MEASUREMENT_KG = "kg";
 	public static final String MEASUREMENT_CELSIUS = "celsius";
-	public static final String MEASUREMENT_fAHRENHEIT = "fahrenheit";
+	public static final String MEASUREMENT_FAHRENHEIT = "fahrenheit";
 	
 	public static final String YEAR_ABBR = "yo";
 	public static final String MONTH_ABBR = "mo";
@@ -136,7 +136,7 @@ public class Util
 		{
 			measurement = measurement * 0.45359237; // convert pounds to kilograms
 		}
-		if (measurementUnits.equalsIgnoreCase(MEASUREMENT_CELSIUS))
+		if (measurementUnits.equalsIgnoreCase(MEASUREMENT_FAHRENHEIT))
 		{
 			measurement = (measurement - 32)*(5/9.0); // convert fahrenheit to celsius
 		}
