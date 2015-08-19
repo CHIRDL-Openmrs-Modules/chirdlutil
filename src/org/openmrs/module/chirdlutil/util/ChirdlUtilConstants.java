@@ -194,6 +194,10 @@ public final class ChirdlUtilConstants {
 	public static final String GLOBAL_PROP_PAGER_BASE_URL = "chica.pagerBaseURL";
 	public static final String GLOBAL_PROP_PAGER_WAIT_TIME_BEFORE_REPAGE = "chica.pagerWaitTimeBeforeRepage";
 	public static final String GLOBAL_PROP_G3_ENCRYPTION_KEY = "chica.g3EncryptionKey";
+	public static final String GLOBAL_PROP_MRF_ARCHIVE_DIRECTORY = "chica.mrfArchiveDirectory";
+	public static final String GLOBAL_PROP_MRF_QUERY_CONFIG_FILE = "chica.mrfQueryConfigFile";
+	public static final String GLOBAL_PROP_MRF_QUERY_PASSWORD = "chica.MRFQueryPassword";
+	public static final String GLOBAL_PROP_MRF_QUERY_TIMEOUT = "chica.kiteTimeout";
 	/*
 	 * 
 	 */
@@ -331,5 +335,47 @@ public final class ChirdlUtilConstants {
 	/*
 	 * 
 	 */
+	
+	/*
+	 * Error levels
+	 */
+	public static final String ERROR_LEVEL_ERROR = "Error";
+	public static final String ERROR_LEVEL_WARNING = "Warning";
+	public static final String ERROR_LEVEL_DEBUG = "Debug";
+	public static final String ERROR_LEVEL_VERBOSE = "Verbose";
+	public static final String ERROR_LEVEL_FATAL = "Fatal";
+	/*
+	 * 
+	 */
+	
+	/*
+	 * HL7 Segments
+	 */
+	public static final String HL7_SEGMENT_MESSAGE_ACKNOWLEDGMENT_MSA = "MSA";
+	public static final String HL7_SEGMENT_MESSAGE_HEADER_MSH = "MSH";
+	public static final String HL7_SEGMENT_PATIENT_IDENTIFICATION_PID = "PID";
+	public static final String HL7_SEGMENT_PATIENT_VISIT_PV1 = "PV1";
+	public static final String HL7_SEGMENT_INSURANCE_IN1 = "IN1";
+	public static final String HL7_SEGMENT_INSURANCE_IN2 = "IN2";
+	public static final String HL7_SEGMENT_NEXT_OF_KIN_NK1 = "NK1";
+	public static final String HL7_SEGMENT_NEXT_OF_KIN_NK2 = "NK2";
+	public static final String HL7_SEGMENT_OBSERVATION_OBX = "OBX";
+	public static final String HL7_SEGMENT_OBSERVATION_REQUEST_OBR = "OBR";
+	public static final String HL7_SEGMENT_PATIENT_ADDITIONAL_INFO_PD1 = "PD1";
+	public static final String HL7_SEGMENT_EVENT_TYPE_EVN = "EVN";
+	public static final String HL7_SEGMENT_Z_SEGMENT_ZPV = "ZPV";
+	 /*
+	  * 
+	  */
+	
+	/*
+	 * HL7 Acknowledgment Codes
+	 */
+	public static final String HL7_ACK_CODE_APPLICATION_ACCEPT = "AA";
+	public static final String HL7_ACK_CODE_APPLICATION_ERROR = "AE";
+	public static final String HL7_ACK_CODE_APPLICATION_REJECT = "AR";
+	 /*
+	  * 
+	  */
 }
 
