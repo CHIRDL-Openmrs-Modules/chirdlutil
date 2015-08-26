@@ -177,6 +177,7 @@ public final class ChirdlUtilConstants {
 	public static final String FILE_EXTENSION_20 = ".20";
 	public static final String FILE_EXTENSION_22 = ".22";
 	public static final String FILE_EXTENSION_23 = ".23";
+	public static final String FILE_EXTENSION_HL7 = ".hl7";
 	public static final String FILE_PDF_TEMPLATE = "_template.pdf";
 	/*
 	 * 
@@ -198,6 +199,9 @@ public final class ChirdlUtilConstants {
 	public static final String GLOBAL_PROP_MRF_QUERY_CONFIG_FILE = "chica.mrfQueryConfigFile";
 	public static final String GLOBAL_PROP_MRF_QUERY_PASSWORD = "chica.MRFQueryPassword";
 	public static final String GLOBAL_PROP_MRF_QUERY_TIMEOUT = "chica.kiteTimeout";
+	public static final String GLOBAL_PROP_MRF_TARGET_ENDPOINT = "chica.MRFQueryTargetEndpoint";
+	public static final String GLOBAL_PROP_PERFORM_MRF_QUERY = "chica.performMRFQuery";
+	public static final String GLOBAL_PROP_MRF_QUERY_NAMESPACE = "chica.MRFQueryNamespace";
 	/*
 	 * 
 	 */
