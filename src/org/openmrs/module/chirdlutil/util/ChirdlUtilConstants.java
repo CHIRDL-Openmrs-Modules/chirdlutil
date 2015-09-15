@@ -206,6 +206,7 @@ public final class ChirdlUtilConstants {
 	public static final String GLOBAL_PROP_MRF_TARGET_ENDPOINT = "chica.MRFQueryTargetEndpoint";
 	public static final String GLOBAL_PROP_PERFORM_MRF_QUERY = "chica.performMRFQuery";
 	public static final String GLOBAL_PROP_MRF_QUERY_NAMESPACE = "chica.MRFQueryNamespace";
+	public static final String GLOBAL_PROP_MRF_ERROR_DIRECTORY = "chica.mrfParseErrorDirectory";
 	/*
 	 * 
 	 */
@@ -217,6 +218,8 @@ public final class ChirdlUtilConstants {
 	public static final String GENERAL_INFO_UNDERSCORE = "_";
 	public static final String GENERAL_INFO_TRUE = "true";
 	public static final String GENERAL_INFO_FALSE = "false";
+	public static final String GENERAL_INFO_FORWARD_SLASH = "/";
+	public static final String GENERAL_INFO_BACK_SLASH = "\\";
 	/*
 	 * 
 	 */
@@ -395,6 +398,5 @@ public final class ChirdlUtilConstants {
 	 /*
 	  * 
 	  */
-	
 }
 
