@@ -381,5 +381,12 @@ public final class ChirdlUtilConstants {
 	 /*
 	  * 
 	  */
+	
+	/*
+	 * Constants used to determine how to replace special characters
+	 */
+	public static final String MESSAGE_XML = "XML";
+	public static final String MESSAGE_HL7 = "HL7";
+	public static final String MESSAGE_CDATA = "CDATA";
 }
 
