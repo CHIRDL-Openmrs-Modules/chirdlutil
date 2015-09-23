@@ -52,6 +52,7 @@ public final class ChirdlUtilConstants {
 	public static final String PERSON_ATTRIBUTE_CITIZENSHIP = "Citizenship";
 	public static final String PERSON_ATTRIBUTE_RACE = "Race";
 	public static final String PERSON_ATTRIBUTE_SSN = "SSN";
+	public static final String PERSON_ATTRIBUTE_PATIENT_ACCOUNT_NUMBER = "Patient Account Number";
 
 	/*
 	 * 
@@ -195,6 +196,9 @@ public final class ChirdlUtilConstants {
 	public static final String GLOBAL_PROP_PAGER_BASE_URL = "chica.pagerBaseURL";
 	public static final String GLOBAL_PROP_PAGER_WAIT_TIME_BEFORE_REPAGE = "chica.pagerWaitTimeBeforeRepage";
 	public static final String GLOBAL_PROP_G3_ENCRYPTION_KEY = "chica.g3EncryptionKey";
+	public static final String GLOBAL_PROP_IU_HEALTH_CERNER_ENCRYPTION_KEY = "chica.iuHealthCernerEncryptionKey";
+	public static final String GLOBAL_PROP_QUERY_MEDS = "chica.queryMeds";
+	public static final String GLOBAL_PROP_IMMUNIZATION_QUERY_ACTIVATED = "chica.ImmunizationQueryActivated";
 	public static final String GLOBAL_PROP_MRF_ARCHIVE_DIRECTORY = "chica.mrfArchiveDirectory";
 	public static final String GLOBAL_PROP_MRF_QUERY_CONFIG_FILE = "chica.mrfQueryConfigFile";
 	public static final String GLOBAL_PROP_MRF_QUERY_PASSWORD = "chica.MRFQueryPassword";
@@ -202,6 +206,7 @@ public final class ChirdlUtilConstants {
 	public static final String GLOBAL_PROP_MRF_TARGET_ENDPOINT = "chica.MRFQueryTargetEndpoint";
 	public static final String GLOBAL_PROP_PERFORM_MRF_QUERY = "chica.performMRFQuery";
 	public static final String GLOBAL_PROP_MRF_QUERY_NAMESPACE = "chica.MRFQueryNamespace";
+	public static final String GLOBAL_PROP_MRF_ERROR_DIRECTORY = "chica.mrfParseErrorDirectory";
 	/*
 	 * 
 	 */
@@ -211,6 +216,10 @@ public final class ChirdlUtilConstants {
 	 */
 	public static final String GENERAL_INFO_COMMA = ",";
 	public static final String GENERAL_INFO_UNDERSCORE = "_";
+	public static final String GENERAL_INFO_TRUE = "true";
+	public static final String GENERAL_INFO_FALSE = "false";
+	public static final String GENERAL_INFO_FORWARD_SLASH = "/";
+	public static final String GENERAL_INFO_BACK_SLASH = "\\";
 	/*
 	 * 
 	 */
@@ -341,6 +350,14 @@ public final class ChirdlUtilConstants {
 	 */
 	
 	/*
+	 * Location strings
+	 */
+	public static final String LOCATION_RIIUMG = "RIIUMG";
+	/*
+	 * 
+	 */
+
+    /*
 	 * Error levels
 	 */
 	public static final String ERROR_LEVEL_ERROR = "Error";
