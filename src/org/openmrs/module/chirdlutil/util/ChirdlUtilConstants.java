@@ -99,7 +99,6 @@ public final class ChirdlUtilConstants {
 	public static final String STATE_EXPORT_VITALS = "Export Vitals";
 	public static final String STATE_EXPORT_POC = "Export POC";
 	/*
-	/*
 	 * 
 	 */
 	
@@ -144,6 +143,7 @@ public final class ChirdlUtilConstants {
 	public static final String FORM_ATTR_DEFAULT_PRINTER = "defaultPrinter";
 	public static final String FORM_ATTR_USE_ALTERNATE_PRINTER = "useAlternatePrinter";
 	public static final String FORM_ATTR_ALTERNATE_PRINTER = "alternatePrinter";
+	public static final String FORM_ATTR_DISPLAY_AND_UPDATE_PREVIOUS_VALUES = "displayAndUpdatePreviousValues";
 	/*
 	 * 
 	 */
@@ -401,5 +401,12 @@ public final class ChirdlUtilConstants {
 	 /*
 	  * 
 	  */
+	
+	/*
+	 * Constants used to determine how to replace special characters
+	 */
+	public static final String MESSAGE_XML = "XML";
+	public static final String MESSAGE_HL7 = "HL7";
+	public static final String MESSAGE_CDATA = "CDATA";
 }
 
