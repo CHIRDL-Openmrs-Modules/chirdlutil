@@ -96,6 +96,7 @@ public final class ChirdlUtilConstants {
 	public static final String STATE_JIT_CREATE = "JIT_create";
 	public static final String STATE_JIT_MOBILE_CREATE = "JIT_mobile_create";
 	public static final String STATE_CHECKIN = "CHECKIN";
+	public static final String STATE_HL7_PROCESS_REGISTRATION_OBS = "HL7ProcessRegistrationObs";
 	public static final String STATE_EXPORT_VITALS = "Export Vitals";
 	public static final String STATE_EXPORT_POC = "Export POC";
 	/*
@@ -408,5 +409,18 @@ public final class ChirdlUtilConstants {
 	public static final String MESSAGE_XML = "XML";
 	public static final String MESSAGE_HL7 = "HL7";
 	public static final String MESSAGE_CDATA = "CDATA";
+	/*
+	 * 
+	 */
+	
+	/*
+	 * Data Sources
+	 */
+	public static final String DATA_SOURCE_IN_MEMORY = "RMRS";
+	public static final String DATA_SOURCE_IU_HEALTH_MEDICAL_RECORD = "IU Health MRF Dump";
+	public static final String DATA_SOURCE_IU_HEALTH_VITALS = "IU Health Vitals";
+	/*
+	 * 
+	 */
 }
 
