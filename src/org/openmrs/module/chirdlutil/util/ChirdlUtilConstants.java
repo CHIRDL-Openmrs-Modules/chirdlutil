@@ -100,6 +100,8 @@ public final class ChirdlUtilConstants {
 	public static final String STATE_HL7_PROCESS_REGISTRATION_OBS = "HL7ProcessRegistrationObs";
 	public static final String STATE_EXPORT_VITALS = "Export Vitals";
 	public static final String STATE_EXPORT_POC = "Export POC";
+	public static final String STATE_PSF_WAIT_FOR_ELECTRONIC_SUBMISSION = "PSF WAIT FOR ELECTRONIC SUBMISSION";
+	
 	/*
 	 * 
 	 */
