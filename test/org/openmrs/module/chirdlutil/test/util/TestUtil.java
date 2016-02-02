@@ -474,4 +474,46 @@ public class TestUtil {
 		return ageInUnits;
 	
 	}
+	
+	@Test
+	public void unitTestConvertUnitsToMetric()
+	{
+		assertEquals(Util.convertUnitsToMetric(5, Util.MEASUREMENT_CELSIUS),5,0);
+		assertEquals(Util.convertUnitsToMetric(5, Util.MEASUREMENT_KG),5,0);
+		assertEquals(Util.convertUnitsToMetric(5, Util.MEASUREMENT_CM),5,0);
+		
+		assertEquals(Util.convertUnitsToMetric(41, Util.MEASUREMENT_FAHRENHEIT),5,0);
+		assertEquals(Util.convertUnitsToMetric(32, Util.MEASUREMENT_FAHRENHEIT),0,0);
+		assertEquals(Util.convertUnitsToMetric(14, Util.MEASUREMENT_FAHRENHEIT),-10,0);
+		
+		assertEquals(Util.convertUnitsToMetric(5, Util.MEASUREMENT_IN),12.7,0);
+		assertEquals(Util.convertUnitsToMetric(0, Util.MEASUREMENT_IN),0,0);
+
+		assertEquals(Util.convertUnitsToMetric(125, Util.MEASUREMENT_LB),56.699,0.0001);
+		assertEquals(Util.convertUnitsToMetric(0, Util.MEASUREMENT_LB),0,0);
+		
+		assertEquals(Util.convertUnitsToMetric(5, null),5,0);
+		assertEquals(Util.convertUnitsToMetric(5, ""),5,0);
+	}
+	
+	@Test
+	public void unitTestConvertUnitsToEnglish()
+	{
+		assertEquals(Util.convertUnitsToEnglish(5, Util.MEASUREMENT_FAHRENHEIT),5,0);
+		assertEquals(Util.convertUnitsToEnglish(5, Util.MEASUREMENT_LB),5,0);
+		assertEquals(Util.convertUnitsToEnglish(5, Util.MEASUREMENT_IN),5,0);
+		
+		assertEquals(Util.convertUnitsToEnglish(5, Util.MEASUREMENT_CELSIUS),41,0);
+		assertEquals(Util.convertUnitsToEnglish(0, Util.MEASUREMENT_CELSIUS),32,0);
+		assertEquals(Util.convertUnitsToEnglish(-10, Util.MEASUREMENT_CELSIUS),14,0);
+		
+		assertEquals(Util.convertUnitsToEnglish(12.7, Util.MEASUREMENT_CM),5,0.00000001);
+		assertEquals(Util.convertUnitsToEnglish(0, Util.MEASUREMENT_CM),0,0);
+
+		assertEquals(Util.convertUnitsToEnglish(56.699, Util.MEASUREMENT_KG),125,0.001);
+		assertEquals(Util.convertUnitsToEnglish(0, Util.MEASUREMENT_KG),0,0);
+		
+		assertEquals(Util.convertUnitsToEnglish(5, null),5,0);
+		assertEquals(Util.convertUnitsToEnglish(5, ""),5,0);
+	}
 }
