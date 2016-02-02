@@ -516,4 +516,28 @@ public class TestUtil {
 		assertEquals(Util.convertUnitsToEnglish(5, null),5,0);
 		assertEquals(Util.convertUnitsToEnglish(5, ""),5,0);
 	}
+	
+	@Test
+	public void unitTestExtractIntFromString()
+	{
+		assertEquals(Util.extractIntFromString(null),null);
+		assertEquals(Util.extractIntFromString(""),"");
+		assertEquals(Util.extractIntFromString("D"),"");
+		assertEquals(Util.extractIntFromString("D1"),"1");
+		assertEquals(Util.extractIntFromString("2D3"),"23");
+		assertEquals(Util.extractIntFromString("2D"),"2");
+	}
+	
+	@Test
+	public void unitTestRound()
+	{
+		assertEquals(Util.round(5.555, 0),6,0);
+		assertEquals(Util.round(5.555, 1),5.6,0);
+		assertEquals(Util.round(5.555, 2),5.56,0);
+		assertEquals(Util.round(5.555, 3),5.555,0);
+		assertEquals(Util.round(5.555, 4),5.555,0);
+		assertEquals(Util.round(0D, 2),0,0);
+		assertEquals(Util.round(0D, 0),0,0);
+		assertEquals(Util.round(0D, 1),0,0);
+	}
 }
