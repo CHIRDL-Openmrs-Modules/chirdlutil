@@ -51,6 +51,13 @@ import org.jibx.runtime.BindingDirectory;
 import org.jibx.runtime.IBindingFactory;
 import org.jibx.runtime.IUnmarshallingContext;
 import org.jibx.runtime.JiBXException;
+import org.joda.time.Days;
+import org.joda.time.LocalDate;
+import org.joda.time.Months;
+import org.joda.time.Period;
+import org.joda.time.PeriodType;
+import org.joda.time.Weeks;
+import org.joda.time.Years;
 import org.openmrs.Concept;
 import org.openmrs.ConceptClass;
 import org.openmrs.ConceptDatatype;
@@ -273,7 +280,18 @@ public class Util
 	
 	public static double getFractionalAgeInUnits(Date birthdate, Date today, String unit)
 	{
+		// Return 0 if the birthdate is after today
+		if (birthdate.compareTo(today) > 0)
+		{
+			return 0;
+		}
+		
 		int ageInUnits = getAgeInUnits(birthdate,today,unit);
+		
+		// DWE CHICA-588 Create Joda LocalDate objects using java Date objects
+		LocalDate localBirthDate = new LocalDate(birthdate);
+		LocalDate localToday = new LocalDate(today);
+		
 		Calendar birthdateCalendar = Calendar.getInstance();
 		birthdateCalendar.setTime(birthdate);
 		Calendar todayCalendar = Calendar.getInstance();
@@ -281,51 +299,55 @@ public class Util
 		
 		if (unit.equalsIgnoreCase(MONTH_ABBR))
 		{
+			// DWE CHICA-588 Use Joda-Time to get the difference in days
+			// since it correctly handles leap year, which is needed since 
+			// this method calls getAgeInUnits which now handles leap year.
+			// Get the time period represented in the number of years old with any difference in days
+			// Example: 1 year, 2 months, 6 days
+			Period p = new Period(localBirthDate, localToday, PeriodType.yearMonthDay());
 			int todayDayOfMonth = todayCalendar.get(Calendar.DAY_OF_MONTH);
 			int birthdateDayOfMonth = birthdateCalendar.get(Calendar.DAY_OF_MONTH);
 			
-			double dayDiff = todayDayOfMonth - birthdateDayOfMonth;
+			double dayDiff = p.getDays();
 			
 			if(dayDiff == 0)
 			{
 				return ageInUnits;
 			}
 			
+			// Now we need to check to see if the current day of month 
+			// is after the birth date day of month. If not, use the previous month
+			// to determine the number of days in the month
 			double daysInMonth = 0;
-			
-			if(dayDiff > 0)
+			if(todayDayOfMonth > birthdateDayOfMonth)
 			{
 				daysInMonth = todayCalendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 			}else{
 				todayCalendar.add(Calendar.MONTH, -1);
 				daysInMonth = todayCalendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-				dayDiff = daysInMonth+dayDiff;
 			}
 			return ageInUnits+(dayDiff/daysInMonth);
 		}
 		if (unit.equalsIgnoreCase(YEAR_ABBR))
 		{
-			int todayDayOfYear = todayCalendar.get(Calendar.DAY_OF_YEAR);
-			int birthdateDayOfYear = birthdateCalendar.get(Calendar.DAY_OF_YEAR);
+			// DWE CHICA-588 Use Joda-Time to get the difference in days
+			// since it correctly handles leap year, which is needed since 
+			// this method calls getAgeInUnits which now handles leap year.
+			// Get the time period represented in the number of years old with any difference in days
+			// Example: 1 year, 6 days
+			Period p = new Period(localBirthDate, localToday, PeriodType.yearDay());
 			
-			double dayDiff = todayDayOfYear - birthdateDayOfYear;
+			double dayDiff = p.getDays();
 			
 			if(dayDiff == 0)
 			{
 				return ageInUnits;
 			}
 			
-			//code to handle leap years
 			Integer daysInYear = 365; 
-			if(birthdateCalendar.getActualMaximum(Calendar.DAY_OF_YEAR)>365||
-					todayCalendar.getActualMaximum(Calendar.DAY_OF_YEAR)>365){
-				dayDiff--;
-			}
-			
-			if(dayDiff < 0)
+			if(dayDiff == 365) // dayDiff will be 365 if patient is born on March 1 and comes in on leap day
 			{
-				todayCalendar.add(Calendar.YEAR, -1);
-				dayDiff = daysInYear+dayDiff;
+				daysInYear = todayCalendar.getActualMaximum(Calendar.DAY_OF_YEAR);
 			}
 			return ageInUnits+(dayDiff/daysInYear);
 		}
@@ -334,7 +356,8 @@ public class Util
 			int todayDayOfWeek = todayCalendar.get(Calendar.DAY_OF_WEEK);
 			int birthdateDayOfWeek = birthdateCalendar.get(Calendar.DAY_OF_WEEK);
 			
-			int dayDiff = todayDayOfWeek - birthdateDayOfWeek;
+			// DWE CHICA-588 Changed dayDiff to double because it was causing a loss of precision in our division below
+			double dayDiff = todayDayOfWeek - birthdateDayOfWeek;
 			
 			if(dayDiff == 0)
 			{
@@ -360,12 +383,20 @@ public class Util
 	 * Returns a person's age in the specified units (days, weeks, months,
 	 * years)
 	 * 
+	 * DWE CHICA-588 Updated this method to use Joda-Time
+	 * This method will convert java.util.Date objects into joda.time.LocalDate objects 
+	 * and use the Between() methods in the Years, Months, Weeks, and Days classes to determine a person's age
+	 * in days, weeks, months, or years. This method will correctly handle leap years, for example, 
+	 * DOB is 02/29/2012 and the current date is 02/28/2013, the person is 365 days old, 
+	 * but is not exactly 1 year old based on the calendar. The person is still 1 year old, 
+	 * so this method will return a value of 1
+	 * 
 	 * @param birthdate person's date of birth
 	 * @param today date to calculate age from
 	 * @param unit unit to calculate age in (days, weeks, months, years)
 	 * @return int age in the given units
 	 */
-	//Note: this does not handle leap years for age in days
+	
 	public static int getAgeInUnits(Date birthdate, Date today, String unit)
 	{
 		if (birthdate == null)
@@ -377,74 +408,39 @@ public class Util
 		{
 			today = new Date();
 		}
-
-		int diffMonths = 0;
-		int diffDayOfMonth = 0;
-		int diffDayOfYear = 0;
-		int years = 0;
-		int months = 0;
-		int days = 0;
-
-		Calendar birthdateCalendar = Calendar.getInstance();
-		birthdateCalendar.setTime(birthdate);
-		Calendar todayCalendar = Calendar.getInstance();
-		todayCalendar.setTime(today);
-
+		
 		// return 0 if the birthdate is after today
 		if (birthdate.compareTo(today) > 0)
 		{
 			return 0;
 		}
-
-		years = todayCalendar.get(Calendar.YEAR)
-				- birthdateCalendar.get(Calendar.YEAR);
 		
-		diffMonths = todayCalendar.get(Calendar.MONTH)
-				- birthdateCalendar.get(Calendar.MONTH);
-		diffDayOfYear = todayCalendar.get(Calendar.DAY_OF_YEAR)
-				- birthdateCalendar.get(Calendar.DAY_OF_YEAR);
-
-		diffDayOfMonth = todayCalendar.get(Calendar.DAY_OF_MONTH)
-				- birthdateCalendar.get(Calendar.DAY_OF_MONTH);
-
-		months = years * 12;
-		months += diffMonths;
-
-		days = years * 365;
-		days += diffDayOfYear;
-
-		if (unit.equalsIgnoreCase(YEAR_ABBR))
+		int ageInUnits = 0;
+		LocalDate localBirthDate = new LocalDate(birthdate);
+		LocalDate localToday = new LocalDate(today);
+		
+		switch(unit)
 		{
-			if (diffMonths < 0)
-			{
-				years--;
-			}
-			else if (diffMonths == 0 && diffDayOfYear < 0)
-			{
-				years--;
-			}
-			return years;
+		case YEAR_ABBR:
+			Years years = Years.yearsBetween(localBirthDate, localToday);
+			ageInUnits = years.getYears();
+			break;
+		case MONTH_ABBR:
+			Months months = Months.monthsBetween(localBirthDate, localToday);
+			ageInUnits = months.getMonths();
+			break;
+		case WEEK_ABBR:
+			Weeks weeks = Weeks.weeksBetween(localBirthDate, localToday);
+			ageInUnits = weeks.getWeeks();
+			break;
+			default:
+				// Default to days, which was the previously existing default
+				Days days = Days.daysBetween(localBirthDate, localToday);
+				ageInUnits = days.getDays();
+				break;
 		}
-
-		if (unit.equalsIgnoreCase(MONTH_ABBR))
-		{
-			if (diffDayOfMonth < 0)
-			{
-				months--;
-			}
-			return months;
-		}
-
-		if (unit.equalsIgnoreCase(WEEK_ABBR))
-		{
-			return days/7;
-		}
-
-		if (days < 0)
-		{
-			days = 0;
-		}
-		return days;
+		
+		return ageInUnits;
 	}
 	
 	public static Double round(Double value,int decimalPlaces)
