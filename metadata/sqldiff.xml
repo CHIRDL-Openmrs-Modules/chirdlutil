@@ -193,7 +193,8 @@ drop TABLE IF EXISTS chirdlutil_location_tag_attribute;
         <author>Steve McKee</author>
         <date>September 9, 2013</date>
         <description>
-        New location attribute for the appointment clinic name.  This is the name to match for the voice calls in the hospital appointment file.
+        New location attribute for the appointment clinic name.  This is the name to match for the voice calls in the hospital appointment file. 
+        This also includes any missing location attributes.
         </description>
     <sql>
         insert into chirdlutilbackports_location_attribute (name, description)
@@ -202,6 +203,36 @@ drop TABLE IF EXISTS chirdlutil_location_tag_attribute;
         insert into chirdlutilbackports_location_attribute_value (location_id, value, location_attribute_id) 
         select a.location_id, '', (select location_attribute_id from chirdlutilbackports_location_attribute where name='clinicAppointmentName')
         from location a;
+        
+        insert into chirdlutilbackports_location_attribute (name, description)
+        values ('facilityCode', 'ASIIS code for facility used to query the immunization registry');
+        
+        insert into chirdlutilbackports_location_attribute (name, description)
+        values ('isImmunizationInterventionLocation', 'Indicates whether a given location is an immunization intervention site');
+        
+        insert into chirdlutilbackports_location_attribute (name, description)
+        values ('isMLPInterventionLocation', 'Indicates whether a given location is a MLP intervention site.');
+        
+        insert into chirdlutilbackports_location_attribute (name, description)
+        values ('socialWorkerName', 'Social worker assigned to a clinic location');
+        
+        insert into chirdlutilbackports_location_attribute (name, description)
+        values ('socialWorkerPhone', 'Phone number for the clinic social worker');
+        
+        insert into chirdlutilbackports_location_attribute (name, description)
+        values ('isAdolescentInterventionLocation', 'Indicates whether a given location is an Adolescent intervention site.');
+        
+        insert into chirdlutilbackports_location_attribute (name, description)
+        values ('isConstipationInterventionLocation', 'Indicates whether a given location is an Constipation intervention site.');
+        
+        insert into chirdlutilbackports_location_attribute (name, description)
+        values ('printSummerServingsSite', 'Indicates whether a given location is set to print the Summer Servings JIT.');
+        
+        insert into chirdlutilbackports_location_attribute (name, description)
+        values ('printEskenaziWellnessPacket', 'Control printing Eskenazi Wellness Packet');
+        
+        insert into chirdlutilbackports_location_attribute (name, description)
+        values ('isHPVTheoInterventionLocation', 'Indicates whether a given location is a HPV Theo intervention site.');
     </sql>
     </diff>
 </sqldiff>
