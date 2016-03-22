@@ -107,6 +107,10 @@ public class Util
 	public static final String MEASUREMENT_CELSIUS = "celsius";
 	public static final String MEASUREMENT_FAHRENHEIT = "fahrenheit";
 	
+	// DWE CHICA-635 IUH sends DegC, also adding one for "cel" since this is the official ISO standard
+	public static final String MEASUREMENT_DEG_C = "DegC";
+	public static final String MEASUREMENT_CEL = "cel";
+		
 	public static final String YEAR_ABBR = "yo";
 	public static final String MONTH_ABBR = "mo";
 	public static final String WEEK_ABBR = "wk";
@@ -176,7 +180,7 @@ public class Util
 			measurement = measurement * 2.20462262; // convert kilograms to pounds
 		}
 		
-		if (measurementUnits.equalsIgnoreCase(MEASUREMENT_CELSIUS))
+		if (measurementUnits.equalsIgnoreCase(MEASUREMENT_CELSIUS) || measurementUnits.equalsIgnoreCase(MEASUREMENT_DEG_C) || measurementUnits.equalsIgnoreCase(MEASUREMENT_CEL)) // DWE CHICA-635 Added DegC and cel
 		{
 			measurement = (measurement *  (9/5.0)) + 32; // convert celsius to fahrenheit
 		}
