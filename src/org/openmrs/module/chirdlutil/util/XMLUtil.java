@@ -493,9 +493,20 @@ public class XMLUtil
 	 * @return A File referencing the merge XML.  Null will be returned if the XML merge file cannot be found.
 	 */
 	public static File findMergeXmlFile(File mergeDirectory, File subDirectory, Integer locationId, Integer formId, Integer formInstanceId) {
-		int i = 22;
-		String filename = locationId + "_" + formId + "_" + formInstanceId + "." + i;
+		String filename = locationId + "_" + formId + "_" + formInstanceId + ChirdlUtilConstants.FILE_EXTENSION_XML;
 		File xmlFile = new File(mergeDirectory, filename);
+		if (xmlFile.exists()) {
+			return xmlFile;
+		}
+		
+		xmlFile = new File(subDirectory, filename);
+		if (xmlFile.exists()) {
+			return xmlFile;
+		}
+		
+		int i = 22;
+		filename = locationId + "_" + formId + "_" + formInstanceId + "." + i;
+		xmlFile = new File(mergeDirectory, filename);
 		while (i > 18 && !xmlFile.exists()) {
 			i--;
 			filename = locationId + "_" + formId + "_" + formInstanceId + "." + i;
