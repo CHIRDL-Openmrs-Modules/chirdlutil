@@ -427,5 +427,10 @@ public final class ChirdlUtilConstants {
 	/*
 	 * 
 	 */
+	
+	/*
+	 * Encounter attribute constants
+	 */
+	public static final String ENCOUNTER_ATTRIBUTE_VISIT_NUMBER = "Visit Number";
 }
 
