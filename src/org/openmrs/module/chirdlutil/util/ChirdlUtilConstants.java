@@ -433,5 +433,12 @@ public final class ChirdlUtilConstants {
 	 * Encounter attribute constants
 	 */
 	public static final String ENCOUNTER_ATTRIBUTE_VISIT_NUMBER = "Visit Number";
+	
+	/*
+	 * Scheduled task properties 
+	 */
+	public static final String TASK_PROPERTY_SOCKET_READ_TIMEOUT = "socketReadTimeout";
+	public static final String TASK_PROPERTY_HOST = "host";
+	public static final String TASK_PROPERTY_PORT= "port";
 }
 
