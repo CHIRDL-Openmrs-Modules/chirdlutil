@@ -1,5 +1,7 @@
 package org.openmrs.module.chirdlutil.util;
 
+//import org.apache.commons.codec.binary.Base64;
+
 /**
  * Static methods for translating Base64 encoded strings to byte arrays
  * and vice-versa.
@@ -29,43 +31,13 @@ public class  Base64 {
     }
 
     public static String byteArrayToBase64(byte[] a, boolean alternate) {
-        int aLen = a.length;
-        int numFullGroups = aLen/3;
-        int numBytesInPartialGroup = aLen - 3*numFullGroups;
-        int resultLen = 4*((aLen + 2)/3);
-        StringBuffer result = new StringBuffer(resultLen);
-        char[] intToAlpha = (alternate ? intToAltBase64 : intToBase64);
-
-        // Translate all full groups from byte array elements to Base64
-        int inCursor = 0;
-        for (int i=0; i<numFullGroups; i++) {
-            int byte0 = a[inCursor++] & 0xff;
-            int byte1 = a[inCursor++] & 0xff;
-            int byte2 = a[inCursor++] & 0xff;
-            result.append(intToAlpha[byte0 >> 2]);
-            result.append(intToAlpha[(byte0 << 4)&0x3f | (byte1 >> 4)]);
-            result.append(intToAlpha[(byte1 << 2)&0x3f | (byte2 >> 6)]);
-            result.append(intToAlpha[byte2 & 0x3f]);
-        }
-
-        // Translate partial group if present
-        if (numBytesInPartialGroup != 0) {
-            int byte0 = a[inCursor++] & 0xff;
-            result.append(intToAlpha[byte0 >> 2]);
-            if (numBytesInPartialGroup == 1) {
-                result.append(intToAlpha[(byte0 << 4) & 0x3f]);
-                result.append("==");
-            } else {
-                // assert numBytesInPartialGroup == 2;
-                int byte1 = a[inCursor++] & 0xff;
-                result.append(intToAlpha[(byte0 << 4)&0x3f | (byte1 >> 4)]);
-                result.append(intToAlpha[(byte1 << 2)&0x3f]);
-                result.append('=');
-            }
-        }
-        // assert inCursor == a.length;
-        // assert result.length() == resultLen;
-        return result.toString();
+      
+    	/**
+         * Replaced with org.apache.commons.codec.binary.Base64
+         */
+        byte[] encodedBtyeArray = org.apache.commons.codec.binary.Base64.encodeBase64(a, alternate);
+    	String result = javax.xml.bind.DatatypeConverter.printBase64Binary(encodedBtyeArray);
+        return result;
     }
 
     /**
@@ -213,8 +185,8 @@ public class  Base64 {
     };
     
     public static void main(String args[]) {
-        int numRuns  = Integer.parseInt(args[0]);
-        int numBytes = Integer.parseInt(args[1]);
+        int numRuns  = Integer.parseInt("10");//args[0]);
+        int numBytes = Integer.parseInt("11");//args[1]);
         java.util.Random rnd = new java.util.Random();
         for (int i=0; i<numRuns; i++) {
             for (int j=0; j<numBytes; j++) {
@@ -223,15 +195,18 @@ public class  Base64 {
                     arr[k] = (byte)rnd.nextInt();
 
                 String s = byteArrayToBase64(arr);
-                byte [] b = base64ToByteArray(s);
+                /*byte [] b = base64ToByteArray(s);
                 if (!java.util.Arrays.equals(arr, b))
                     System.out.println("Dismal failure!");
 
                 s = byteArrayToAltBase64(arr);
                 b = altBase64ToByteArray(s);
                 if (!java.util.Arrays.equals(arr, b))
-                    System.out.println("Alternate dismal failure!");
+                    System.out.println("Alternate dismal failure!");*/
+                System.out.println(s);
+               
             }
+            
         }
     }
 }
