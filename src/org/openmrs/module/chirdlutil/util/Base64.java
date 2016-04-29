@@ -185,8 +185,8 @@ public class  Base64 {
     };
     
     public static void main(String args[]) {
-        int numRuns  = Integer.parseInt("10");//args[0]);
-        int numBytes = Integer.parseInt("11");//args[1]);
+        int numRuns  = Integer.parseInt(args[0]);
+        int numBytes = Integer.parseInt(args[1]);
         java.util.Random rnd = new java.util.Random();
         for (int i=0; i<numRuns; i++) {
             for (int j=0; j<numBytes; j++) {
