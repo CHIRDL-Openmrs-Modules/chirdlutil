@@ -217,6 +217,12 @@ public final class ChirdlUtilConstants {
 	public static final String GLOBAL_PROP_ENCRYPTION_KEY = "chica.encryptionKey";
 	public static final String GLOBAL_PROP_ENABLE_MANUAL_CHECKIN = "chica.enableManualCheckin";
 	public static final String GLOBAL_PROP_GREASEBOARD_REFRESH = "chica.greaseBoardRefresh";
+	public static final String GLOBAL_PROP_OUTGOING_NOTE_INCLUDE_PV1 = "chica.outgoingNoteIncludePV1";
+	public static final String GLOBAL_PROP_OUTGOING_NOTE_TXA_UNIQUE_DOC_NUMBER = "chica.outgoingNoteTXAUniqueDocumentNumber";
+	public static final String GLOBAL_PROP_OUTGOING_NOTE_TXA_DOC_AVAILABILITY_STATUS = "chica.outgoingNoteTXADocumentAvailabilityStatus";
+	public static final String GLOBAL_PROP_OUTGOING_NOTE_HOST = "chica.outgoingNoteHost";
+	public static final String GLOBAL_PROP_OUTGOING_NOTE_PORT = "chica.outgoingNotePort";
+	
 	/*
 	 * 
 	 */
@@ -400,6 +406,17 @@ public final class ChirdlUtilConstants {
 	  */
 	
 	/*
+	 * HL7 Constants
+	 */
+	public static final String HL7_ENCODING_CHARS = "^~\\&";
+	public static final String HL7_FIELD_SEPARATOR = "|";
+	public static final String HL7_DATATYPE_TX = "TX";
+	public static final String HL7_RESULT_STATUS = "F";
+	public static final String HL7_MDM = "MDM";
+	public static final String HL7_EVENT_CODE_T02 = "T02";
+	public static final String HL7_VERSION_2_2 = "2.2";
+	
+	/*
 	 * HL7 Acknowledgment Codes
 	 */
 	public static final String HL7_ACK_CODE_APPLICATION_ACCEPT = "AA";
@@ -433,5 +450,19 @@ public final class ChirdlUtilConstants {
 	 * Encounter attribute constants
 	 */
 	public static final String ENCOUNTER_ATTRIBUTE_VISIT_NUMBER = "Visit Number";
+	
+	/*
+	 * Scheduled task properties 
+	 */
+	public static final String TASK_PROPERTY_SOCKET_READ_TIMEOUT = "socketReadTimeout";
+	public static final String TASK_PROPERTY_HOST = "host";
+	public static final String TASK_PROPERTY_PORT= "port";
+	
+	/*
+	 * Date constants
+	 */
+	public static final String DATE_FORMAT_yyyy_MM_dd_HH_mm = "yyyyMMddHHmm";
+	public static final String DATE_FORMAT_yyyy_MM_dd_HH_mm_ss = "yyyyMMddHHmmss";
+	public static final String DATE_FORMAT_yyyy_MM_dd = "yyyyMMdd";
 }
 
