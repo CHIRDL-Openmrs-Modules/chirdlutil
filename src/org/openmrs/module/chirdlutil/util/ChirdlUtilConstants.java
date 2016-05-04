@@ -415,6 +415,9 @@ public final class ChirdlUtilConstants {
 	public static final String HL7_MDM = "MDM";
 	public static final String HL7_EVENT_CODE_T02 = "T02";
 	public static final String HL7_VERSION_2_2 = "2.2";
+	public static final String HL7_START_OF_MESSAGE = "\u000b";
+    public static final String HL7_SEGMENT_SEPARATOR = "\r";
+    public static final String HL7_END_OF_MESSGAE = "\u001c";
 	
 	/*
 	 * HL7 Acknowledgment Codes
@@ -457,6 +460,7 @@ public final class ChirdlUtilConstants {
 	public static final String TASK_PROPERTY_SOCKET_READ_TIMEOUT = "socketReadTimeout";
 	public static final String TASK_PROPERTY_HOST = "host";
 	public static final String TASK_PROPERTY_PORT= "port";
+	public static final String TASK_PROPERTY_THREAD_SLEEP_TIME = "threadSleepTime";
 	
 	/*
 	 * Date constants
