@@ -108,8 +108,10 @@ public class Util
 	public static final String MEASUREMENT_FAHRENHEIT = "fahrenheit";
 	
 	// DWE CHICA-635 IUH sends DegC, also adding one for "cel" since this is the official ISO standard
+	// Epic is sending "C"
 	public static final String MEASUREMENT_DEG_C = "DegC";
 	public static final String MEASUREMENT_CEL = "cel";
+	public static final String MEASUREMENT_CELSIUS_C = "C";
 		
 	public static final String YEAR_ABBR = "yo";
 	public static final String MONTH_ABBR = "mo";
