@@ -182,7 +182,7 @@ public class Util
 			measurement = measurement * 2.20462262; // convert kilograms to pounds
 		}
 		
-		if (measurementUnits.equalsIgnoreCase(MEASUREMENT_CELSIUS) || measurementUnits.equalsIgnoreCase(MEASUREMENT_DEG_C) || measurementUnits.equalsIgnoreCase(MEASUREMENT_CEL)) // DWE CHICA-635 Added DegC and cel
+		if (measurementUnits.equalsIgnoreCase(MEASUREMENT_CELSIUS) || measurementUnits.equalsIgnoreCase(MEASUREMENT_DEG_C) || measurementUnits.equalsIgnoreCase(MEASUREMENT_CEL) || measurementUnits.equalsIgnoreCase(MEASUREMENT_CELSIUS_C)) // DWE CHICA-635 Added DegC and cel
 		{
 			measurement = (measurement *  (9/5.0)) + 32; // convert celsius to fahrenheit
 		}
