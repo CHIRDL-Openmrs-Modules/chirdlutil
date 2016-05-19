@@ -213,8 +213,14 @@ public final class ChirdlUtilConstants {
 	public static final String GLOBAL_PROP_MRF_TARGET_ENDPOINT = "chica.MRFQueryTargetEndpoint";
 	public static final String GLOBAL_PROP_PERFORM_MRF_QUERY = "chica.performMRFQuery";
 	public static final String GLOBAL_PROP_MRF_QUERY_NAMESPACE = "chica.MRFQueryNamespace";
-	public static final String GLOBAL_PROP_MRF_ERROR_DIRECTORY = "chica.mrfParseErrorDirectory";
-	public static final String GLOBAL_PROP_SESSION_TIMEOUT_WARNING= "chica.sessionTimeoutWarning";
+	public static final String GLOBAL_PROP_OUTGOING_FAX_SENDER = "atd.outgoingFaxFrom";
+	public static final String GLOBAL_PROP_OUTGOING_FAX_RECIPIENT = "atd.outgoingFaxTo";
+	public static final String GLOBAL_PROP_OUTGOING_FAX_WSDL_LOCATION = "atd.outgoingFaxWsdlLocation";
+	public static final String GLOBAL_PROP_OUTGOING_FAX_USERNAME = "atd.outgoingFaxUsername";
+	public static final String GLOBAL_PROP_OUTGOING_FAX_PASSWORD = "atd.outgoingFaxPassword";
+	public static final String GLOBAL_PROP_OUTGOING_FAX_PRIORITY = "atd.outgoingFaxPriority";
+	public static final String GLOBAL_PROP_OUTGOING_FAX_RESOLUTION = "atd.outgoingFaxResolution";
+	public static final String GLOBAL_PROP_OUTGOING_FAX_SEND_TIME = "atd.outgoingFaxSendTime";
 	/*
 	 * 
 	 */
@@ -228,6 +234,7 @@ public final class ChirdlUtilConstants {
 	public static final String GENERAL_INFO_FALSE = "false";
 	public static final String GENERAL_INFO_FORWARD_SLASH = "/";
 	public static final String GENERAL_INFO_BACK_SLASH = "\\";
+	public static final String GENERAL_INFO_EMPTY_STRING = "";
 	/*
 	 * 
 	 */
@@ -423,8 +430,17 @@ public final class ChirdlUtilConstants {
 	public static final String DATA_SOURCE_IN_MEMORY = "RMRS";
 	public static final String DATA_SOURCE_IU_HEALTH_MEDICAL_RECORD = "IU Health MRF Dump";
 	public static final String DATA_SOURCE_IU_HEALTH_VITALS = "IU Health Vitals";
+	
 	/*
-	 * 
+	 * Fax
 	 */
+	public static final String FAX_SEND_TIME_IMMEDIATE = "0.0";
+	public static final String FAX_SEND_TIME_OFF_PEAK = "1.0";
+	public static final int FAX_RESOLUTION_STANDARD = 0;
+	public static final int FAX_RESOLUTION_HIGH = 1;
+	public static final int FAX_PRIORITY_URGENT = 3;
+	public static final int FAX_PRIORITY_HIGH = 2;
+	public static final int FAX_PRIORITY_NORMAL = 1;
+	public static final int FAX_PRIORITY_LOW = 0;
 }
 

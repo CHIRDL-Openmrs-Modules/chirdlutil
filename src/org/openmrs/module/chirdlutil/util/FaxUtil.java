@@ -14,14 +14,27 @@
 package org.openmrs.module.chirdlutil.util;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.UUID;
 
 import org.jfree.util.Log;
 import org.openmrs.Patient;
 import org.openmrs.PatientIdentifier;
+import org.openmrs.PersonName;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
+
+import com.biscom.ArrayOfAttachment;
+import com.biscom.ArrayOfRecipientInfo;
+import com.biscom.Attachment;
+import com.biscom.FAXCOMX0020Service;
+import com.biscom.FAXCOMX0020ServiceSoap;
+import com.biscom.RecipientInfo;
+import com.biscom.ResultMessage;
+import com.biscom.SenderInfo;
 
 
 /**
@@ -30,6 +43,13 @@ import org.openmrs.api.context.Context;
  * @author Steve McKee
  */
 public class FaxUtil {
+
+	
+	private static final int LOGON_THROUGH_USERACCOUNT = 2;
+
+	private static final String EMPTY_STRING = ChirdlUtilConstants.GENERAL_INFO_EMPTY_STRING; //shorten name
+	private static final String SEND_TIME_IMMEDIATE = "0.0";
+	private static final String SEND_TIME_OFF_PEAK = "1.0";
 
 	/**
 	 * Faxes a file.
@@ -121,5 +141,120 @@ public class FaxUtil {
 			Log.error("Error faxing file: " + fileToFax, e);
 			throw e;
 		}
+	}
+	
+	/**
+	 * Faxes a file using the FAX COM Anywhere (biscom.com) web service using wsdl generated java classes.  
+	 * @param fileToFax - the file that is being faxed.
+	 * @param wsdlLocation - wsdl URL of the FAX COM web service
+	 * @param faxQueue - use empty string if this is unknown
+	 * @param faxNumber - destination fax number
+	 * @param userName - web service username
+	 * @param password - web service password
+	 * @param from - sender information displayed on the the coverpage
+	 * @param to - recipient information displayed on the cover page
+	 * @param patient - patient for whom this fax was sent
+	 * @param formName - displayed on cover page
+	 * @param resolution - resolutiion of fax image
+	 * @param priority - priority level of fax request
+	 * @param sendTime - defines if sending on-peak or off-peak hours
+	 * @author Meena Sheley 
+	 */
+	
+	public static void faxFileByWebService(File fileToFax, String wsdlLocation, String faxQueue, String faxNumber, 
+			String userName, String password, String from, String to, Patient patient, String formName, int resolution, int priority, String sendTime)
+			throws Exception {
+		
+		if (fileToFax == null) {
+			throw new IllegalArgumentException("The 'fileToFax' parameter cannot be null.");
+		}else if (wsdlLocation == null){
+			throw new IllegalArgumentException("The fax service wsdl location cannot be null.");
+		}else if (from == null) {
+			throw new IllegalArgumentException("The 'from' parameter cannot be null.");
+		} else if (to == null) {
+			throw new IllegalArgumentException("The fax 'to' parameter cannot be null.");
+		} else if (faxNumber == null) {
+			throw new IllegalArgumentException("The 'faxNumber' parameter cannot be null.");
+		} else if (userName == null ){
+			throw new IllegalArgumentException("The 'userName' parameter cannot be null.");
+		}else if (password == null){
+			throw new IllegalArgumentException("The 'password' parameter cannot be null.");
+		}
+		if (faxQueue == null){
+			//use empty string for default queue
+			faxQueue  = EMPTY_STRING;
+		}
+		if (!SEND_TIME_IMMEDIATE.equals(sendTime) && SEND_TIME_OFF_PEAK.equals(sendTime)){
+			sendTime = SEND_TIME_IMMEDIATE;
+		}
+		if (priority < 0 || priority > 3){
+			priority = 2;
+		}
+		
+		try {
+			
+			FAXCOMX0020Service service = new FAXCOMX0020Service();
+			FAXCOMX0020ServiceSoap port = service.getFAXCOMX0020ServiceSoap();
+			
+			String subject = "Form: " +  formName;
+			String memo = "Form: " + formName; 
+			
+			//Add patient information to memo 
+			if (patient != null) {
+				PatientIdentifier ident = patient.getPatientIdentifier();
+				if (ident != null) {
+					memo += " MRN: " + ident.getIdentifier();
+				}
+				String firstName = patient.getGivenName();
+				String lastName = patient.getFamilyName();
+				if (!EMPTY_STRING.equals(firstName.trim()) && !EMPTY_STRING.equals(lastName.trim())){
+					memo += " Patient Name: " + lastName + ", " + firstName;
+				}
+					
+			}
+			
+			//add attachments
+			Attachment attachment = new Attachment();
+			attachment.setFileName(fileToFax.getName());
+			byte[] fileContents;
+			try {
+				FileInputStream fin = new FileInputStream(fileToFax);
+				fileContents = new byte[(int)fileToFax.length()];
+				fin.read(fileContents);
+				fin.close();
+				attachment.setFileContent(fileContents);
+			} catch (IOException e) {
+				Log.error("Exception reading contents of fax file: " + fileToFax.getName());
+			}
+			
+			ArrayOfAttachment attachments = new ArrayOfAttachment();
+			attachments.getAttachment().add(attachment);
+			
+			//sender
+			SenderInfo sender = new SenderInfo();
+			sender.setName(from);
+			
+			//recipient
+			ArrayOfRecipientInfo recipients = new ArrayOfRecipientInfo();
+			RecipientInfo recInfo = new RecipientInfo();
+			recInfo.setName(to);
+			recInfo.setFaxNumber(faxNumber);
+			
+			String idTag = EMPTY_STRING; //optional and unknown at this point
+			String coverPage = EMPTY_STRING;  // empty string will use Eskenazi Health default coverpage
+			String tsi = EMPTY_STRING; //Transmitting Station ID
+			
+			ResultMessage rm = port.loginAndSendNewFaxMessage("", userName, password, LOGON_THROUGH_USERACCOUNT, idTag, 
+					priority, sendTime, resolution, subject, coverPage,
+					memo, sender, recipients, attachments , tsi);
+			Log.info("Fax result: " + rm.getDetail());
+			
+				
+			
+		} catch (Exception e) {
+			throw e;
+		}
+	
+		
 	}
 }
