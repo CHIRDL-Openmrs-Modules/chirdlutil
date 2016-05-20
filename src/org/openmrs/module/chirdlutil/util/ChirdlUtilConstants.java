@@ -110,6 +110,7 @@ public final class ChirdlUtilConstants {
 	 * Rules
 	 */
 	public static final String RULE_CREATE_JIT = "CREATE_JIT";
+	public static final String RULE_PROVIDER_NAME = "providerName";
 	/*
 	 * 
 	 */
@@ -148,6 +149,8 @@ public final class ChirdlUtilConstants {
 	public static final String FORM_ATTR_USE_ALTERNATE_PRINTER = "useAlternatePrinter";
 	public static final String FORM_ATTR_ALTERNATE_PRINTER = "alternatePrinter";
 	public static final String FORM_ATTR_DISPLAY_AND_UPDATE_PREVIOUS_VALUES = "displayAndUpdatePreviousValues";
+	public static final String FORM_ATTRIBUTE_AUTO_FAX = "auto-fax";
+	public static final String FORM_ATTRIBUTE_IMAGE_DIRECTORY = "imageDirectory";
 	/*
 	 * 
 	 */
@@ -168,6 +171,7 @@ public final class ChirdlUtilConstants {
 	 * Location Attribute Values
 	 */
 	public static final String LOCATION_ATTR_PAGER_MESSAGE = "pagerMessage";
+	public static final String LOCATION_ATTR_CLINIC_FAX_NUMBER = "clinicFaxNumber";
 	/*
 	 * 
 	 */
@@ -431,16 +435,6 @@ public final class ChirdlUtilConstants {
 	public static final String DATA_SOURCE_IU_HEALTH_MEDICAL_RECORD = "IU Health MRF Dump";
 	public static final String DATA_SOURCE_IU_HEALTH_VITALS = "IU Health Vitals";
 	
-	/*
-	 * Fax
-	 */
-	public static final String FAX_SEND_TIME_IMMEDIATE = "0.0";
-	public static final String FAX_SEND_TIME_OFF_PEAK = "1.0";
-	public static final int FAX_RESOLUTION_STANDARD = 0;
-	public static final int FAX_RESOLUTION_HIGH = 1;
-	public static final int FAX_PRIORITY_URGENT = 3;
-	public static final int FAX_PRIORITY_HIGH = 2;
-	public static final int FAX_PRIORITY_NORMAL = 1;
-	public static final int FAX_PRIORITY_LOW = 0;
+	
 }
 
