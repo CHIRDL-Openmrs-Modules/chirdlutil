@@ -15,7 +15,6 @@ package org.openmrs.module.chirdlutil.util;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.UUID;
@@ -23,8 +22,8 @@ import java.util.UUID;
 import org.jfree.util.Log;
 import org.openmrs.Patient;
 import org.openmrs.PatientIdentifier;
-import org.openmrs.PersonName;
 import org.openmrs.api.AdministrationService;
+import org.openmrs.api.PersonService;
 import org.openmrs.api.context.Context;
 
 import com.biscom.ArrayOfAttachment;
@@ -162,7 +161,7 @@ public class FaxUtil {
 	 */
 	
 	public static void faxFileByWebService(File fileToFax, String wsdlLocation, String faxQueue, String faxNumber, 
-			String userName, String password, String from, String to, Patient patient, String formName, int resolution, int priority, String sendTime)
+			String userName, String password, String from, String to, String company, Patient patient, String formName, int resolution, int priority, String sendTime)
 			throws Exception {
 		
 		if (fileToFax == null) {
@@ -192,7 +191,7 @@ public class FaxUtil {
 		}
 		
 		try {
-			
+	
 			FAXCOMX0020Service service = new FAXCOMX0020Service();
 			FAXCOMX0020ServiceSoap port = service.getFAXCOMX0020ServiceSoap();
 			
@@ -202,13 +201,18 @@ public class FaxUtil {
 			//Add patient information to memo 
 			if (patient != null) {
 				PatientIdentifier ident = patient.getPatientIdentifier();
-				if (ident != null) {
-					memo += " MRN: " + ident.getIdentifier();
+				String mrn = EMPTY_STRING;
+				if (ident != null){
+					mrn = ident.getIdentifier();
 				}
+				
+				memo += "\r\nMRN: " + mrn;
+				
 				String firstName = patient.getGivenName();
 				String lastName = patient.getFamilyName();
+				memo += "\r\nPatient Name: ";
 				if (!EMPTY_STRING.equals(firstName.trim()) && !EMPTY_STRING.equals(lastName.trim())){
-					memo += " Patient Name: " + lastName + ", " + firstName;
+					memo += lastName + ", " + firstName;
 				}
 					
 			}
@@ -239,6 +243,9 @@ public class FaxUtil {
 			RecipientInfo recInfo = new RecipientInfo();
 			recInfo.setName(to);
 			recInfo.setFaxNumber(faxNumber);
+			recInfo.setCompany(company);
+			recipients.getRecipientInfo().add(recInfo);
+			
 			
 			String idTag = EMPTY_STRING; //optional and unknown at this point
 			String coverPage = EMPTY_STRING;  // empty string will use Eskenazi Health default coverpage

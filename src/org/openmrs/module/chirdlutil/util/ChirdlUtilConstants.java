@@ -172,6 +172,8 @@ public final class ChirdlUtilConstants {
 	 */
 	public static final String LOCATION_ATTR_PAGER_MESSAGE = "pagerMessage";
 	public static final String LOCATION_ATTR_CLINIC_FAX_NUMBER = "clinicFaxNumber";
+	public static final String LOCATION_ATTR_CLINIC_FAX_NUMBER_DISPLAY = "clinicFaxNumberDisplay";
+	public static final String LOCATION_ATTR_CLINIC_DISPLAY_NAME = "clinicDisplayName";
 	/*
 	 * 
 	 */
@@ -218,7 +220,7 @@ public final class ChirdlUtilConstants {
 	public static final String GLOBAL_PROP_PERFORM_MRF_QUERY = "chica.performMRFQuery";
 	public static final String GLOBAL_PROP_MRF_QUERY_NAMESPACE = "chica.MRFQueryNamespace";
 	public static final String GLOBAL_PROP_OUTGOING_FAX_SENDER = "atd.outgoingFaxFrom";
-	public static final String GLOBAL_PROP_OUTGOING_FAX_RECIPIENT = "atd.outgoingFaxTo";
+	public static final String GLOBAL_PROP_OUTGOING_FAX_RECIPIENT = "atd.defaultOutgoingFaxRecipient";
 	public static final String GLOBAL_PROP_OUTGOING_FAX_WSDL_LOCATION = "atd.outgoingFaxWsdlLocation";
 	public static final String GLOBAL_PROP_OUTGOING_FAX_USERNAME = "atd.outgoingFaxUsername";
 	public static final String GLOBAL_PROP_OUTGOING_FAX_PASSWORD = "atd.outgoingFaxPassword";
