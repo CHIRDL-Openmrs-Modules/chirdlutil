@@ -454,6 +454,7 @@ public final class ChirdlUtilConstants {
 	 * Encounter attribute constants
 	 */
 	public static final String ENCOUNTER_ATTRIBUTE_VISIT_NUMBER = "Visit Number";
+	public static final String ENCOUNTER_ATTRIBUTE_ORIGINAL_LOCATION = "Original Location";
 	
 	/*
 	 * Scheduled task properties 
