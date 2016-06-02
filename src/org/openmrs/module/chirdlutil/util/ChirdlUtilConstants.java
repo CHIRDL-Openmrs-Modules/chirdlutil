@@ -36,6 +36,7 @@ public final class ChirdlUtilConstants {
 	public static final String IDENTIFIER_TYPE_MRN = "MRN_OTHER";
 	public static final String IDENTIFIER_TYPE_SSN = "SSN";
 	public static final String IDENTIFIER_TYPE_IMMUNIZATION_REGISTRY = "Immunization Registry";
+	public static final String IDENTIFIER_TYPE_MRN_EHR = "MRN_EHR";
 
 	/*
 	 * 
