@@ -2,6 +2,7 @@ package org.openmrs.module.chirdlutil.util;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.util.HashSet;
 
 /**
  * @author msheley Filters files in a directory based on the extension and file
@@ -11,10 +12,17 @@ import java.io.FilenameFilter;
 public class FileListFilter implements FilenameFilter {
 	private String name;
 	private String extension;
+	private HashSet<String> extensionSet = new HashSet<String>();
 
 	public FileListFilter(String name, String extension) {
 		this.name = name;
 		this.extension = extension;
+		this.extensionSet.add(extension);
+	}
+	
+	public FileListFilter(String name, HashSet<String> extensions) {
+		this.name = name;
+		this.extensionSet = extensions;
 	}
 
 	public boolean accept(File directory, String filename) {
@@ -25,10 +33,10 @@ public class FileListFilter implements FilenameFilter {
 					|| filename.startsWith("_"+name + "_"));
 		}
 		
-		if (extension != null) {
-			ok &= filename.endsWith('.' + extension);
-		}
-
+		String fileNameExtension = filename.substring(filename.lastIndexOf(".") + 1);
+		
+		ok &= extensionSet.contains(fileNameExtension);
+	
 		return ok;
 	}
 	

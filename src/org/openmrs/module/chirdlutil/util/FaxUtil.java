@@ -183,7 +183,7 @@ public class FaxUtil {
 			//use empty string for default queue
 			faxQueue  = EMPTY_STRING;
 		}
-		if (!SEND_TIME_IMMEDIATE.equals(sendTime) && SEND_TIME_OFF_PEAK.equals(sendTime)){
+		if (!SEND_TIME_IMMEDIATE.equals(sendTime) && !SEND_TIME_OFF_PEAK.equals(sendTime)){
 			sendTime = SEND_TIME_IMMEDIATE;
 		}
 		if (priority < 0 || priority > 3){

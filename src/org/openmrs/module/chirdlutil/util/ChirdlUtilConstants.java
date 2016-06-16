@@ -184,6 +184,8 @@ public final class ChirdlUtilConstants {
 	public static final String FILE_PENDING = "Pending";
 	public static final String FILE_ARCHIVE = "Archive";
 	public static final String FILE_PDF = "pdf";
+	public static final String FILE_TIF = "tif";
+	public static final String FILE_TIFF = "tiff";
 	public static final String FILE_EXTENSION_XML = ".xml";
 	public static final String FILE_EXTENSION_XMLE = ".xmle";
 	public static final String FILE_EXTENSION_PDF = ".pdf";
@@ -192,6 +194,8 @@ public final class ChirdlUtilConstants {
 	public static final String FILE_EXTENSION_22 = ".22";
 	public static final String FILE_EXTENSION_23 = ".23";
 	public static final String FILE_EXTENSION_HL7 = ".hl7";
+	public static final String FILE_EXTENSION_TIF = ".tif";
+	public static final String FILE_EXTENSION_TIFF = ".tiff";
 	public static final String FILE_PDF_TEMPLATE = "_template.pdf";
 	/*
 	 * 

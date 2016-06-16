@@ -18,6 +18,7 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.InvalidPropertiesFormatException;
 import java.util.Properties;
 
@@ -585,6 +586,34 @@ public class IOUtil
 		//This FilenameFilter will get ALL tifs starting with the filename
 		//including of rescan versions nnn_1.tif, nnn_2.tif, etc
 		FilenameFilter filtered = new FileListFilter(imageFilename, extension);
+		File dir = new File(imageDir);
+		File[] files = dir.listFiles(filtered);
+		if (!(files == null || files.length == 0)) {
+			//This FileDateComparator will list in order
+			//with newest file first.
+			Arrays.sort(files, new FileDateComparator());
+			imageFilename = files[0].getPath();
+		}
+		
+		File imagefile = new File(imageFilename);
+		
+		return imagefile;
+	}
+	
+	/**
+	 * Finds an image file based on location id, form id, and form instance id 
+	 * in the provided directory.
+	 * 
+	 * @param imageFilename String containing the location id + form id + form instance id.
+	 * @param imageDir The directory to search for the file.
+	 * @param extensions Set of acceptable file extensions.
+	 * 
+	 * @return File matching the search criteria.
+	 */
+	public static File searchForFile(String imageFilename, String imageDir, HashSet<String> extensions) {
+		//This FilenameFilter will get ALL tifs starting with the filename
+		//including of rescan versions nnn_1.tif, nnn_2.tif, etc
+		FilenameFilter filtered = new FileListFilter(imageFilename, extensions);
 		File dir = new File(imageDir);
 		File[] files = dir.listFiles(filtered);
 		if (!(files == null || files.length == 0)) {
