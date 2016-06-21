@@ -184,8 +184,6 @@ public final class ChirdlUtilConstants {
 	public static final String FILE_PENDING = "Pending";
 	public static final String FILE_ARCHIVE = "Archive";
 	public static final String FILE_PDF = "pdf";
-	public static final String FILE_TIF = "tif";
-	public static final String FILE_TIFF = "tiff";
 	public static final String FILE_EXTENSION_XML = ".xml";
 	public static final String FILE_EXTENSION_XMLE = ".xmle";
 	public static final String FILE_EXTENSION_PDF = ".pdf";
@@ -245,6 +243,7 @@ public final class ChirdlUtilConstants {
 	public static final String GENERAL_INFO_FORWARD_SLASH = "/";
 	public static final String GENERAL_INFO_BACK_SLASH = "\\";
 	public static final String GENERAL_INFO_EMPTY_STRING = "";
+	public static final String GENERAL_INFO_CARRIAGE_RETURN_LINE_FEED = "\r\n";
 	/*
 	 * 
 	 */
@@ -440,7 +439,22 @@ public final class ChirdlUtilConstants {
 	public static final String DATA_SOURCE_IN_MEMORY = "RMRS";
 	public static final String DATA_SOURCE_IU_HEALTH_MEDICAL_RECORD = "IU Health MRF Dump";
 	public static final String DATA_SOURCE_IU_HEALTH_VITALS = "IU Health Vitals";
+	/*
+	 * 
+	 */
 	
-	
+	/*
+	 * Fax service
+	 */
+	public static final int FAX_PRIORITY_URGENT = 3;
+	public static final int FAX_PRIORITY_HIGH = 2;
+	public static final int FAX_PRIORITY_NORMAL = 1;
+	public static final int FAX_PRIORITY_LOW = 0;
+	public static final int FAX_RESOLUTION_HIGH = 1;
+	public static final String FAX_SEND_TIME_IMMEDIATE = "0.0";
+	public static final String FAX_SEND_TIME_OFF_PEAK = "1.0";
+	/*
+	 * 
+	 */
 }
 

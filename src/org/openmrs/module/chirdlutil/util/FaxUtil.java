@@ -23,7 +23,6 @@ import org.jfree.util.Log;
 import org.openmrs.Patient;
 import org.openmrs.PatientIdentifier;
 import org.openmrs.api.AdministrationService;
-import org.openmrs.api.PersonService;
 import org.openmrs.api.context.Context;
 
 import com.biscom.ArrayOfAttachment;
@@ -35,7 +34,6 @@ import com.biscom.RecipientInfo;
 import com.biscom.ResultMessage;
 import com.biscom.SenderInfo;
 
-
 /**
  * Utility class for handling faxes.
  * 
@@ -43,12 +41,11 @@ import com.biscom.SenderInfo;
  */
 public class FaxUtil {
 
-	
+	private static final String PATIENT_NAME_LABEL = "Patient Name: ";
+	private static final String MRN_LABEL = "MRN: ";
+	private static final String FORM_LABEL = "Form: ";
 	private static final int LOGON_THROUGH_USERACCOUNT = 2;
-
 	private static final String EMPTY_STRING = ChirdlUtilConstants.GENERAL_INFO_EMPTY_STRING; //shorten name
-	private static final String SEND_TIME_IMMEDIATE = "0.0";
-	private static final String SEND_TIME_OFF_PEAK = "1.0";
 
 	/**
 	 * Faxes a file.
@@ -152,6 +149,7 @@ public class FaxUtil {
 	 * @param password - web service password
 	 * @param from - sender information displayed on the the coverpage
 	 * @param to - recipient information displayed on the cover page
+	 * @param company - recipient company
 	 * @param patient - patient for whom this fax was sent
 	 * @param formName - displayed on cover page
 	 * @param resolution - resolutiion of fax image
@@ -167,7 +165,7 @@ public class FaxUtil {
 		if (fileToFax == null) {
 			throw new IllegalArgumentException("The 'fileToFax' parameter cannot be null.");
 		}else if (wsdlLocation == null){
-			throw new IllegalArgumentException("The fax service wsdl location cannot be null.");
+			throw new IllegalArgumentException("The fax service 'wsdl location' cannot be null.");
 		}else if (from == null) {
 			throw new IllegalArgumentException("The 'from' parameter cannot be null.");
 		} else if (to == null) {
@@ -178,16 +176,23 @@ public class FaxUtil {
 			throw new IllegalArgumentException("The 'userName' parameter cannot be null.");
 		}else if (password == null){
 			throw new IllegalArgumentException("The 'password' parameter cannot be null.");
+		}else if (formName == null){
+			throw new IllegalArgumentException("The 'formName' parameter cannot be null.");
+		}else if (patient == null){
+			throw new IllegalArgumentException("The 'patient' parameter cannot be null.");
 		}
+		
 		if (faxQueue == null){
 			//use empty string for default queue
 			faxQueue  = EMPTY_STRING;
 		}
-		if (!SEND_TIME_IMMEDIATE.equals(sendTime) && !SEND_TIME_OFF_PEAK.equals(sendTime)){
-			sendTime = SEND_TIME_IMMEDIATE;
+		
+		if (!ChirdlUtilConstants.FAX_SEND_TIME_IMMEDIATE.equals(sendTime) && !ChirdlUtilConstants.FAX_SEND_TIME_OFF_PEAK.equals(sendTime)){
+			sendTime = ChirdlUtilConstants.FAX_SEND_TIME_IMMEDIATE;
 		}
-		if (priority < 0 || priority > 3){
-			priority = 2;
+		
+		if (priority < ChirdlUtilConstants.FAX_PRIORITY_LOW || priority > ChirdlUtilConstants.FAX_PRIORITY_URGENT){
+			priority = ChirdlUtilConstants.FAX_PRIORITY_NORMAL;
 		}
 		
 		try {
@@ -195,28 +200,24 @@ public class FaxUtil {
 			FAXCOMX0020Service service = new FAXCOMX0020Service();
 			FAXCOMX0020ServiceSoap port = service.getFAXCOMX0020ServiceSoap();
 			
-			String subject = "Form: " +  formName;
-			String memo = "Form: " + formName; 
+			String subject = FORM_LABEL +  formName;
+			String memo = FORM_LABEL +  formName;
+			memo += ChirdlUtilConstants.GENERAL_INFO_CARRIAGE_RETURN_LINE_FEED + MRN_LABEL;
 			
-			//Add patient information to memo 
-			if (patient != null) {
-				PatientIdentifier ident = patient.getPatientIdentifier();
-				String mrn = EMPTY_STRING;
-				if (ident != null){
-					mrn = ident.getIdentifier();
-				}
-				
-				memo += "\r\nMRN: " + mrn;
-				
-				String firstName = patient.getGivenName();
-				String lastName = patient.getFamilyName();
-				memo += "\r\nPatient Name: ";
-				if (!EMPTY_STRING.equals(firstName.trim()) && !EMPTY_STRING.equals(lastName.trim())){
-					memo += lastName + ", " + firstName;
-				}
-					
+			//Add patient information to coversheet memo 
+			PatientIdentifier ident = patient.getPatientIdentifier();
+			if (ident != null){
+				memo += ident.getIdentifier();
 			}
 			
+			//Add name to coversheet memo
+			memo += ChirdlUtilConstants.GENERAL_INFO_CARRIAGE_RETURN_LINE_FEED +  PATIENT_NAME_LABEL;
+			String firstName = patient.getGivenName();
+			String lastName = patient.getFamilyName();
+			if (!EMPTY_STRING.equals(firstName.trim()) && !EMPTY_STRING.equals(lastName.trim())){
+				memo += lastName + ", " + firstName;
+			}
+				
 			//add attachments
 			Attachment attachment = new Attachment();
 			attachment.setFileName(fileToFax.getName());
@@ -246,7 +247,6 @@ public class FaxUtil {
 			recInfo.setCompany(company);
 			recipients.getRecipientInfo().add(recInfo);
 			
-			
 			String idTag = EMPTY_STRING; //optional and unknown at this point
 			String coverPage = EMPTY_STRING;  // empty string will use Eskenazi Health default coverpage
 			String tsi = EMPTY_STRING; //Transmitting Station ID
@@ -255,8 +255,7 @@ public class FaxUtil {
 					priority, sendTime, resolution, subject, coverPage,
 					memo, sender, recipients, attachments , tsi);
 			Log.info("Fax result: " + rm.getDetail());
-			
-				
+		
 			
 		} catch (Exception e) {
 			throw e;

@@ -601,7 +601,7 @@ public class IOUtil
 	}
 	
 	/**
-	 * Finds an image file based on location id, form id, and form instance id 
+	 * Finds an image file of a specified extenstion based on location id, form id, and form instance id 
 	 * in the provided directory.
 	 * 
 	 * @param imageFilename String containing the location id + form id + form instance id.

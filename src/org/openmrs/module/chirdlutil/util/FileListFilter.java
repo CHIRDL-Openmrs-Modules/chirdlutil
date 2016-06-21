@@ -11,12 +11,10 @@ import java.util.HashSet;
  */
 public class FileListFilter implements FilenameFilter {
 	private String name;
-	private String extension;
 	private HashSet<String> extensionSet = new HashSet<String>();
 
 	public FileListFilter(String name, String extension) {
 		this.name = name;
-		this.extension = extension;
 		this.extensionSet.add(extension);
 	}
 	
@@ -34,7 +32,6 @@ public class FileListFilter implements FilenameFilter {
 		}
 		
 		String fileNameExtension = filename.substring(filename.lastIndexOf(".") + 1);
-		
 		ok &= extensionSet.contains(fileNameExtension);
 	
 		return ok;
