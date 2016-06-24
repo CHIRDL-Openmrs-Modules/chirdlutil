@@ -583,8 +583,9 @@ public class IOUtil
 	 * @return File matching the search criteria.
 	 */
 	public static File searchForFile(String imageFilename, String imageDir, String extension) {
-		//This FilenameFilter will get ALL tifs starting with the filename
-		//including of rescan versions nnn_1.tif, nnn_2.tif, etc
+		//This FilenameFilter will get all files that start with the filename, and end with any 
+		//extensions in the extensions set - including rescan versions of files.
+		//such as nnn_1.tif, nnn_2.tif, etc
 		FilenameFilter filtered = new FileListFilter(imageFilename, extension);
 		File dir = new File(imageDir);
 		File[] files = dir.listFiles(filtered);
@@ -601,8 +602,9 @@ public class IOUtil
 	}
 	
 	/**
-	 * Finds an image file of a specified extenstion based on location id, form id, and form instance id 
-	 * in the provided directory.
+	 * Finds an a file with any extensions contained in the extensions set. 
+	 * 		//This FilenameFilter will get ALL 
+		//including of rescan versions nnn_1.tif, nnn_2.tif, etc
 	 * 
 	 * @param imageFilename String containing the location id + form id + form instance id.
 	 * @param imageDir The directory to search for the file.
@@ -611,8 +613,7 @@ public class IOUtil
 	 * @return File matching the search criteria.
 	 */
 	public static File searchForFile(String imageFilename, String imageDir, HashSet<String> extensions) {
-		//This FilenameFilter will get ALL tifs starting with the filename
-		//including of rescan versions nnn_1.tif, nnn_2.tif, etc
+
 		FilenameFilter filtered = new FileListFilter(imageFilename, extensions);
 		File dir = new File(imageDir);
 		File[] files = dir.listFiles(filtered);

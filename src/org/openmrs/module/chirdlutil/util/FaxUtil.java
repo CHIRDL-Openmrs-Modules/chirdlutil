@@ -46,6 +46,7 @@ public class FaxUtil {
 	private static final String FORM_LABEL = "Form: ";
 	private static final int LOGON_THROUGH_USERACCOUNT = 2;
 	private static final String EMPTY_STRING = ChirdlUtilConstants.GENERAL_INFO_EMPTY_STRING; //shorten name
+	private static final String CRLF = ChirdlUtilConstants.GENERAL_INFO_CARRIAGE_RETURN_LINE_FEED; //shorten name
 
 	/**
 	 * Faxes a file.
@@ -159,9 +160,11 @@ public class FaxUtil {
 	 */
 	
 	public static void faxFileByWebService(File fileToFax, String wsdlLocation, String faxQueue, String faxNumber, 
-			String userName, String password, String from, String to, String company, Patient patient, String formName, int resolution, int priority, String sendTime)
+			String userName, String password, String from, String to, String company, Patient patient, String formName, 
+			int resolution, int priority, String sendTime)
 			throws Exception {
 		
+		//Check parameter validity
 		if (fileToFax == null) {
 			throw new IllegalArgumentException("The 'fileToFax' parameter cannot be null.");
 		}else if (wsdlLocation == null){
@@ -183,16 +186,16 @@ public class FaxUtil {
 		}
 		
 		if (faxQueue == null){
-			//use empty string for default queue
 			faxQueue  = EMPTY_STRING;
 		}
-		
 		if (!ChirdlUtilConstants.FAX_SEND_TIME_IMMEDIATE.equals(sendTime) && !ChirdlUtilConstants.FAX_SEND_TIME_OFF_PEAK.equals(sendTime)){
 			sendTime = ChirdlUtilConstants.FAX_SEND_TIME_IMMEDIATE;
 		}
-		
 		if (priority < ChirdlUtilConstants.FAX_PRIORITY_LOW || priority > ChirdlUtilConstants.FAX_PRIORITY_URGENT){
 			priority = ChirdlUtilConstants.FAX_PRIORITY_NORMAL;
+		}
+		if (resolution != ChirdlUtilConstants.FAX_RESOLUTION_HIGH && resolution != ChirdlUtilConstants.FAX_RESOLUTION_LOW ){
+			resolution = ChirdlUtilConstants.FAX_RESOLUTION_HIGH;
 		}
 		
 		try {
@@ -200,23 +203,17 @@ public class FaxUtil {
 			FAXCOMX0020Service service = new FAXCOMX0020Service();
 			FAXCOMX0020ServiceSoap port = service.getFAXCOMX0020ServiceSoap();
 			
+			//Coversheet subject
 			String subject = FORM_LABEL +  formName;
-			String memo = FORM_LABEL +  formName;
-			memo += ChirdlUtilConstants.GENERAL_INFO_CARRIAGE_RETURN_LINE_FEED + MRN_LABEL;
 			
-			//Add patient information to coversheet memo 
+			//Coversheet memo
+			String memo = MRN_LABEL;
 			PatientIdentifier ident = patient.getPatientIdentifier();
 			if (ident != null){
 				memo += ident.getIdentifier();
 			}
-			
-			//Add name to coversheet memo
-			memo += ChirdlUtilConstants.GENERAL_INFO_CARRIAGE_RETURN_LINE_FEED +  PATIENT_NAME_LABEL;
-			String firstName = patient.getGivenName();
-			String lastName = patient.getFamilyName();
-			if (!EMPTY_STRING.equals(firstName.trim()) && !EMPTY_STRING.equals(lastName.trim())){
-				memo += lastName + ", " + firstName;
-			}
+			memo += CRLF + PATIENT_NAME_LABEL + patient.getFamilyName()
+					+ ChirdlUtilConstants.GENERAL_INFO_COMMA + patient.getGivenName();
 				
 			//add attachments
 			Attachment attachment = new Attachment();
@@ -231,7 +228,6 @@ public class FaxUtil {
 			} catch (IOException e) {
 				Log.error("Exception reading contents of fax file: " + fileToFax.getName());
 			}
-			
 			ArrayOfAttachment attachments = new ArrayOfAttachment();
 			attachments.getAttachment().add(attachment);
 			
@@ -251,13 +247,14 @@ public class FaxUtil {
 			String coverPage = EMPTY_STRING;  // empty string will use Eskenazi Health default coverpage
 			String tsi = EMPTY_STRING; //Transmitting Station ID
 			
+			//send fax
 			ResultMessage rm = port.loginAndSendNewFaxMessage("", userName, password, LOGON_THROUGH_USERACCOUNT, idTag, 
 					priority, sendTime, resolution, subject, coverPage,
 					memo, sender, recipients, attachments , tsi);
-			Log.info("Fax result: " + rm.getDetail());
+			Log.info("Fax sent for form: " + rm.getDetail());
 		
-			
 		} catch (Exception e) {
+			Log.error("Error faxing file: " + fileToFax, e);
 			throw e;
 		}
 	

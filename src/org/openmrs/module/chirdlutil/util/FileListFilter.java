@@ -32,7 +32,7 @@ public class FileListFilter implements FilenameFilter {
 		}
 		
 		String fileNameExtension = filename.substring(filename.lastIndexOf(".") + 1);
-		ok &= extensionSet.contains(fileNameExtension);
+		ok &= extensionSet.contains("." + fileNameExtension);
 	
 		return ok;
 	}

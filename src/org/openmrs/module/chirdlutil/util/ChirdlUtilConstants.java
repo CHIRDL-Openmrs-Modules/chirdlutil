@@ -451,6 +451,7 @@ public final class ChirdlUtilConstants {
 	public static final int FAX_PRIORITY_NORMAL = 1;
 	public static final int FAX_PRIORITY_LOW = 0;
 	public static final int FAX_RESOLUTION_HIGH = 1;
+	public static final int FAX_RESOLUTION_LOW = 0;
 	public static final String FAX_SEND_TIME_IMMEDIATE = "0.0";
 	public static final String FAX_SEND_TIME_OFF_PEAK = "1.0";
 	/*
