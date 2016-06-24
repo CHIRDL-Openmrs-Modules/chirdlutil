@@ -214,6 +214,7 @@ public final class ChirdlUtilConstants {
 	public static final String GLOBAL_PROP_PERFORM_MRF_QUERY = "chica.performMRFQuery";
 	public static final String GLOBAL_PROP_MRF_QUERY_NAMESPACE = "chica.MRFQueryNamespace";
 	public static final String GLOBAL_PROP_MRF_ERROR_DIRECTORY = "chica.mrfParseErrorDirectory";
+	public static final String GLOBAL_PROP_SESSION_TIMEOUT_WARNING= "chica.sessionTimeoutWarning";
 	/*
 	 * 
 	 */
