@@ -228,6 +228,8 @@ public final class ChirdlUtilConstants {
 	public static final String GENERAL_INFO_FALSE = "false";
 	public static final String GENERAL_INFO_FORWARD_SLASH = "/";
 	public static final String GENERAL_INFO_BACK_SLASH = "\\";
+	public static final String GENERAL_INFO_DEFAULT_DELIMITER = "\\^\\^";
+	
 	/*
 	 * 
 	 */
