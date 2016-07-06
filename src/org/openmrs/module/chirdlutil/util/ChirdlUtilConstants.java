@@ -224,7 +224,7 @@ public final class ChirdlUtilConstants {
 	public static final String GLOBAL_PROP_OUTGOING_NOTE_TXA_DOC_AVAILABILITY_STATUS = "chica.outgoingNoteTXADocumentAvailabilityStatus";
 	public static final String GLOBAL_PROP_OUTGOING_NOTE_HOST = "chica.outgoingNoteHost";
 	public static final String GLOBAL_PROP_OUTGOING_NOTE_PORT = "chica.outgoingNotePort";
-	
+	public static final String GLOBAL_PROP_SESSION_TIMEOUT_WARNING= "chica.sessionTimeoutWarning";
 	/*
 	 * 
 	 */
