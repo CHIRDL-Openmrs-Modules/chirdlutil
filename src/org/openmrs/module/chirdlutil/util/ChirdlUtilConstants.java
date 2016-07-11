@@ -221,6 +221,8 @@ public final class ChirdlUtilConstants {
 	public static final String GLOBAL_PROP_MRF_TARGET_ENDPOINT = "chica.MRFQueryTargetEndpoint";
 	public static final String GLOBAL_PROP_PERFORM_MRF_QUERY = "chica.performMRFQuery";
 	public static final String GLOBAL_PROP_MRF_QUERY_NAMESPACE = "chica.MRFQueryNamespace";
+	public static final String GLOBAL_PROP_MRF_ERROR_DIRECTORY = "chica.mrfParseErrorDirectory";
+	public static final String GLOBAL_PROP_SESSION_TIMEOUT_WARNING= "chica.sessionTimeoutWarning";
 	public static final String GLOBAL_PROP_OUTGOING_FAX_SENDER = "atd.outgoingFaxFrom";
 	public static final String GLOBAL_PROP_OUTGOING_FAX_RECIPIENT = "atd.defaultOutgoingFaxRecipient";
 	public static final String GLOBAL_PROP_OUTGOING_FAX_WSDL_LOCATION = "atd.outgoingFaxWsdlLocation";
@@ -242,6 +244,7 @@ public final class ChirdlUtilConstants {
 	public static final String GENERAL_INFO_FALSE = "false";
 	public static final String GENERAL_INFO_FORWARD_SLASH = "/";
 	public static final String GENERAL_INFO_BACK_SLASH = "\\";
+	public static final String GENERAL_INFO_DEFAULT_DELIMITER = "\\^\\^";
 	public static final String GENERAL_INFO_EMPTY_STRING = "";
 	public static final String GENERAL_INFO_CARRIAGE_RETURN_LINE_FEED = "\r\n";
 	/*
