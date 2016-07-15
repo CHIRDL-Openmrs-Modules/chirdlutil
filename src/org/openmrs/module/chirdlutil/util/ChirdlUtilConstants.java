@@ -160,6 +160,7 @@ public final class ChirdlUtilConstants {
 	public static final String FORM_ATTR_VAL_PDF = "pdf";
 	public static final String FORM_ATTR_VAL_TRUE = "true";
 	public static final String FORM_ATTR_VAL_FALSE = "false";
+	public static final String FORM_ATTR_STYLESHEET = "stylesheet";
 	/*
 	 * 
 	 */
