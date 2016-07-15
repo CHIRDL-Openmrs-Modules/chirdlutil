@@ -137,7 +137,7 @@
     <globalProperty>
         <property>chirdlutil.printerThreadPoolSize</property>
         <defaultValue>1</defaultValue>
-        <description>The number of available threads for each printer pool in the PrinterThreadManager to use</description>
+        <description>The number of available threads for each printer pool in the PrinterThreadManager to use.</description>
     </globalProperty>
     <globalProperty>
         <property>chirdlutil.SumatraPDFExecutable</property>
