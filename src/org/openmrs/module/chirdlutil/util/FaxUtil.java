@@ -227,6 +227,7 @@ public class FaxUtil {
 				attachment.setFileContent(fileContents);
 			} catch (IOException e) {
 				Log.error("Exception reading contents of fax file: " + fileToFax.getName());
+				return;
 			}
 			ArrayOfAttachment attachments = new ArrayOfAttachment();
 			attachments.getAttachment().add(attachment);
