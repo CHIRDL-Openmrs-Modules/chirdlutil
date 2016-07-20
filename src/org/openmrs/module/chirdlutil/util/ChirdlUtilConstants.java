@@ -149,6 +149,7 @@ public final class ChirdlUtilConstants {
 	public static final String FORM_ATTR_USE_ALTERNATE_PRINTER = "useAlternatePrinter";
 	public static final String FORM_ATTR_ALTERNATE_PRINTER = "alternatePrinter";
 	public static final String FORM_ATTR_DISPLAY_AND_UPDATE_PREVIOUS_VALUES = "displayAndUpdatePreviousValues";
+	public static final String FORM_ATTR_STYLESHEET = "stylesheet";
 	public static final String FORM_ATTRIBUTE_AUTO_FAX = "auto-fax";
 	public static final String FORM_ATTRIBUTE_IMAGE_DIRECTORY = "imageDirectory";
 	/*
