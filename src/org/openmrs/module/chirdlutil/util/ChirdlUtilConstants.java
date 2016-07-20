@@ -238,6 +238,7 @@ public final class ChirdlUtilConstants {
 	public static final String GENERAL_INFO_FALSE = "false";
 	public static final String GENERAL_INFO_FORWARD_SLASH = "/";
 	public static final String GENERAL_INFO_BACK_SLASH = "\\";
+	public static final String GENERAL_INFO_NUMBER_SIGN = "#";
 	/*
 	 * 
 	 */
@@ -471,5 +472,7 @@ public final class ChirdlUtilConstants {
 	public static final String DATE_FORMAT_yyyy_MM_dd_HH_mm = "yyyyMMddHHmm";
 	public static final String DATE_FORMAT_yyyy_MM_dd_HH_mm_ss = "yyyyMMddHHmmss";
 	public static final String DATE_FORMAT_yyyy_MM_dd = "yyyyMMdd";
+	public static final String DATE_FORMAT_MMM_d_yyyy = "MMM d yyyy";
+	public static final String DATE_FORMAT_h_mm_a = "h:mma";
 }
 
