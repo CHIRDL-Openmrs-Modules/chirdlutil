@@ -144,7 +144,7 @@
         <description>The location of the SumatraPDF executable for PDF printing.</description>
     </globalProperty>
     
-    <!-- Servlets -->
+    <!-- Servlets -->  
     <!-- Accessed through the url /pageContext()/moduleServlet/<moduleId>/<servlet-name> -->
     <servlet>
         <servlet-name>threadPoolMonitor</servlet-name>

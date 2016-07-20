@@ -18,6 +18,7 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.InvalidPropertiesFormatException;
 import java.util.Properties;
 
@@ -512,20 +513,10 @@ public class IOUtil
 	public static File searchForImageFile(String imageFilename, String imageDir) {
 		//This FilenameFilter will get ALL tifs starting with the filename
 		//including of rescan versions nnn_1.tif, nnn_2.tif, etc
-		FilenameFilter filtered = new FileListFilter(imageFilename, "tif");
-		File dir = new File(imageDir);
-		File[] files = dir.listFiles(filtered);
-		if (!(files == null || files.length == 0)) {
-			//This FileDateComparator will list in order
-			//with newest file first.
-			Arrays.sort(files, new FileDateComparator());
-			imageFilename = files[0].getPath();
-		}
-		
-		File imagefile = new File(imageFilename);
-		
+		File imagefile = searchForFile(imageFilename, imageDir, ".tif");
 		return imagefile;
 	}
+	
 	public static Properties getProps(String filename)
 	{
 		try
@@ -571,5 +562,49 @@ public class IOUtil
 		}
 		
 		return sb.toString();
+	}
+    /**
+	 * Finds a file by directory, name, file type.
+	 * 
+	 * @param filename 
+	 * @param directory The directory to search for the file.
+	 * @param extension Acceptable file extension.
+	 * 
+	 * @return File matching the search criteria.
+	 */
+	public static File searchForFile(String filename, String directory, String extension) {
+		//This FilenameFilter will get all files that start with the filename, and end with any 
+		//extensions in the extensions set - including rescan versions of files.
+		//such as nnn_1.tif, nnn_2.tif, etc
+		HashSet<String> extensions = new HashSet<String>();
+		extensions.add(extension);
+		File imagefile =  searchForFile(filename, directory, extensions);
+		return imagefile;
+	}
+	
+	/**
+	 * Finds an a file with any extensions contained in the extensions set. 
+	 * 		//This FilenameFilter will get ALL 
+		//including of rescan versions nnn_1.tif, nnn_2.tif, etc
+	 * 
+	 * @param filename String containing the location id + form id + form instance id.
+	 * @param directory The directory to search for the file.
+	 * @param extensions Set of acceptable file extensions.
+	 * 
+	 * @return File matching the search criteria.
+	 */
+	public static File searchForFile(String filename, String directory, HashSet<String> extensions) {
+
+		FilenameFilter filtered = new FileListFilter(filename, extensions);
+		File dir = new File(directory);
+		File[] files = dir.listFiles(filtered);
+		if (!(files == null || files.length == 0)) {
+			//This FileDateComparator will list in order
+			//with newest file first.
+			Arrays.sort(files, new FileDateComparator());
+			filename = files[0].getPath();
+		}
+		File imagefile = new File(filename);
+		return imagefile;
 	}
 }
