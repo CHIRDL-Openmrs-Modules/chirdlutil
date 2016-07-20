@@ -148,6 +148,7 @@ public final class ChirdlUtilConstants {
 	public static final String FORM_ATTR_USE_ALTERNATE_PRINTER = "useAlternatePrinter";
 	public static final String FORM_ATTR_ALTERNATE_PRINTER = "alternatePrinter";
 	public static final String FORM_ATTR_DISPLAY_AND_UPDATE_PREVIOUS_VALUES = "displayAndUpdatePreviousValues";
+	public static final String FORM_ATTR_STYLESHEET = "stylesheet";
 	/*
 	 * 
 	 */
@@ -228,6 +229,8 @@ public final class ChirdlUtilConstants {
 	public static final String GENERAL_INFO_FALSE = "false";
 	public static final String GENERAL_INFO_FORWARD_SLASH = "/";
 	public static final String GENERAL_INFO_BACK_SLASH = "\\";
+	public static final String GENERAL_INFO_DEFAULT_DELIMITER = "\\^\\^";
+	
 	/*
 	 * 
 	 */
