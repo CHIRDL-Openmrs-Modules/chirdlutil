@@ -67,6 +67,7 @@ import org.openmrs.Form;
 import org.openmrs.Location;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
+import org.openmrs.PatientIdentifier;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.EncounterService;
 import org.openmrs.api.ObsService;
@@ -1024,4 +1025,22 @@ public class Util
         
 		
 	}
+	
+	/**
+     * DWE CHICA-761 
+     * Formats the patient identifier
+     * 
+     * @param patient
+     * @return
+     */
+    public static String formatMRN(Patient patient)
+    {
+    	String formattedMRN = "";
+    	PatientIdentifier patientIdentifier = patient.getPatientIdentifier();
+		if(patientIdentifier != null)
+		{
+			formattedMRN = ChirdlUtilConstants.GENERAL_INFO_NUMBER_SIGN + patientIdentifier.getIdentifier();
+		}
+    	return formattedMRN;
+    }
 }
