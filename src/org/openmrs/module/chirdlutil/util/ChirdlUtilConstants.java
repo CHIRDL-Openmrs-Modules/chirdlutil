@@ -208,6 +208,7 @@ public final class ChirdlUtilConstants {
 	public static final String GLOBAL_PROP_IU_HEALTH_CERNER_ENCRYPTION_KEY = "chica.iuHealthCernerEncryptionKey";
 	public static final String GLOBAL_PROP_QUERY_MEDS = "chica.queryMeds";
 	public static final String GLOBAL_PROP_IMMUNIZATION_QUERY_ACTIVATED = "chica.ImmunizationQueryActivated";
+	public static final String GLOBAL_PROP_IMMUNIZATION_LIST_TIMEOUT = "chica.immunizationListTimeout";
 	public static final String GLOBAL_PROP_MRF_ARCHIVE_DIRECTORY = "chica.mrfArchiveDirectory";
 	public static final String GLOBAL_PROP_MRF_QUERY_CONFIG_FILE = "chica.mrfQueryConfigFile";
 	public static final String GLOBAL_PROP_MRF_QUERY_PASSWORD = "chica.MRFQueryPassword";
