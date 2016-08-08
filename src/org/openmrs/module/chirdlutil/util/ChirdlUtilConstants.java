@@ -110,6 +110,7 @@ public final class ChirdlUtilConstants {
 	 * Rules
 	 */
 	public static final String RULE_CREATE_JIT = "CREATE_JIT";
+	public static final String RULE_PROVIDER_NAME = "providerName";
 	/*
 	 * 
 	 */
@@ -148,6 +149,9 @@ public final class ChirdlUtilConstants {
 	public static final String FORM_ATTR_USE_ALTERNATE_PRINTER = "useAlternatePrinter";
 	public static final String FORM_ATTR_ALTERNATE_PRINTER = "alternatePrinter";
 	public static final String FORM_ATTR_DISPLAY_AND_UPDATE_PREVIOUS_VALUES = "displayAndUpdatePreviousValues";
+	public static final String FORM_ATTR_STYLESHEET = "stylesheet";
+	public static final String FORM_ATTRIBUTE_AUTO_FAX = "auto-fax";
+	public static final String FORM_ATTRIBUTE_IMAGE_DIRECTORY = "imageDirectory";
 	/*
 	 * 
 	 */
@@ -168,6 +172,9 @@ public final class ChirdlUtilConstants {
 	 * Location Attribute Values
 	 */
 	public static final String LOCATION_ATTR_PAGER_MESSAGE = "pagerMessage";
+	public static final String LOCATION_ATTR_CLINIC_FAX_NUMBER = "clinicFaxNumber";
+	public static final String LOCATION_ATTR_CLINIC_FAX_NUMBER_DISPLAY = "clinicFaxNumberDisplay";
+	public static final String LOCATION_ATTR_CLINIC_DISPLAY_NAME = "clinicDisplayName";
 	/*
 	 * 
 	 */
@@ -186,6 +193,8 @@ public final class ChirdlUtilConstants {
 	public static final String FILE_EXTENSION_22 = ".22";
 	public static final String FILE_EXTENSION_23 = ".23";
 	public static final String FILE_EXTENSION_HL7 = ".hl7";
+	public static final String FILE_EXTENSION_TIF = ".tif";
+	public static final String FILE_EXTENSION_TIFF = ".tiff";
 	public static final String FILE_PDF_TEMPLATE = "_template.pdf";
 	/*
 	 * 
@@ -215,6 +224,14 @@ public final class ChirdlUtilConstants {
 	public static final String GLOBAL_PROP_MRF_QUERY_NAMESPACE = "chica.MRFQueryNamespace";
 	public static final String GLOBAL_PROP_MRF_ERROR_DIRECTORY = "chica.mrfParseErrorDirectory";
 	public static final String GLOBAL_PROP_SESSION_TIMEOUT_WARNING= "chica.sessionTimeoutWarning";
+	public static final String GLOBAL_PROP_OUTGOING_FAX_SENDER = "atd.outgoingFaxFrom";
+	public static final String GLOBAL_PROP_OUTGOING_FAX_RECIPIENT = "atd.defaultOutgoingFaxRecipient";
+	public static final String GLOBAL_PROP_OUTGOING_FAX_WSDL_LOCATION = "atd.outgoingFaxWsdlLocation";
+	public static final String GLOBAL_PROP_OUTGOING_FAX_USERNAME = "atd.outgoingFaxUsername";
+	public static final String GLOBAL_PROP_OUTGOING_FAX_PASSWORD = "atd.outgoingFaxPassword";
+	public static final String GLOBAL_PROP_OUTGOING_FAX_PRIORITY = "atd.outgoingFaxPriority";
+	public static final String GLOBAL_PROP_OUTGOING_FAX_RESOLUTION = "atd.outgoingFaxResolution";
+	public static final String GLOBAL_PROP_OUTGOING_FAX_SEND_TIME = "atd.outgoingFaxSendTime";
 	/*
 	 * 
 	 */
@@ -228,6 +245,9 @@ public final class ChirdlUtilConstants {
 	public static final String GENERAL_INFO_FALSE = "false";
 	public static final String GENERAL_INFO_FORWARD_SLASH = "/";
 	public static final String GENERAL_INFO_BACK_SLASH = "\\";
+	public static final String GENERAL_INFO_DEFAULT_DELIMITER = "\\^\\^";
+	public static final String GENERAL_INFO_EMPTY_STRING = "";
+	public static final String GENERAL_INFO_CARRIAGE_RETURN_LINE_FEED = "\r\n";
 	/*
 	 * 
 	 */
@@ -423,6 +443,21 @@ public final class ChirdlUtilConstants {
 	public static final String DATA_SOURCE_IN_MEMORY = "RMRS";
 	public static final String DATA_SOURCE_IU_HEALTH_MEDICAL_RECORD = "IU Health MRF Dump";
 	public static final String DATA_SOURCE_IU_HEALTH_VITALS = "IU Health Vitals";
+	/*
+	 * 
+	 */
+	
+	/*
+	 * Fax service
+	 */
+	public static final int FAX_PRIORITY_URGENT = 3;
+	public static final int FAX_PRIORITY_HIGH = 2;
+	public static final int FAX_PRIORITY_NORMAL = 1;
+	public static final int FAX_PRIORITY_LOW = 0;
+	public static final int FAX_RESOLUTION_HIGH = 1;
+	public static final int FAX_RESOLUTION_LOW = 0;
+	public static final String FAX_SEND_TIME_IMMEDIATE = "0.0";
+	public static final String FAX_SEND_TIME_OFF_PEAK = "1.0";
 	/*
 	 * 
 	 */
