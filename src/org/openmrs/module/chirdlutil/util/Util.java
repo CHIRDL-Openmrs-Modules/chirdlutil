@@ -1043,4 +1043,26 @@ public class Util
 		}
     	return formattedMRN;
     }
+    
+    /**
+     * TMD CHICA-852
+     * Displays mrn stored in MRN_EHR
+     * If MRN_EHR value is empty, it displays MRN_OTHER value
+     * Allows for correct display of check digits in MRNs
+     * 
+     * @param patient
+     * @return
+     */
+	public static String getDisplayMRN(Patient patient)
+	{
+		PatientIdentifier mrn = patient.getPatientIdentifier(ChirdlUtilConstants.IDENTIFIER_TYPE_MRN_EHR);
+		
+		if(mrn == null){
+			mrn = patient.getPatientIdentifier(ChirdlUtilConstants.IDENTIFIER_TYPE_MRN);
+		}
+		if(mrn != null){
+			return mrn.getIdentifier();
+		}
+		return null;
+	}
 }
