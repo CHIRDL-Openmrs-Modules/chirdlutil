@@ -36,6 +36,7 @@ public final class ChirdlUtilConstants {
 	public static final String IDENTIFIER_TYPE_MRN = "MRN_OTHER";
 	public static final String IDENTIFIER_TYPE_SSN = "SSN";
 	public static final String IDENTIFIER_TYPE_IMMUNIZATION_REGISTRY = "Immunization Registry";
+	public static final String IDENTIFIER_TYPE_MRN_EHR = "MRN_EHR";
 
 	/*
 	 * 
@@ -53,6 +54,7 @@ public final class ChirdlUtilConstants {
 	public static final String PERSON_ATTRIBUTE_RACE = "Race";
 	public static final String PERSON_ATTRIBUTE_SSN = "SSN";
 	public static final String PERSON_ATTRIBUTE_PATIENT_ACCOUNT_NUMBER = "Patient Account Number";
+	public static final String PERSON_ATTRIBUTE_ETHNICITY = "Ethnicity";
 
 	/*
 	 * 
@@ -101,6 +103,7 @@ public final class ChirdlUtilConstants {
 	public static final String STATE_EXPORT_VITALS = "Export Vitals";
 	public static final String STATE_EXPORT_POC = "Export POC";
 	public static final String STATE_PSF_WAIT_FOR_ELECTRONIC_SUBMISSION = "PSF WAIT FOR ELECTRONIC SUBMISSION";
+	public static final String STATE_PWS_PROCESS = "PWS_process";
 	
 	/*
 	 * 
@@ -215,6 +218,7 @@ public final class ChirdlUtilConstants {
 	public static final String GLOBAL_PROP_IU_HEALTH_CERNER_ENCRYPTION_KEY = "chica.iuHealthCernerEncryptionKey";
 	public static final String GLOBAL_PROP_QUERY_MEDS = "chica.queryMeds";
 	public static final String GLOBAL_PROP_IMMUNIZATION_QUERY_ACTIVATED = "chica.ImmunizationQueryActivated";
+	public static final String GLOBAL_PROP_IMMUNIZATION_LIST_TIMEOUT = "chica.immunizationListTimeout";
 	public static final String GLOBAL_PROP_MRF_ARCHIVE_DIRECTORY = "chica.mrfArchiveDirectory";
 	public static final String GLOBAL_PROP_MRF_QUERY_CONFIG_FILE = "chica.mrfQueryConfigFile";
 	public static final String GLOBAL_PROP_MRF_QUERY_PASSWORD = "chica.MRFQueryPassword";
@@ -223,6 +227,14 @@ public final class ChirdlUtilConstants {
 	public static final String GLOBAL_PROP_PERFORM_MRF_QUERY = "chica.performMRFQuery";
 	public static final String GLOBAL_PROP_MRF_QUERY_NAMESPACE = "chica.MRFQueryNamespace";
 	public static final String GLOBAL_PROP_MRF_ERROR_DIRECTORY = "chica.mrfParseErrorDirectory";
+	public static final String GLOBAL_PROP_ENCRYPTION_KEY = "chica.encryptionKey";
+	public static final String GLOBAL_PROP_ENABLE_MANUAL_CHECKIN = "chica.enableManualCheckin";
+	public static final String GLOBAL_PROP_GREASEBOARD_REFRESH = "chica.greaseBoardRefresh";
+	public static final String GLOBAL_PROP_OUTGOING_NOTE_INCLUDE_PV1 = "chica.outgoingNoteIncludePV1";
+	public static final String GLOBAL_PROP_OUTGOING_NOTE_TXA_UNIQUE_DOC_NUMBER = "chica.outgoingNoteTXAUniqueDocumentNumber";
+	public static final String GLOBAL_PROP_OUTGOING_NOTE_TXA_DOC_AVAILABILITY_STATUS = "chica.outgoingNoteTXADocumentAvailabilityStatus";
+	public static final String GLOBAL_PROP_OUTGOING_NOTE_HOST = "chica.outgoingNoteHost";
+	public static final String GLOBAL_PROP_OUTGOING_NOTE_PORT = "chica.outgoingNotePort";
 	public static final String GLOBAL_PROP_SESSION_TIMEOUT_WARNING= "chica.sessionTimeoutWarning";
 	public static final String GLOBAL_PROP_OUTGOING_FAX_SENDER = "atd.outgoingFaxFrom";
 	public static final String GLOBAL_PROP_OUTGOING_FAX_RECIPIENT = "atd.defaultOutgoingFaxRecipient";
@@ -232,6 +244,7 @@ public final class ChirdlUtilConstants {
 	public static final String GLOBAL_PROP_OUTGOING_FAX_PRIORITY = "atd.outgoingFaxPriority";
 	public static final String GLOBAL_PROP_OUTGOING_FAX_RESOLUTION = "atd.outgoingFaxResolution";
 	public static final String GLOBAL_PROP_OUTGOING_FAX_SEND_TIME = "atd.outgoingFaxSendTime";
+	public static final String GLOBAL_PROP_VITALS_USE_VISIT_NUMBER = "chica.vitalsUseVisitNumberLookupEncounter";
 	/*
 	 * 
 	 */
@@ -245,6 +258,7 @@ public final class ChirdlUtilConstants {
 	public static final String GENERAL_INFO_FALSE = "false";
 	public static final String GENERAL_INFO_FORWARD_SLASH = "/";
 	public static final String GENERAL_INFO_BACK_SLASH = "\\";
+	public static final String GENERAL_INFO_NUMBER_SIGN = "#";
 	public static final String GENERAL_INFO_DEFAULT_DELIMITER = "\\^\\^";
 	public static final String GENERAL_INFO_EMPTY_STRING = "";
 	public static final String GENERAL_INFO_CARRIAGE_RETURN_LINE_FEED = "\r\n";
@@ -418,6 +432,20 @@ public final class ChirdlUtilConstants {
 	  */
 	
 	/*
+	 * HL7 Constants
+	 */
+	public static final String HL7_ENCODING_CHARS = "^~\\&";
+	public static final String HL7_FIELD_SEPARATOR = "|";
+	public static final String HL7_DATATYPE_TX = "TX";
+	public static final String HL7_RESULT_STATUS = "F";
+	public static final String HL7_MDM = "MDM";
+	public static final String HL7_EVENT_CODE_T02 = "T02";
+	public static final String HL7_VERSION_2_2 = "2.2";
+	public static final String HL7_START_OF_MESSAGE = "\u000b";
+    public static final String HL7_SEGMENT_SEPARATOR = "\r";
+    public static final String HL7_END_OF_MESSGAE = "\u001c";
+	
+	/*
 	 * HL7 Acknowledgment Codes
 	 */
 	public static final String HL7_ACK_CODE_APPLICATION_ACCEPT = "AA";
@@ -447,6 +475,28 @@ public final class ChirdlUtilConstants {
 	 * 
 	 */
 	
+	/*
+	 * Encounter attribute constants
+	 */
+	public static final String ENCOUNTER_ATTRIBUTE_VISIT_NUMBER = "Visit Number";
+	public static final String ENCOUNTER_ATTRIBUTE_ORIGINAL_LOCATION = "Original Location";
+	
+	/*
+	 * Scheduled task properties 
+	 */
+	public static final String TASK_PROPERTY_SOCKET_READ_TIMEOUT = "socketReadTimeout";
+	public static final String TASK_PROPERTY_HOST = "host";
+	public static final String TASK_PROPERTY_PORT= "port";
+	public static final String TASK_PROPERTY_THREAD_SLEEP_TIME = "threadSleepTime";
+	
+	/*
+	 * Date constants
+	 */
+	public static final String DATE_FORMAT_yyyy_MM_dd_HH_mm = "yyyyMMddHHmm";
+	public static final String DATE_FORMAT_yyyy_MM_dd_HH_mm_ss = "yyyyMMddHHmmss";
+	public static final String DATE_FORMAT_yyyy_MM_dd = "yyyyMMdd";
+	public static final String DATE_FORMAT_MMM_d_yyyy = "MMM d yyyy";
+	public static final String DATE_FORMAT_h_mm_a = "h:mma";
 	/*
 	 * Fax service
 	 */

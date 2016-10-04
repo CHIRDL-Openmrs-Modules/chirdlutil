@@ -67,6 +67,7 @@ import org.openmrs.Form;
 import org.openmrs.Location;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
+import org.openmrs.PatientIdentifier;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.EncounterService;
 import org.openmrs.api.ObsService;
@@ -107,6 +108,12 @@ public class Util
 	public static final String MEASUREMENT_CELSIUS = "celsius";
 	public static final String MEASUREMENT_FAHRENHEIT = "fahrenheit";
 	
+	// DWE CHICA-635 IUH sends DegC, also adding one for "cel" since this is the official ISO standard
+	// Epic is sending "C"
+	public static final String MEASUREMENT_DEG_C = "DegC";
+	public static final String MEASUREMENT_CEL = "cel";
+	public static final String MEASUREMENT_CELSIUS_C = "C";
+		
 	public static final String YEAR_ABBR = "yo";
 	public static final String MONTH_ABBR = "mo";
 	public static final String WEEK_ABBR = "wk";
@@ -176,7 +183,7 @@ public class Util
 			measurement = measurement * 2.20462262; // convert kilograms to pounds
 		}
 		
-		if (measurementUnits.equalsIgnoreCase(MEASUREMENT_CELSIUS))
+		if (measurementUnits.equalsIgnoreCase(MEASUREMENT_CELSIUS) || measurementUnits.equalsIgnoreCase(MEASUREMENT_DEG_C) || measurementUnits.equalsIgnoreCase(MEASUREMENT_CEL) || measurementUnits.equalsIgnoreCase(MEASUREMENT_CELSIUS_C)) // DWE CHICA-635 Added DegC and cel
 		{
 			measurement = (measurement *  (9/5.0)) + 32; // convert celsius to fahrenheit
 		}
@@ -1017,5 +1024,45 @@ public class Util
         }
         
 		
+	}
+	
+	/**
+     * DWE CHICA-761 
+     * Formats the patient identifier
+     * 
+     * @param patient
+     * @return
+     */
+    public static String formatMRN(Patient patient)
+    {
+    	String formattedMRN = "";
+    	PatientIdentifier patientIdentifier = patient.getPatientIdentifier();
+		if(patientIdentifier != null)
+		{
+			formattedMRN = ChirdlUtilConstants.GENERAL_INFO_NUMBER_SIGN + patientIdentifier.getIdentifier();
+		}
+    	return formattedMRN;
+    }
+    
+    /**
+     * TMD CHICA-852
+     * Displays mrn stored in MRN_EHR
+     * If MRN_EHR value is empty, it displays MRN_OTHER value
+     * Allows for correct display of check digits in MRNs
+     * 
+     * @param patient
+     * @return
+     */
+	public static String getDisplayMRN(Patient patient)
+	{
+		PatientIdentifier mrn = patient.getPatientIdentifier(ChirdlUtilConstants.IDENTIFIER_TYPE_MRN_EHR);
+		
+		if(mrn == null){
+			mrn = patient.getPatientIdentifier(ChirdlUtilConstants.IDENTIFIER_TYPE_MRN);
+		}
+		if(mrn != null){
+			return mrn.getIdentifier();
+		}
+		return null;
 	}
 }
