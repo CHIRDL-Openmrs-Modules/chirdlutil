@@ -245,6 +245,7 @@ public final class ChirdlUtilConstants {
 	public static final String GLOBAL_PROP_OUTGOING_FAX_RESOLUTION = "atd.outgoingFaxResolution";
 	public static final String GLOBAL_PROP_OUTGOING_FAX_SEND_TIME = "atd.outgoingFaxSendTime";
 	public static final String GLOBAL_PROP_VITALS_USE_VISIT_NUMBER = "chica.vitalsUseVisitNumberLookupEncounter";
+	public static final String GLOBAL_PROP_HAPI_CHARACTER_ENCODING = "sockethl7listener.hapiCharacterEncoding";
 	/*
 	 * 
 	 */
@@ -508,6 +509,14 @@ public final class ChirdlUtilConstants {
 	public static final int FAX_RESOLUTION_LOW = 0;
 	public static final String FAX_SEND_TIME_IMMEDIATE = "0.0";
 	public static final String FAX_SEND_TIME_OFF_PEAK = "1.0";
+	/*
+	 * 
+	 */
+	
+	/*
+	 * Hapi constants
+	 */
+	public static final String HAPI_CHARSET_PROPERTY_KEY = "ca.uhn.hl7v2.llp.charset";
 	/*
 	 * 
 	 */
