@@ -286,6 +286,7 @@ public final class ChirdlUtilConstants {
 	public static final String PARAMETER_VALUE_PRODUCE = "PRODUCE";
 	public static final String PARAMETER_VALUE_CONSUME = "CONSUME";
 	public static final String PARAMETER_MODE = "mode";
+	public static final String PARAMETER_FORCE_AUTO_PRINT = "forceAutoPrint";
 	/*
 	 * 
 	 */
@@ -520,5 +521,7 @@ public final class ChirdlUtilConstants {
 	/*
 	 * 
 	 */
+	
+	public static final String FORM_PWS = "PWS";
 }
 
