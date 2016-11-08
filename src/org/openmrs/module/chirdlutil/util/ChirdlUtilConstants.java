@@ -104,6 +104,21 @@ public final class ChirdlUtilConstants {
 	public static final String STATE_EXPORT_POC = "Export POC";
 	public static final String STATE_PSF_WAIT_FOR_ELECTRONIC_SUBMISSION = "PSF WAIT FOR ELECTRONIC SUBMISSION";
 	public static final String STATE_PWS_PROCESS = "PWS_process";
+	public static final String STATE_PWS_WAIT_TO_SCAN = "PWS_wait_to_scan";
+	public static final String STATE_PSF_WAIT_TO_SCAN = "PSF_wait_to_scan";
+	public static final String STATE_PWS_WAIT_FOR_SUBMISSION = "PWS WAIT FOR SUBMISSION";
+	public static final String STATE_QUERY_KITE_PWS = "QUERY KITE PWS";
+	public static final String STATE_QUERY_KITE_PSF = "QUERY KITE PSF";
+	public static final String STATE_QUERY_KITE_ALIAS = "QUERY KITE Alias";
+	public static final String STATE_PSF_CREATE = "PSF_create";
+	public static final String STATE_RANDOMIZE = "Randomize";
+	public static final String STATE_PSF_PRINTED = "PSF_printed";
+	public static final String STATE_PSF_PROCESS = "PSF_process";
+	public static final String STATE_PWS_CREATE = "PWS_create";
+	public static final String STATE_PWS_PRINTED = "PWS_printed";
+	public static final String STATE_FINISHED = "FINISHED";
+	public static final String STATE_PSF_REPRINT = "PSF_reprint";
+	public static final String STATE_PWS_REPRINT = "PWS_reprint";
 	
 	/*
 	 * 
