@@ -104,8 +104,6 @@ public final class ChirdlUtilConstants {
 	public static final String STATE_EXPORT_POC = "Export POC";
 	public static final String STATE_PSF_WAIT_FOR_ELECTRONIC_SUBMISSION = "PSF WAIT FOR ELECTRONIC SUBMISSION";
 	public static final String STATE_PWS_PROCESS = "PWS_process";
-	public static final String STATE_PWS_WAIT_TO_SCAN = "PWS_wait_to_scan";
-	public static final String STATE_PSF_WAIT_TO_SCAN = "PSF_wait_to_scan";
 	public static final String STATE_PWS_WAIT_FOR_SUBMISSION = "PWS WAIT FOR SUBMISSION";
 	public static final String STATE_QUERY_KITE_PWS = "QUERY KITE PWS";
 	public static final String STATE_QUERY_KITE_PSF = "QUERY KITE PSF";
@@ -538,5 +536,13 @@ public final class ChirdlUtilConstants {
 	 */
 	
 	public static final String FORM_PWS = "PWS";
+	
+	/*
+	 * Greaseboard indicators for PWS Ready 
+	 */
+	public static final String PWS_READY = "PWS Ready";
+	public static final String PWS_READY_AWAITING_PSF = "PWS Ready/Awaiting PSF";
+	public static final String PWS_READY_AWAITING_VITALS = "PWS Ready/Awaiting Vitals";
+	
 }
 
