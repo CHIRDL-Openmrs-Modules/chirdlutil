@@ -192,6 +192,7 @@ public final class ChirdlUtilConstants {
 	public static final String LOCATION_ATTR_CLINIC_FAX_NUMBER = "clinicFaxNumber";
 	public static final String LOCATION_ATTR_CLINIC_FAX_NUMBER_DISPLAY = "clinicFaxNumberDisplay";
 	public static final String LOCATION_ATTR_CLINIC_DISPLAY_NAME = "clinicDisplayName";
+	public static final String LOCATION_ATTR_DISPLAY_CONFIDENTIALITY_NOTICE = "displayConfidentialityNoticeMobileGreaseBoard";
 	/*
 	 * 
 	 */
