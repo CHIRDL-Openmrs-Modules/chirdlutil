@@ -289,7 +289,6 @@ public final class ChirdlUtilConstants {
 	public static final String PARAMETER_1 = "param1";
 	public static final String PARAMETER_2 = "param2";
 	public static final String PARAMETER_3 = "param3";
-	public static final String PARAMETER_4 = "param4";
 	public static final String PARAMETER_SESSION_ID = "sessionId";
 	public static final String PARAMETER_LOCATION_TAG_ID = "locationTagId";
 	public static final String PARAMETER_FORM_INSTANCE = "formInstance";
