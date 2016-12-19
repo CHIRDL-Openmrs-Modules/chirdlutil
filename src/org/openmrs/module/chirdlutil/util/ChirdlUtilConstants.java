@@ -55,6 +55,7 @@ public final class ChirdlUtilConstants {
 	public static final String PERSON_ATTRIBUTE_SSN = "SSN";
 	public static final String PERSON_ATTRIBUTE_PATIENT_ACCOUNT_NUMBER = "Patient Account Number";
 	public static final String PERSON_ATTRIBUTE_ETHNICITY = "Ethnicity";
+	public static final String PERSON_ATTRIBUTE_EMAIL = "email";
 
 	/*
 	 * 
@@ -104,6 +105,20 @@ public final class ChirdlUtilConstants {
 	public static final String STATE_EXPORT_POC = "Export POC";
 	public static final String STATE_PSF_WAIT_FOR_ELECTRONIC_SUBMISSION = "PSF WAIT FOR ELECTRONIC SUBMISSION";
 	public static final String STATE_PWS_PROCESS = "PWS_process";
+	public static final String STATE_PWS_WAIT_FOR_SUBMISSION = "PWS WAIT FOR SUBMISSION";
+	public static final String STATE_QUERY_KITE_PWS = "QUERY KITE PWS";
+	public static final String STATE_QUERY_KITE_PSF = "QUERY KITE PSF";
+	public static final String STATE_QUERY_KITE_ALIAS = "QUERY KITE Alias";
+	public static final String STATE_PSF_CREATE = "PSF_create";
+	public static final String STATE_RANDOMIZE = "Randomize";
+	public static final String STATE_PSF_PRINTED = "PSF_printed";
+	public static final String STATE_PSF_PROCESS = "PSF_process";
+	public static final String STATE_PWS_CREATE = "PWS_create";
+	public static final String STATE_PWS_PRINTED = "PWS_printed";
+	public static final String STATE_FINISHED = "FINISHED";
+	public static final String STATE_PSF_REPRINT = "PSF_reprint";
+	public static final String STATE_PWS_REPRINT = "PWS_reprint";
+	public static final String STATE_GREASE_BOARD_PRINT_PWS = "Grease Board Print PWS";
 	
 	/*
 	 * 
@@ -178,6 +193,7 @@ public final class ChirdlUtilConstants {
 	public static final String LOCATION_ATTR_CLINIC_FAX_NUMBER = "clinicFaxNumber";
 	public static final String LOCATION_ATTR_CLINIC_FAX_NUMBER_DISPLAY = "clinicFaxNumberDisplay";
 	public static final String LOCATION_ATTR_CLINIC_DISPLAY_NAME = "clinicDisplayName";
+	public static final String LOCATION_ATTR_DISPLAY_CONFIDENTIALITY_NOTICE = "displayConfidentialityNoticeMobileGreaseBoard";
 	/*
 	 * 
 	 */
@@ -245,6 +261,7 @@ public final class ChirdlUtilConstants {
 	public static final String GLOBAL_PROP_OUTGOING_FAX_RESOLUTION = "atd.outgoingFaxResolution";
 	public static final String GLOBAL_PROP_OUTGOING_FAX_SEND_TIME = "atd.outgoingFaxSendTime";
 	public static final String GLOBAL_PROP_VITALS_USE_VISIT_NUMBER = "chica.vitalsUseVisitNumberLookupEncounter";
+	public static final String GLOBAL_PROP_HAPI_CHARACTER_ENCODING = "sockethl7listener.hapiCharacterEncoding";
 	/*
 	 * 
 	 */
@@ -285,6 +302,7 @@ public final class ChirdlUtilConstants {
 	public static final String PARAMETER_VALUE_PRODUCE = "PRODUCE";
 	public static final String PARAMETER_VALUE_CONSUME = "CONSUME";
 	public static final String PARAMETER_MODE = "mode";
+	public static final String PARAMETER_FORCE_AUTO_PRINT = "forceAutoPrint";
 	/*
 	 * 
 	 */
@@ -511,5 +529,23 @@ public final class ChirdlUtilConstants {
 	/*
 	 * 
 	 */
+	
+	/*
+	 * Hapi constants
+	 */
+	public static final String HAPI_CHARSET_PROPERTY_KEY = "ca.uhn.hl7v2.llp.charset";
+	/*
+	 * 
+	 */
+	
+	public static final String FORM_PWS = "PWS";
+	
+	/*
+	 * Greaseboard indicators for PWS Ready 
+	 */
+	public static final String PWS_READY = "PWS Ready";
+	public static final String PWS_READY_AWAITING_PSF = "PWS Ready/Awaiting PSF";
+	public static final String PWS_READY_AWAITING_VITALS = "PWS Ready/Awaiting Vitals";
+	
 }
 
