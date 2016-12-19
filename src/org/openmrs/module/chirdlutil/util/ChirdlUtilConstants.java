@@ -118,6 +118,7 @@ public final class ChirdlUtilConstants {
 	public static final String STATE_FINISHED = "FINISHED";
 	public static final String STATE_PSF_REPRINT = "PSF_reprint";
 	public static final String STATE_PWS_REPRINT = "PWS_reprint";
+	public static final String STATE_GREASE_BOARD_PRINT_PWS = "Grease Board Print PWS";
 	
 	/*
 	 * 
