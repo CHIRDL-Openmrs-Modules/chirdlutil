@@ -56,9 +56,6 @@
 	<classpathentry kind="lib" path="lib-common/junit/hsqldb.jar"/>
 	<classpathentry kind="lib" path="lib-common/junit/junit-4.4.jar"/>
 	<classpathentry kind="lib" path="lib-common/logic-0.5.0.1.jar"/>
-	<classpathentry kind="lib" path="lib-common/openmrs-api-1.7.3.0-dev.jar"/>
-	<classpathentry kind="lib" path="lib-common/tests-openmrs-api-1.7.2.19959-dev.jar"/>
-	<classpathentry kind="lib" path="lib-common/web-openmrs-api-1.7.2.19959-dev.jar"/>
 	<classpathentry kind="lib" path="lib-common/jibx/bcel.jar"/>
 	<classpathentry kind="lib" path="lib-common/jibx/jibx-bind.jar"/>
 	<classpathentry kind="lib" path="lib-common/jibx/jibx-extras.jar"/>
@@ -89,5 +86,10 @@
 	<classpathentry kind="lib" path="lib/joda-time-2.9.jar"/>
 	<classpathentry kind="lib" path="lib-common/faxws-client.jar"/>
 	<classpathentry kind="lib" path="lib-common/chirdlutilbackports-2.6.0.jar"/>
+	<classpathentry kind="lib" path="lib-common/openmrs-api-1.12.1-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib-common/openmrs-api-1.12.1-SNAPSHOT-tests.jar"/>
+	<classpathentry kind="lib" path="lib-common/openmrs-tests.jar"/>
+	<classpathentry kind="lib" path="lib-common/openmrs-tools-1.12.1-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib-common/openmrs-web-1.12.1-SNAPSHOT.jar"/>
 	<classpathentry kind="output" path="build"/>
 </classpath>
