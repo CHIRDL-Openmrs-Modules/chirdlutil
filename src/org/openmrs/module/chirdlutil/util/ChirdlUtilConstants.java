@@ -303,6 +303,8 @@ public final class ChirdlUtilConstants {
 	public static final String PARAMETER_VALUE_CONSUME = "CONSUME";
 	public static final String PARAMETER_MODE = "mode";
 	public static final String PARAMETER_FORCE_AUTO_PRINT = "forceAutoPrint";
+	public static final String PARAMETER_TAG_NAME = "tagName";
+	public static final String PARAMETER_DESCRIPTION = "description";
 	/*
 	 * 
 	 */
@@ -546,6 +548,12 @@ public final class ChirdlUtilConstants {
 	public static final String PWS_READY = "PWS Ready";
 	public static final String PWS_READY_AWAITING_PSF = "PWS Ready/Awaiting PSF";
 	public static final String PWS_READY_AWAITING_VITALS = "PWS Ready/Awaiting Vitals";
+	
+	/*
+	 * Location Configuration constants
+	 */
+	public static final String EDIT_LOC_TAG_ATTR_FORM = "editClinicTagAttributeForm";
+	public static final String CREATE_LOC_TAG_FORM = "createClinicTagForm";
 	
 }
 
