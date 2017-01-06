@@ -305,6 +305,15 @@ public final class ChirdlUtilConstants {
 	public static final String PARAMETER_FORCE_AUTO_PRINT = "forceAutoPrint";
 	public static final String PARAMETER_TAG_NAME = "tagName";
 	public static final String PARAMETER_DESCRIPTION = "description";
+	public static final String PARAMETER_FORM = "form";
+	public static final String PARAMETER_HIDDEN_SUBMIT = "hiddenSubmit";
+	public static final String PARAMETER_FINISH = "Finish";
+	public static final String PARAMETER_NAME = "name";
+	public static final String PARAMETER_USERNAME = "username";
+	public static final String PARAMETER_PASSWORD = "password";
+	public static final String PARAMETER_PROGRAM = "program";
+	public static final String PARAMETER_ESTABLISHED_TAG = "establishedTag";
+	
 	/*
 	 * 
 	 */
@@ -552,8 +561,8 @@ public final class ChirdlUtilConstants {
 	/*
 	 * Location Configuration constants
 	 */
-	public static final String EDIT_LOC_TAG_ATTR_FORM = "editClinicTagAttributeForm";
-	public static final String CREATE_LOC_TAG_FORM = "createClinicTagForm";
+	public static final String LOC_TAG_ATTR_FORM_EDIT = "editClinicTagAttributeForm"; 
+	public static final String LOC_TAG_FORM_CREATE = "createClinicTagForm";
 	
 }
 
