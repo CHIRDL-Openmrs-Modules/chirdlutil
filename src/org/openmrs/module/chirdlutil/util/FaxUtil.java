@@ -50,7 +50,7 @@ public class FaxUtil {
 	private static final String CRLF = ChirdlUtilConstants.GENERAL_INFO_CARRIAGE_RETURN_LINE_FEED; //shorten name
 
 	/** Logger for this class and subclasses */
-	protected final Log Log = LogFactory.getLog(getClass());
+	private static Log log = LogFactory.getLog(FaxUtil.class);
 	
 	/**
 	 * Faxes a file.
@@ -139,7 +139,7 @@ public class FaxUtil {
 			}
 		}
 		catch (Exception e) {
-			Log.error("Error faxing file: " + fileToFax, e);
+			log.error("Error faxing file: " + fileToFax, e);
 			throw e;
 		}
 	}
@@ -230,7 +230,7 @@ public class FaxUtil {
 				fin.close();
 				attachment.setFileContent(fileContents);
 			} catch (IOException e) {
-				Log.error("Exception reading contents of fax file: " + fileToFax.getName());
+				log.error("Exception reading contents of fax file: " + fileToFax.getName());
 				return;
 			}
 			ArrayOfAttachment attachments = new ArrayOfAttachment();
@@ -256,10 +256,10 @@ public class FaxUtil {
 			ResultMessage rm = port.loginAndSendNewFaxMessage("", userName, password, LOGON_THROUGH_USERACCOUNT, idTag, 
 					priority, sendTime, resolution, subject, coverPage,
 					memo, sender, recipients, attachments , tsi);
-			Log.info("Fax sent for form: " + rm.getDetail());
+			log.info("Fax sent for form: " + rm.getDetail());
 		
 		} catch (Exception e) {
-			Log.error("Error faxing file: " + fileToFax, e);
+			log.error("Error faxing file: " + fileToFax, e);
 			throw e;
 		}
 	
