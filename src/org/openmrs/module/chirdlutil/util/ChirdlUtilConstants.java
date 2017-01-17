@@ -118,6 +118,7 @@ public final class ChirdlUtilConstants {
 	public static final String STATE_FINISHED = "FINISHED";
 	public static final String STATE_PSF_REPRINT = "PSF_reprint";
 	public static final String STATE_PWS_REPRINT = "PWS_reprint";
+	public static final String STATE_GREASE_BOARD_PRINT_PWS = "Grease Board Print PWS";
 	
 	/*
 	 * 
@@ -289,6 +290,7 @@ public final class ChirdlUtilConstants {
 	public static final String PARAMETER_1 = "param1";
 	public static final String PARAMETER_2 = "param2";
 	public static final String PARAMETER_3 = "param3";
+	public static final String PARAMETER_4 = "param4";
 	public static final String PARAMETER_SESSION_ID = "sessionId";
 	public static final String PARAMETER_LOCATION_TAG_ID = "locationTagId";
 	public static final String PARAMETER_FORM_INSTANCE = "formInstance";
@@ -302,6 +304,17 @@ public final class ChirdlUtilConstants {
 	public static final String PARAMETER_VALUE_CONSUME = "CONSUME";
 	public static final String PARAMETER_MODE = "mode";
 	public static final String PARAMETER_FORCE_AUTO_PRINT = "forceAutoPrint";
+	public static final String PARAMETER_TAG_NAME = "tagName";
+	public static final String PARAMETER_DESCRIPTION = "description";
+	public static final String PARAMETER_FORM = "form";
+	public static final String PARAMETER_HIDDEN_SUBMIT = "hiddenSubmit";
+	public static final String PARAMETER_FINISH = "Finish";
+	public static final String PARAMETER_NAME = "name";
+	public static final String PARAMETER_USERNAME = "username";
+	public static final String PARAMETER_PASSWORD = "password";
+	public static final String PARAMETER_PROGRAM = "program";
+	public static final String PARAMETER_ESTABLISHED_TAG = "establishedTag";
+	
 	/*
 	 * 
 	 */
@@ -545,6 +558,12 @@ public final class ChirdlUtilConstants {
 	public static final String PWS_READY = "PWS Ready";
 	public static final String PWS_READY_AWAITING_PSF = "PWS Ready/Awaiting PSF";
 	public static final String PWS_READY_AWAITING_VITALS = "PWS Ready/Awaiting Vitals";
+	
+	/*
+	 * Location Configuration constants
+	 */
+	public static final String LOC_TAG_ATTR_FORM_EDIT = "editClinicTagAttributeForm"; 
+	public static final String LOC_TAG_FORM_CREATE = "createClinicTagForm";
 	
 }
 
