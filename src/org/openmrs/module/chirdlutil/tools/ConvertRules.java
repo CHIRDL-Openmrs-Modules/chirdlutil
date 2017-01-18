@@ -23,8 +23,6 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.openmrs.module.chirdlutil.util.IOUtil;
-
 /**
  * This class reads a csv file and reassigns mlm priorities accordingly. It expects name and
  * new_priority column. The name is the token name of the rule
@@ -105,7 +103,8 @@ public class ConvertRules {
 			Boolean inLogicSection = false;
 			String result = "";
 			String extraVariables = "";
-			
+			String logicExtraVariables = "";
+			int openIf = 0;
 			while ((line = reader.readLine()) != null) {
 				
 				if (line.trim().length() == 0) {
@@ -124,6 +123,27 @@ public class ConvertRules {
 					int index = line.indexOf("T");
 					if (index > 0) {
 						line = line.substring(0, index) + ";;";
+					} else {
+						
+						//replaces time if T divider is missing
+						p = Pattern.compile("(\\s*Date:\\s*\\d\\d\\d\\d-\\d\\d-\\d\\d)(\\s+\\d\\d:\\d\\d:\\d\\d)");
+						m = p.matcher(line);
+						matches = m.find();
+						
+						if (matches) {
+							
+							line = m.replaceFirst("$1");
+						}
+					}
+				}
+				
+				//make sure all open ifs are closed before consume mode
+				if (line.toLowerCase().contains("mode = consume")) {
+					if (openIf > 0) {
+						while (openIf > 0) {
+							result = result + "\nendif;\n";
+							openIf--;
+						}
 					}
 				}
 				
@@ -133,6 +153,7 @@ public class ConvertRules {
 					if (index == -1) {
 						line = line + ";";
 					}
+					openIf--;
 				}
 				
 				p = Pattern.compile("(.+)(\\|\\|\\s+)(\\w+\\s+)(\\|\\|\\s+=)(.+)");
@@ -144,6 +165,7 @@ public class ConvertRules {
 					
 					line = m.replaceFirst("$1$3:=$5");
 					line = line + "\n" + "endif;";
+					openIf--;
 				}
 				
 				p = Pattern.compile("\\s+[Cc][Oo][Nn][Cc][Ll][Uu][Dd][Ee]\\s+");
@@ -164,6 +186,7 @@ public class ConvertRules {
 					} else {
 						
 						line = line + "\n" + "endif;";
+						openIf--;
 					}
 				}
 				
@@ -206,16 +229,27 @@ public class ConvertRules {
 						
 						line = m.replaceFirst("temp:=$2");
 					}
-				}
-				
-				p = Pattern.compile("(\\w+\\s*=\\s*)(no)");
-				m = p.matcher(line);
-				matches = m.find();
-				
-				//make sure reserved word "no" has quotes around it
-				if (matches) {
 					
-					line = m.replaceAll("$1\"$2\"");
+					p = Pattern.compile("(\\w+\\s*=\\s*)(no)");
+					m = p.matcher(line);
+					matches = m.find();
+					
+					//make sure reserved word "no" has quotes around it
+					if (matches) {
+						
+						line = m.replaceAll("$1\"$2\"");
+					}
+				}else{
+					//look for calls that already have a variable assignment
+					p = Pattern.compile(".+:=\\s*[Cc][Aa][Ll][Ll]\\s+.+");
+					m = p.matcher(line);
+					matches = m.find();
+					
+					//move calls with assignments in the action section to the logic section
+					if (matches) {
+						logicExtraVariables+=line+"\n";
+						continue;
+					}
 				}
 				
 				//fix missing semicolon after Explanation
@@ -250,10 +284,18 @@ public class ConvertRules {
 				p = Pattern.compile("\\s*If.*'.*then");
 				m = p.matcher(line);
 				matches = m.find();
-				
 				//replace single quotes with double quotes in If statements
 				if (matches) {
-					line = line.replaceAll("'", "\"");
+					line = line.substring(0,m.end()).replaceAll("'", "\"")+line.substring(m.end());
+				}
+				
+				//count open if statements
+				p = Pattern.compile("\\s*If.*then");
+				m = p.matcher(line);
+				matches = m.find();
+			
+				if (matches) {
+					openIf++;
 				}
 				
 				result += line + "\n";
@@ -284,15 +326,22 @@ public class ConvertRules {
 				p = Pattern.compile("hisher\\s*:=");
 				m = p.matcher(result);
 				if (!m.find()) {
-					extraVariables += "If (Gender = M) then hisher := \"his\";\n"+
-							"endif;\n"+
-							"If (Gender = F) then hisher := \"her\";\n"+
-							"endif;\n";
+					extraVariables += "If (Gender = M) then hisher := \"his\";\n" + "endif;\n"
+					        + "If (Gender = F) then hisher := \"her\";\n" + "endif;\n";
 				}
 			}
+			
+			//add extra variables to the data section
 			int index = result.indexOf("Data:");
-			result = result.substring(0, index + 5) + "\n" + extraVariables + "\n"
-			        + result.substring(index + 5, result.length());
+			result = result.substring(0, index + "Data:".length()) + "\n" + extraVariables + "\n"
+			        + result.substring(index + "Data:".length(), result.length());
+			
+			//add extra variables to the logic section
+			if(logicExtraVariables.length()>0){
+				index = result.indexOf("Logic:");
+				result = result.substring(0, index + "Logic:".length()) + "\n" + logicExtraVariables + "\n"
+						+ result.substring(index + "Logic:".length(), result.length());
+			}
 			
 			//remove empty If then statements
 			p = Pattern.compile("If[^\\n\\r]+?then\\s+?endif", Pattern.DOTALL);
