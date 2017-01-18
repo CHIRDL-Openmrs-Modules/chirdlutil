@@ -26,6 +26,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -63,6 +64,7 @@ import org.openmrs.ConceptClass;
 import org.openmrs.ConceptDatatype;
 import org.openmrs.ConceptName;
 import org.openmrs.Encounter;
+import org.openmrs.EncounterRole;
 import org.openmrs.Form;
 import org.openmrs.Location;
 import org.openmrs.Obs;
@@ -1064,5 +1066,36 @@ public class Util
 			return mrn.getIdentifier();
 		}
 		return null;
+	}
+	
+	/**
+	 * CHICA-221
+	 * Gets the provider that has the "Attending Provider" role for the provided encounter
+	 * There should be only one provider with this role for the encounter
+	 * 
+	 * @param encounter
+	 * @return
+	 */
+	public static org.openmrs.Provider getProviderByAttendingProviderEncounterRole(org.openmrs.Encounter encounter)
+	{
+		org.openmrs.Provider provider = null;
+		
+		if(encounter != null)
+		{
+			EncounterService es = Context.getEncounterService();
+			EncounterRole encounterRole = es.getEncounterRoleByName(ChirdlUtilConstants.ENCOUNTER_ROLE_ATTENDING_PROVIDER);
+			Set<org.openmrs.Provider> providers = encounter.getProvidersByRole(encounterRole);
+			
+			if(providers != null && providers.size() == 1) // We should only have one encounter provider with the "Attending Provider" role
+			{
+				Iterator<org.openmrs.Provider> iter = providers.iterator();
+				if(iter.hasNext())
+				{
+					provider = iter.next();
+				}
+			}
+		}
+		
+		return provider;
 	}
 }

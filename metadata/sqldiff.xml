@@ -235,4 +235,22 @@ drop TABLE IF EXISTS chirdlutil_location_tag_attribute;
         values ('isHPVTheoInterventionLocation', 'Indicates whether a given location is a HPV Theo intervention site.');
     </sql>
     </diff>
+    <diff>
+        <version>1.0.9</version>
+        <author>David Ely</author>
+        <date>January 17, 2017</date>
+        <description>
+            CHICA-221 Create new encounter_role record as part of the Openmrs upgrade. Openmrs has created new provider records based on providers that were found
+            in the encounter table. New encounter_provider records were also created to map each of the providers to the encounter table. The provider_id column
+            was then removed from the encounter table. Create a new encounter_role called Attending Provider then assign this role to all encounter_provider records
+            that were created by Openmrs.
+        </description>
+        <sql>
+            INSERT INTO `encounter_role` (`name`, `description`, `creator`, `date_created`, `uuid`)
+            VALUES ('Attending Provider', 'Attending Provider encounter role', 1, NOW(), UUID());
+            
+            UPDATE encounter_provider
+			SET encounter_role_id = (SELECT encounter_role_id FROM encounter_role WHERE name = 'Attending Provider');
+        </sql>
+    </diff>
 </sqldiff>

@@ -564,5 +564,10 @@ public final class ChirdlUtilConstants {
 	public static final String LOC_TAG_ATTR_FORM_EDIT = "editClinicTagAttributeForm"; 
 	public static final String LOC_TAG_FORM_CREATE = "createClinicTagForm";
 	
+	/*
+	 * Encounter Role constants
+	 */
+	public static final String ENCOUNTER_ROLE_ATTENDING_PROVIDER = "Attending Provider";
+	
 }
 
