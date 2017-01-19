@@ -101,6 +101,8 @@ public class ConvertRules {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(newFileName));
 			String line = null;
 			Boolean inLogicSection = false;
+			Boolean inDataSection = false;
+			Boolean inActionSection = false;
 			String result = "";
 			String extraVariables = "";
 			String logicExtraVariables = "";
@@ -149,11 +151,14 @@ public class ConvertRules {
 				
 				//make sure endif has a semicolon
 				if (line.toLowerCase().indexOf("endif") > -1) {
-					int index = line.indexOf(";");
-					if (index == -1) {
-						line = line + ";";
+					if (openIf > 0) {
+						int index = line.indexOf(";");
+						if (index == -1) {
+							line = line + ";";
+						}
+					} else {
+						line = ""; //ignore the line
 					}
-					openIf--;
 				}
 				
 				p = Pattern.compile("(.+)(\\|\\|\\s+)(\\w+\\s+)(\\|\\|\\s+=)(.+)");
@@ -164,8 +169,9 @@ public class ConvertRules {
 				if (matches) {
 					
 					line = m.replaceFirst("$1$3:=$5");
-					line = line + "\n" + "endif;";
-					openIf--;
+					if(openIf>0){
+						line = line + "\n" + "endif;";
+					}
 				}
 				
 				p = Pattern.compile("\\s+[Cc][Oo][Nn][Cc][Ll][Uu][Dd][Ee]\\s+");
@@ -184,9 +190,9 @@ public class ConvertRules {
 						
 						line = m.replaceFirst("$1");
 					} else {
-						
-						line = line + "\n" + "endif;";
-						openIf--;
+						if(openIf>0){
+							line = line + "\n" + "endif;";
+						}
 					}
 				}
 				
@@ -205,41 +211,45 @@ public class ConvertRules {
 				//replace "is in" with "in"
 				line = line.replaceAll("is in", "in");
 				
-				if (line.toLowerCase().indexOf("logic:") > -1) {
-					inLogicSection = true;
+				if (line.toLowerCase().indexOf("data:") > -1) {
+					inDataSection = true;
 				}
 				
+				if (line.toLowerCase().indexOf("logic:") > -1) {
+					inLogicSection = true;
+					inDataSection = false;
+				}
+
 				if (line.toLowerCase().indexOf("action:") > -1) {
+					inActionSection = true;
 					inLogicSection = false;
 				}
 				
 				if (inLogicSection) {
 					//look for calls in the logic section
-					p = Pattern.compile("(.*)([cC][aA][lL][lL]\\s+)");
-					m = p.matcher(line);
-					matches = m.find();
-					
-					//look for calls that already have a variable assignment
-					Pattern p2 = Pattern.compile(".+:=\\s*[Cc][Aa][Ll][Ll]\\s+.+");
-					Matcher m2 = p2.matcher(line);
-					boolean matches2 = m2.find();
-					
-					//make sure calls have an assignment variable in the logic section
-					if (matches && !matches2) {
-						
-						line = m.replaceFirst("temp:=$2");
+					if(line.trim().toLowerCase().startsWith("call")){
+						line = "temp:="+line.trim();
 					}
 					
-					p = Pattern.compile("(\\w+\\s*=\\s*)(no)");
+					p = Pattern.compile("(\\w+\\s*=\\s*)(no)(\\))");
 					m = p.matcher(line);
 					matches = m.find();
 					
 					//make sure reserved word "no" has quotes around it
 					if (matches) {
 						
-						line = m.replaceAll("$1\"$2\"");
+						line = m.replaceAll("$1\"$2\"$3");
 					}
-				}else{
+					//make sure all open ifs are closed before end of logic section
+					if (line.toLowerCase().contains(";;")) {
+						if (openIf > 0) {
+							while (openIf > 0) {
+								result = result + "\nendif;\n";
+								openIf--;
+							}
+						}
+					}
+				} else {
 					//look for calls that already have a variable assignment
 					p = Pattern.compile(".+:=\\s*[Cc][Aa][Ll][Ll]\\s+.+");
 					m = p.matcher(line);
@@ -247,13 +257,13 @@ public class ConvertRules {
 					
 					//move calls with assignments in the action section to the logic section
 					if (matches) {
-						logicExtraVariables+=line+"\n";
+						logicExtraVariables += line + "\n";
 						continue;
 					}
 				}
 				
 				//fix missing semicolon after Explanation
-				if (line.indexOf("Explanation:") > -1) {
+				if (line.indexOf("Explanation:") > -1 || line.indexOf("Purpose:") > -1) {
 					line = line.replaceAll(";", "");
 					line = line + ";;";
 				}
@@ -281,21 +291,24 @@ public class ConvertRules {
 					}
 				}
 				
-				p = Pattern.compile("\\s*If.*'.*then");
+				p = Pattern.compile("\\s*[Ii]f.*'.*then");
 				m = p.matcher(line);
 				matches = m.find();
 				//replace single quotes with double quotes in If statements
 				if (matches) {
-					line = line.substring(0,m.end()).replaceAll("'", "\"")+line.substring(m.end());
+					line = line.substring(0, m.end()).replaceAll("'", "\"") + line.substring(m.end());
 				}
 				
 				//count open if statements
-				p = Pattern.compile("\\s*If.*then");
+				p = Pattern.compile("\\s*[Ii]f.*then");
 				m = p.matcher(line);
 				matches = m.find();
-			
-				if (matches) {
+				
+				if (matches&&(inDataSection||inLogicSection||inActionSection)) {
 					openIf++;
+				}
+				if (line.contains("endif")) {
+					openIf--;
 				}
 				
 				result += line + "\n";
@@ -337,10 +350,10 @@ public class ConvertRules {
 			        + result.substring(index + "Data:".length(), result.length());
 			
 			//add extra variables to the logic section
-			if(logicExtraVariables.length()>0){
+			if (logicExtraVariables.length() > 0) {
 				index = result.indexOf("Logic:");
 				result = result.substring(0, index + "Logic:".length()) + "\n" + logicExtraVariables + "\n"
-						+ result.substring(index + "Logic:".length(), result.length());
+				        + result.substring(index + "Logic:".length(), result.length());
 			}
 			
 			//remove empty If then statements
