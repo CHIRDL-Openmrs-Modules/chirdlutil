@@ -262,6 +262,7 @@ public final class ChirdlUtilConstants {
 	public static final String GLOBAL_PROP_OUTGOING_FAX_SEND_TIME = "atd.outgoingFaxSendTime";
 	public static final String GLOBAL_PROP_VITALS_USE_VISIT_NUMBER = "chica.vitalsUseVisitNumberLookupEncounter";
 	public static final String GLOBAL_PROP_HAPI_CHARACTER_ENCODING = "sockethl7listener.hapiCharacterEncoding";
+	public static final String GLOBAL_PROP_ePWS_TIMEFRAME = "chica.ePWSTimeFrame";
 	/*
 	 * 
 	 */
