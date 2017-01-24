@@ -569,5 +569,12 @@ public final class ChirdlUtilConstants {
 	 */
 	public static final String ENCOUNTER_ROLE_ATTENDING_PROVIDER = "Attending Provider";
 	
+	/*
+	 * Gender constants
+	 */
+	public static final String GENDER_UNKNOWN = "U";
+	public static final String GENDER_MALE = "M";
+	public static final String GENDER_FEMALE = "F";
+	
 }
 
