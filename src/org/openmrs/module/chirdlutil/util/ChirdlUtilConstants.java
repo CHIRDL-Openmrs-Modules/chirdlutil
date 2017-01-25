@@ -262,7 +262,7 @@ public final class ChirdlUtilConstants {
 	public static final String GLOBAL_PROP_OUTGOING_FAX_SEND_TIME = "atd.outgoingFaxSendTime";
 	public static final String GLOBAL_PROP_VITALS_USE_VISIT_NUMBER = "chica.vitalsUseVisitNumberLookupEncounter";
 	public static final String GLOBAL_PROP_HAPI_CHARACTER_ENCODING = "sockethl7listener.hapiCharacterEncoding";
-	public static final String GLOBAL_PROP_ePWS_TIMEFRAME = "chica.ePWSTimeFrame";
+	public static final String GLOBAL_PROP_FORM_TIME_LIMIT = "chica.formTimeLimit";
 	/*
 	 * 
 	 */
@@ -280,6 +280,7 @@ public final class ChirdlUtilConstants {
 	public static final String GENERAL_INFO_DEFAULT_DELIMITER = "\\^\\^";
 	public static final String GENERAL_INFO_EMPTY_STRING = "";
 	public static final String GENERAL_INFO_CARRIAGE_RETURN_LINE_FEED = "\r\n";
+	public static final String GENERAL_INFO_DASH = "-";
 	/*
 	 * 
 	 */
@@ -314,6 +315,35 @@ public final class ChirdlUtilConstants {
 	public static final String PARAMETER_PASSWORD = "password";
 	public static final String PARAMETER_PROGRAM = "program";
 	public static final String PARAMETER_ESTABLISHED_TAG = "establishedTag";
+	public static final String PARAMETER_MISSING_FORM_INSTANCE = "missingFormInstance";
+	public static final String PARAMETER_MISSING_ENCOUNTER = "missingEncounter";
+	public static final String PARAMETER_INVALID_END_STATE = "invalidEndState";
+	public static final String PARAMETER_INVALID_START_STATE = "invalidStartState";
+	public static final String PARAMETER_MISSING_END_STATE = "missingEndState";
+	public static final String PARAMETER_MISSING_START_STATE = "missingStartState";
+	public static final String PARAMETER_INVALID_PATIENT = "invalidPatient";
+	public static final String PARAMETER_INVALID_FORM = "invalidForm";
+	public static final String PARAMETER_END_STATE = "endState";
+	public static final String PARAMETER_START_STATE = "startState";
+	public static final String PARAMETER_FAILED_AUTHENTICATION = "failedAuthentication";
+	public static final String PARAMETER_MISSING_PROVIDER_ID = "missingProviderId";
+	public static final String PARAMETER_MISSING_PASSWORD = "missingPassword";
+	public static final String PARAMETER_MISSING_USER = "missingUser";
+	public static final String PARAMETER_MISSING_MRN = "missingMRN";
+	public static final String PARAMETER_MISSING_FORM = "missingForm";
+	public static final String PARAMETER_MISSING_FORM_PAGE = "missingFormPage";
+	public static final String PARAMETER_MRN = "mrn";
+	public static final String PARAMETER_FORM_PAGE = "formPage";
+	public static final String PARAMETER_INVALID_VENDOR = "invalidVendor";
+	public static final String PARAMETER_MISSING_VENDOR = "missingVendor";
+	public static final String PARAMETER_VAL_TRUE = "true";
+	public static final String PARAMETER_HAS_ERRORS = "hasErrors";
+	public static final String PARAMETER_VENDOR = "vendor";
+	public static final String PARAMETER_SHOW_HANDOUTS = "showHandouts";
+	public static final String PARAMETER_PATIENT_NAME = "patientName";
+	public static final String PARAMETER_PATIENT_ID = "patientId";
+	public static final String PARAMETER_PROVIDER_ID = "providerId";
+	public static final String PARAMETER_FORM_TIME_LIMIT = "formTimeLimit";
 	
 	/*
 	 * 
