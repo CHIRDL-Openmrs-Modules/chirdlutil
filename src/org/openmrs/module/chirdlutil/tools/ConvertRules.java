@@ -110,8 +110,7 @@ public class ConvertRules {
 			while ((line = reader.readLine()) != null) {
 				
 				if (line.trim().length() == 0) {
-					writer.write(line);
-					writer.flush();
+					result+=line+"\n";
 					continue;
 				}
 				
