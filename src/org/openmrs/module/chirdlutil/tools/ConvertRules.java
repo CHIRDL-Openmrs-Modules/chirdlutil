@@ -64,7 +64,9 @@ public class ConvertRules {
 			
 			if (!file.getAbsolutePath().equals(outputDirectory)) {
 				if (file.isDirectory()) {
-					updateMLMs(file.listFiles(), outputDirectory);
+					if(!file.getName().contains("retired")){
+						updateMLMs(file.listFiles(), outputDirectory);
+					}
 				} else {
 					processFile(file, outputDirectory);
 				}
@@ -109,7 +111,7 @@ public class ConvertRules {
 			int openIf = 0;
 			while ((line = reader.readLine()) != null) {
 				
-				if (line.trim().length() == 0) {
+				if (line.trim().length() == 0||line.trim().startsWith("/*")){
 					result+=line+"\n";
 					continue;
 				}
@@ -265,6 +267,15 @@ public class ConvertRules {
 				if (line.indexOf("Explanation:") > -1 || line.indexOf("Purpose:") > -1) {
 					line = line.replaceAll(";", "");
 					line = line + ";;";
+				}
+				
+				//fix read Last X {}
+				p = Pattern.compile("(.*)([Rr][Ee][Aa][Dd].+[Ll]ast.+\\d+\\s+)(\\{.*)");
+				m = p.matcher(line);
+				matches = m.find();
+				
+				if (matches) {
+					line = m.replaceFirst("$1$2from $3");
 				}
 				
 				p = Pattern.compile("\\{(.*)\\}");
