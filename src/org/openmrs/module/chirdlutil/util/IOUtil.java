@@ -17,13 +17,17 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.InvalidPropertiesFormatException;
+import java.util.List;
 import java.util.Properties;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.module.chirdlutilbackports.hibernateBeans.FormInstance;
+import org.openmrs.module.chirdlutilbackports.hibernateBeans.FormInstanceTag;
 import org.openmrs.util.OpenmrsUtil;
 
 import com.itextpdf.text.Document;
@@ -606,5 +610,46 @@ public class IOUtil
 		}
 		File imagefile = new File(filename);
 		return imagefile;
+	}
+	
+	/**
+	 * Locates the merge file on disk.
+	 * 
+	 * @param formInstanceTag FormInstanceTag object containing the information needed to find the merge file on disk
+	 * @return File containing path of the merge file.
+	 */
+	public static File getMergeFile(FormInstanceTag formInstanceTag) {
+		Integer formId = formInstanceTag.getFormId();
+		Integer formInstanceId = formInstanceTag.getFormInstanceId();
+		Integer locationId = formInstanceTag.getLocationId();
+		Integer locationTagId = formInstanceTag.getLocationTagId();
+		List<String> possibleMergeFilenames = new ArrayList<String>();
+		String defaultMergeDirectory = IOUtil.formatDirectoryName(org.openmrs.module.chirdlutilbackports.util.Util
+		        .getFormAttributeValue(formId, ChirdlUtilConstants.FORM_ATTR_DEFAULT_MERGE_DIRECTORY, locationTagId, locationId));
+		String pendingMergeDirectory = IOUtil.formatDirectoryName(org.openmrs.module.chirdlutilbackports.util.Util
+		        .getFormAttributeValue(formId, ChirdlUtilConstants.FORM_ATTR_DEFAULT_MERGE_DIRECTORY, locationTagId, locationId))
+		        + ChirdlUtilConstants.FILE_PENDING + File.separator;
+		
+		// Parse the merge file
+		FormInstance formInstance = new FormInstance(locationId, formId, formInstanceId);
+		possibleMergeFilenames.add(defaultMergeDirectory + formInstance.toString() + ChirdlUtilConstants.FILE_EXTENSION_XML);
+		possibleMergeFilenames.add(defaultMergeDirectory + formInstance.toString() + ChirdlUtilConstants.FILE_EXTENSION_20);
+		possibleMergeFilenames.add(defaultMergeDirectory + formInstance.toString() + ChirdlUtilConstants.FILE_EXTENSION_22);
+		possibleMergeFilenames.add(defaultMergeDirectory + formInstance.toString() + ChirdlUtilConstants.FILE_EXTENSION_23);
+		possibleMergeFilenames.add(defaultMergeDirectory + formInstance.toString() + ChirdlUtilConstants.FILE_EXTENSION_19);
+		possibleMergeFilenames.add(pendingMergeDirectory + formInstance.toString() + ChirdlUtilConstants.FILE_EXTENSION_XML);
+		possibleMergeFilenames.add(pendingMergeDirectory + formInstance.toString() + ChirdlUtilConstants.FILE_EXTENSION_20);
+		possibleMergeFilenames.add(pendingMergeDirectory + formInstance.toString() + ChirdlUtilConstants.FILE_EXTENSION_22);
+		possibleMergeFilenames.add(pendingMergeDirectory + formInstance.toString() + ChirdlUtilConstants.FILE_EXTENSION_23);
+		possibleMergeFilenames.add(pendingMergeDirectory + formInstance.toString() + ChirdlUtilConstants.FILE_EXTENSION_19);
+		
+		for (String currFilename : possibleMergeFilenames) {
+			File file = new File(currFilename);
+			if (file.exists()) {
+				return file;
+			}
+		}
+		
+		return null;
 	}
 }

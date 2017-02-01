@@ -65,7 +65,9 @@ import org.openmrs.ConceptDatatype;
 import org.openmrs.ConceptName;
 import org.openmrs.Encounter;
 import org.openmrs.EncounterRole;
+import org.openmrs.Field;
 import org.openmrs.Form;
+import org.openmrs.FormField;
 import org.openmrs.Location;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
@@ -1097,5 +1099,24 @@ public class Util
 		}
 		
 		return provider;
+	}
+
+	/**
+	 * Utility method to build a map of form field name to a Field object.
+	 * 
+	 * @param form The Form used to build the map
+	 * @return Map of form field name to Field objects
+	 */
+	public static Map<String, Field> createFormFieldMap(Form form) {
+		Map<String, Field> formFieldMap = new HashMap<String, Field>();
+		Set<FormField> formFields = form.getFormFields();
+		Iterator<FormField> iter = formFields.iterator();
+		while (iter.hasNext()) {
+			FormField formField = iter.next();
+			Field field = formField.getField();
+			formFieldMap.put(field.getName(), field);
+		}
+		
+		return formFieldMap;
 	}
 }
