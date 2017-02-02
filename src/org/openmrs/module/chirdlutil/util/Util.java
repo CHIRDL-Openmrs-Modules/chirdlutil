@@ -1088,12 +1088,17 @@ public class Util
 			EncounterRole encounterRole = es.getEncounterRoleByName(ChirdlUtilConstants.ENCOUNTER_ROLE_ATTENDING_PROVIDER);
 			Set<org.openmrs.Provider> providers = encounter.getProvidersByRole(encounterRole);
 			
-			if(providers != null && providers.size() == 1) // We should only have one encounter provider with the "Attending Provider" role
+			if(providers != null && providers.size() > 0) // We should only have one encounter provider with the "Attending Provider" role
 			{
 				Iterator<org.openmrs.Provider> iter = providers.iterator();
 				if(iter.hasNext())
 				{
 					provider = iter.next();
+					
+					if(iter.hasNext())
+					{
+						log.info("More than one provider was found for encounter: " + encounter.getEncounterId());
+					}
 				}
 			}
 		}
