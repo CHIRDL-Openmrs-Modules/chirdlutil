@@ -338,11 +338,16 @@ public class ConvertRules {
 			if (result.indexOf("firstname") > -1) {
 				extraVariables += "firstname:= call firstName;\n";
 			}
+			//Add lastName to Data section, if needed
+			if (result.indexOf("lastName") > -1) {
+				extraVariables += "lastName:= call lastName;\n";
+			}
 			
 			//Add Gender to Data section, if needed
-			if (result.indexOf("Gender") > -1 || result.indexOf("hisher") > -1) {
+			if (result.indexOf("Gender") > -1 || result.indexOf("hisher")> -1|| result.indexOf("gender") > -1) {
 				extraVariables += "Gender:= read Last {gender from person};\n";
 			}
+			
 			//Add hisher to Data section, if needed
 			if (result.indexOf("hisher") > -1) {
 				//only add if not already there
@@ -351,6 +356,17 @@ public class ConvertRules {
 				if (!m.find()) {
 					extraVariables += "If (Gender = M) then hisher := \"his\";\n" + "endif;\n"
 					        + "If (Gender = F) then hisher := \"her\";\n" + "endif;\n";
+				}
+			}
+			
+			//Add gender to Data section, if needed
+			if (result.indexOf("gender") > -1) {
+				//only add if not already there
+				p = Pattern.compile("\\s+gender\\s*:=");
+				m = p.matcher(result);
+				if (!m.find()) {
+					extraVariables += "If (Gender = M) then gender := \"his\";\n" + "endif;\n"
+					        + "If (Gender = F) then gender := \"her\";\n" + "endif;\n";
 				}
 			}
 			
