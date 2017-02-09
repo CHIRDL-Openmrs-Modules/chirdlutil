@@ -64,6 +64,7 @@ import org.openmrs.ConceptClass;
 import org.openmrs.ConceptDatatype;
 import org.openmrs.ConceptName;
 import org.openmrs.Encounter;
+import org.openmrs.EncounterRole;
 import org.openmrs.Field;
 import org.openmrs.Form;
 import org.openmrs.FormField;
@@ -1069,6 +1070,42 @@ public class Util
 		return null;
 	}
 	
+	/**
+	 * CHICA-221
+	 * Gets the provider that has the "Attending Provider" role for the provided encounter
+	 * There should be only one provider with this role for the encounter
+	 * 
+	 * @param encounter
+	 * @return
+	 */
+	public static org.openmrs.Provider getProviderByAttendingProviderEncounterRole(org.openmrs.Encounter encounter)
+	{
+		org.openmrs.Provider provider = null;
+		
+		if(encounter != null)
+		{
+			EncounterService es = Context.getEncounterService();
+			EncounterRole encounterRole = es.getEncounterRoleByName(ChirdlUtilConstants.ENCOUNTER_ROLE_ATTENDING_PROVIDER);
+			Set<org.openmrs.Provider> providers = encounter.getProvidersByRole(encounterRole);
+			
+			if(providers != null && providers.size() > 0) // We should only have one encounter provider with the "Attending Provider" role
+			{
+				Iterator<org.openmrs.Provider> iter = providers.iterator();
+				if(iter.hasNext())
+				{
+					provider = iter.next();
+					
+					if(iter.hasNext())
+					{
+						log.info("More than one provider was found for encounter: " + encounter.getEncounterId());
+					}
+				}
+			}
+		}
+		
+		return provider;
+	}
+
 	/**
 	 * Utility method to build a map of form field name to a Field object.
 	 * 

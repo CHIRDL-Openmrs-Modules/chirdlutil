@@ -13,7 +13,7 @@ import org.apache.commons.logging.LogFactory;
 import org.hibernate.Criteria;
 import org.hibernate.SQLQuery;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Expression;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.openmrs.module.chirdlutil.db.ChirdlUtilDAO;
@@ -57,34 +57,34 @@ public class HibernateChirdlUtilDAO implements ChirdlUtilDAO {
                                        Date startDate, Date endDate, Integer userId, String description) {
     	Criteria criteria = sessionFactory.getCurrentSession().createCriteria(EventLog.class).addOrder(Order.desc("eventTime"));
     	if (eventId != null) {
-    		criteria.add(Expression.eq("eventId", eventId));
+    		criteria.add(Restrictions.eq("eventId", eventId));
     	}
     	if (locationId != null) {
-    		criteria.add(Expression.eq("locationId", locationId));
+    		criteria.add(Restrictions.eq("locationId", locationId));
     	}
     	if (formId != null) {
-    		criteria.add(Expression.eq("formId", formId));
+    		criteria.add(Restrictions.eq("formId", formId));
     	}
     	if (studyId != null) {
-    		criteria.add(Expression.eq("studyId", studyId));
+    		criteria.add(Restrictions.eq("studyId", studyId));
     	}
     	if (startDate != null && endDate != null) {
-    		criteria.add(Expression.between("eventTime", startDate, endDate));
+    		criteria.add(Restrictions.between("eventTime", startDate, endDate));
     	} else {
     		if (startDate != null) {
-    			criteria.add(Expression.ge("eventTime", startDate));
+    			criteria.add(Restrictions.ge("eventTime", startDate));
     		} else if (endDate != null) {
-    			criteria.add(Expression.le("eventTime", endDate));
+    			criteria.add(Restrictions.le("eventTime", endDate));
     		}
     	}
     	if (event != null) {
-    		criteria.add(Expression.like("event", event));
+    		criteria.add(Restrictions.like("event", event));
     	}
     	if (userId != null) {
-    		criteria.add(Expression.eq("userId", userId));
+    		criteria.add(Restrictions.eq("userId", userId));
     	}
     	if (description != null) {
-    		criteria.add(Expression.like("description", description, MatchMode.ANYWHERE));
+    		criteria.add(Restrictions.like("description", description, MatchMode.ANYWHERE));
     	}
 		
 		List<EventLog> logs = criteria.list();

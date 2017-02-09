@@ -44,7 +44,7 @@ import org.openmrs.module.chirdlutil.util.Appointment;
 import org.openmrs.module.chirdlutil.util.Util;
 import org.openmrs.module.chirdlutil.util.voice.VoiceCallRequest;
 import org.openmrs.module.chirdlutil.util.voice.VoiceSystemUtil;
-import org.openmrs.module.chirdlutilbackports.hibernateBeans.LocationAttributeValue;
+import org.openmrs.module.chirdlutilbackports.hibernateBeans.ChirdlLocationAttributeValue;
 import org.openmrs.module.chirdlutilbackports.service.ChirdlUtilBackportsService;
 import org.openmrs.scheduler.TaskDefinition;
 import org.openmrs.scheduler.tasks.AbstractTask;
@@ -250,7 +250,7 @@ public class AppointmentVoiceCalls extends AbstractTask {
 			Integer locationId = obs.getLocation().getLocationId();
 			String locName = locToLocNameMap.get(locationId);
 			if (locName == null) {
-				LocationAttributeValue lav = backportsService.getLocationAttributeValue(locationId, "clinicAppointmentName");
+				ChirdlLocationAttributeValue lav = backportsService.getLocationAttributeValue(locationId, "clinicAppointmentName");
 				if (lav == null || lav.getValue() == null || lav.getValue().trim().length() == 0) {
 					log.error("Please specify a location attribute for 'clinicAppointmentName'.");
 					continue;
