@@ -49,6 +49,7 @@ public class AddPSFStoreNotes {
 		
 		try {
 			if (args == null || args.length < 2) {
+				System.err.println("A minimum number of two arguments (a rule directory and a csv file) are required.");
 				return;
 			}
 			
@@ -76,6 +77,7 @@ public class AddPSFStoreNotes {
 	public static void processFile(ArrayList<File> parentDirectories, File storeNotesFile) throws FileNotFoundException,
 	    IOException {
 		if (!storeNotesFile.exists()) {
+			System.err.print("File: "+storeNotesFile.getPath()+" does not exist.");
 			return;
 		}
 		
@@ -90,15 +92,17 @@ public class AddPSFStoreNotes {
 		
 		List<NoteContentDescriptor> psfNotes = getNoteInfo(new FileInputStream(storeNotesFile));
 		File result = null;
+		int lineNum = 1;
 		//look through each entry in the csv file
 		for (NoteContentDescriptor noteDescriptor : psfNotes) {
-			
+			lineNum++;
 			String heading = noteDescriptor.getHeading().trim();
 			String noNote = noteDescriptor.getNoNote().trim();
 			String yesNote = noteDescriptor.getYesNote().trim();
 			String ruleName = noteDescriptor.getRuleName().trim();
 			
 			if (ruleName == null || ruleName.length() == 0 || heading == null || heading.length() == 0) {
+				System.err.print("Line "+ lineNum+" was skipped because the rule name or heading was invalid.");
 				continue;//skip because there is not enough content for a storeNote
 			}
 			
@@ -180,7 +184,7 @@ public class AddPSFStoreNotes {
 			return null;
 		}
 		
-		File file = new File(directory.getPath() + File.separator + filename);
+		File file = new File(directory, filename);
 		
 		if (file.exists()) {
 			return file;
