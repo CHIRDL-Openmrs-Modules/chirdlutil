@@ -262,7 +262,9 @@ public final class ChirdlUtilConstants {
 	public static final String GLOBAL_PROP_OUTGOING_FAX_SEND_TIME = "atd.outgoingFaxSendTime";
 	public static final String GLOBAL_PROP_VITALS_USE_VISIT_NUMBER = "chica.vitalsUseVisitNumberLookupEncounter";
 	public static final String GLOBAL_PROP_HAPI_CHARACTER_ENCODING = "sockethl7listener.hapiCharacterEncoding";
+	public static final String GLOBAL_PROP_UNKNOWN_PROVIDER_ID = "sockethl7listener.unknownProviderId";
 	public static final String GLOBAL_PROP_FORM_TIME_LIMIT = "chica.formTimeLimit";
+
 	/*
 	 * 
 	 */
@@ -595,6 +597,18 @@ public final class ChirdlUtilConstants {
 	 */
 	public static final String LOC_TAG_ATTR_FORM_EDIT = "editClinicTagAttributeForm"; 
 	public static final String LOC_TAG_FORM_CREATE = "createClinicTagForm";
+	
+	/*
+	 * Encounter Role constants
+	 */
+	public static final String ENCOUNTER_ROLE_ATTENDING_PROVIDER = "Attending Provider";
+	
+	/*
+	 * Gender constants
+	 */
+	public static final String GENDER_UNKNOWN = "U";
+	public static final String GENDER_MALE = "M";
+	public static final String GENDER_FEMALE = "F";
 	
 }
 
