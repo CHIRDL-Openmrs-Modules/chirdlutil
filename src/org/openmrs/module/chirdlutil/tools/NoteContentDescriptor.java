@@ -22,7 +22,8 @@ public class NoteContentDescriptor {
 	private String ruleName = null;
 	private String yesNote = null;
 	private String noNote = null;
-	private String heading = null;
+	private String yesHeading = null;
+	private String noHeading = null;
 	
     /**
      * @return the ruleName
@@ -65,20 +66,40 @@ public class NoteContentDescriptor {
     public void setNoNote(String noNote) {
     	this.noNote = noNote;
     }
+
 	
     /**
-     * @return the heading
+     * @return the yesHeading
      */
-    public String getHeading() {
-    	return heading;
+    public String getYesHeading() {
+    	return yesHeading;
     }
+
 	
     /**
-     * @param heading the heading to set
+     * @param yesHeading the yesHeading to set
      */
-    public void setHeading(String heading) {
-    	this.heading = heading;
+    public void setYesHeading(String yesHeading) {
+    	this.yesHeading = yesHeading;
     }
+
+	
+    /**
+     * @return the noHeading
+     */
+    public String getNoHeading() {
+    	return noHeading;
+    }
+
+	
+    /**
+     * @param noHeading the noHeading to set
+     */
+    public void setNoHeading(String noHeading) {
+    	this.noHeading = noHeading;
+    }
+	
+   
 	
 	
 }

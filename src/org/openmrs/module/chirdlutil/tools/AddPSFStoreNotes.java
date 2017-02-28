@@ -96,13 +96,15 @@ public class AddPSFStoreNotes {
 		//look through each entry in the csv file
 		for (NoteContentDescriptor noteDescriptor : psfNotes) {
 			lineNum++;
-			String heading = noteDescriptor.getHeading().trim();
+			String noHeading = noteDescriptor.getNoHeading().trim();
+			String yesHeading = noteDescriptor.getYesHeading().trim();
 			String noNote = noteDescriptor.getNoNote().trim();
 			String yesNote = noteDescriptor.getYesNote().trim();
 			String ruleName = noteDescriptor.getRuleName().trim();
 			
-			if (ruleName == null || ruleName.length() == 0 || heading == null || heading.length() == 0) {
-				System.err.print("Line "+ lineNum+" was skipped because the rule name or heading was invalid.");
+			if (ruleName == null || ruleName.length() == 0 || ((noHeading == null || noHeading.length() == 0)&&
+					(yesHeading == null || yesHeading.length() == 0))) {
+				System.err.print("Line "+ lineNum+" was skipped because the rule name or headings were invalid.");
 				continue;//skip because there is not enough content for a storeNote
 			}
 			
@@ -140,8 +142,8 @@ public class AddPSFStoreNotes {
 						m = p.matcher(line);
 						matches = m.find();
 						if (matches) {
-							if (yesNote != null && yesNote.length() > 0) {
-								writer.write("\tCALL storeNote With \""+yesNote+"\", \""+heading+"\";\n");
+							if (yesNote != null && yesNote.length() > 0 && yesHeading != null && yesHeading.length() > 0) {
+								writer.write("\tCALL storeNote With \""+yesNote+"\", \""+yesHeading+"\";\n");
 							}
 						}
 						
@@ -150,8 +152,8 @@ public class AddPSFStoreNotes {
 						m = p.matcher(line);
 						matches = m.find();
 						if (matches) {
-							if (noNote != null && noNote.length() > 0) {
-								writer.write("\tCALL storeNote With \""+noNote+"\", \""+heading+"\";\n");
+							if (noNote != null && noNote.length() > 0 && noHeading != null && noHeading.length() > 0) {
+								writer.write("\tCALL storeNote With \""+noNote+"\", \""+noHeading+"\";\n");
 							}
 						}
 						
@@ -219,7 +221,8 @@ public class AddPSFStoreNotes {
 			map.put("Rule name", "ruleName");
 			map.put("Note if Yes", "yesNote");
 			map.put("Note if No", "noNote");
-			map.put("category/heading", "heading");
+			map.put("Heading if Yes", "yesHeading");
+			map.put("Heading if No", "noHeading");
 			
 			strat.setType(NoteContentDescriptor.class);
 			strat.setColumnMapping(map);
