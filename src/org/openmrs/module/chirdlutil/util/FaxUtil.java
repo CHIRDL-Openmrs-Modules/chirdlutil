@@ -48,6 +48,7 @@ public class FaxUtil {
 	private static final int LOGON_THROUGH_USERACCOUNT = 2;
 	private static final String EMPTY_STRING = ChirdlUtilConstants.GENERAL_INFO_EMPTY_STRING; //shorten name
 	private static final String CRLF = ChirdlUtilConstants.GENERAL_INFO_CARRIAGE_RETURN_LINE_FEED; //shorten name
+	private static final String ADDITIONAL_MEMO_TEXT = "DO NOT SCAN";
 
 	/** Logger for this class and subclasses */
 	private static Log log = LogFactory.getLog(FaxUtil.class);
@@ -216,8 +217,10 @@ public class FaxUtil {
 			if (ident != null){
 				memo += ident.getIdentifier();
 			}
+			//MES CHICA-969 Add additional text to memo field for coversheet.
 			memo += CRLF + PATIENT_NAME_LABEL + patient.getFamilyName()
-					+ ChirdlUtilConstants.GENERAL_INFO_COMMA + patient.getGivenName();
+					+ ChirdlUtilConstants.GENERAL_INFO_COMMA + patient.getGivenName()
+					+ CRLF + ADDITIONAL_MEMO_TEXT;
 				
 			//add attachments
 			Attachment attachment = new Attachment();
