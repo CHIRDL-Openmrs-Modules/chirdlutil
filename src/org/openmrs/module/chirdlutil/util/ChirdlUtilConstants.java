@@ -170,6 +170,7 @@ public final class ChirdlUtilConstants {
 	public static final String FORM_ATTR_STYLESHEET = "stylesheet";
 	public static final String FORM_ATTRIBUTE_AUTO_FAX = "auto-fax";
 	public static final String FORM_ATTRIBUTE_IMAGE_DIRECTORY = "imageDirectory";
+	public static final String FORM_ATTRIBUTE_DISPLAY_GP_HEADER = "displayGroupHeader";
 	/*
 	 * 
 	 */
