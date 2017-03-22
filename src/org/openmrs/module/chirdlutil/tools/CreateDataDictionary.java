@@ -100,6 +100,10 @@ public class CreateDataDictionary {
 	 */
 	public static void createDataDictionaryFile(File[] files, List<DataDictionaryDescriptor> list)
 	    throws FileNotFoundException, IOException {
+		final int NUM_BOXES = 6;
+		Pattern storeObsPattern = Pattern.compile("CALL\\s*storeObs\\s*With\\s*\"(.+)\"\\s*,\\s*\"(.+)\"\\s*;");
+		Pattern ifBoxPattern = Pattern.compile("[Ii]f.*Box.*then");
+		Pattern writePattern = Pattern.compile("[wW]rite\\s*\\(\\s*\"(.*)\"\\s*\\)\\s*;");
 		
 		//loop through the mlms
 		for (File file : files) {
@@ -124,7 +128,6 @@ public class CreateDataDictionary {
 			BufferedReader reader = new BufferedReader(new FileReader(mlmFilename));
 			
 			int writeBoxNum = 1;
-			final int NUM_BOXES = 6;
 			
 			//process each line of the mlm looking for storeObs
 			try {
@@ -132,7 +135,6 @@ public class CreateDataDictionary {
 				HashMap<String, String> writeMap = new HashMap<String, String>();
 				String line = null;
 				ArrayList<String> currentBoxes = new ArrayList<String>();
-				Pattern storeObsPattern = Pattern.compile("CALL\\s*storeObs\\s*With\\s*\"(.+)\"\\s*,\\s*\"(.+)\"\\s*;");
 				boolean openIf = false;
 				while ((line = reader.readLine()) != null) {
 					
@@ -148,8 +150,7 @@ public class CreateDataDictionary {
 					}
 					
 					//Look for Box* if statement
-					Pattern p = Pattern.compile("[Ii]f.*Box.*then");
-					m = p.matcher(line);
+					m = ifBoxPattern.matcher(line);
 					matches = m.find();
 					if (matches) {
 						openIf = true;
@@ -158,7 +159,7 @@ public class CreateDataDictionary {
 						//create a list of all boxes in the If statement
 						//ignore the box if the logic is NOT Box<i>
 						for (int i = 1; i <= NUM_BOXES; i++) {
-							p = Pattern.compile("[Ii]f.*Box" + i + ".*then");
+							Pattern p = Pattern.compile("[Ii]f.*Box" + i + ".*then");
 							m = p.matcher(line);
 							matches = m.find();
 							if (matches) {
@@ -190,8 +191,7 @@ public class CreateDataDictionary {
 					}
 					
 					//create a map of write statements by Box<i> 
-					p = Pattern.compile("[wW]rite\\s*\\(\\s*\"(.*)\"\\s*\\)\\s*;");
-					m = p.matcher(line);
+					m = writePattern.matcher(line);
 					matches = m.find();
 					if (matches) {
 						if (m.group(1).trim().length() > 0) {
