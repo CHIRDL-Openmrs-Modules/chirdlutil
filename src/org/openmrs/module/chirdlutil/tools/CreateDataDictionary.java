@@ -135,25 +135,23 @@ public class CreateDataDictionary {
 				HashMap<String, String> writeMap = new HashMap<String, String>();
 				String line = null;
 				ArrayList<String> currentBoxes = new ArrayList<String>();
-				boolean openIf = false;
 				while ((line = reader.readLine()) != null) {
 					
 					if (line.trim().length() == 0) {
 						continue;
 					}
 					
+					if(line.toLowerCase().trim().startsWith("action:")){
+						currentBoxes = new ArrayList<String>();
+					}
+					
 					Matcher m = null;
 					boolean matches = false;
-					
-					if (line.toLowerCase().contains("endif")) {
-						openIf = false;
-					}
 					
 					//Look for Box* if statement
 					m = ifBoxPattern.matcher(line);
 					matches = m.find();
 					if (matches) {
-						openIf = true;
 						currentBoxes = new ArrayList<String>();
 						
 						//create a list of all boxes in the If statement
@@ -177,7 +175,7 @@ public class CreateDataDictionary {
 					Matcher m2 = storeObsPattern.matcher(line);
 					boolean matches2 = m2.find();
 					
-					if (matches2 && openIf) {
+					if (matches2) {
 						ConceptPair conceptPair = new ConceptPair(m2.group(1), m2.group(2));
 						
 						for (String currentBox : currentBoxes) {
