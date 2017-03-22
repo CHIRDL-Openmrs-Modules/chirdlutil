@@ -101,9 +101,9 @@ public class CreateDataDictionary {
 	public static void createDataDictionaryFile(File[] files, List<DataDictionaryDescriptor> list)
 	    throws FileNotFoundException, IOException {
 		final int NUM_BOXES = 6;
-		Pattern storeObsPattern = Pattern.compile("CALL\\s*storeObs\\s*With\\s*\"(.+)\"\\s*,\\s*\"(.+)\"\\s*;");
-		Pattern ifBoxPattern = Pattern.compile("[Ii]f.*Box.*then");
-		Pattern writePattern = Pattern.compile("[wW]rite\\s*\\(\\s*\"(.*)\"\\s*\\)\\s*;");
+		Pattern storeObsPattern = Pattern.compile("CALL\\s*storeObs\\s*With\\s*\"(.+)\"\\s*,\\s*\"(.+)\"\\s*;",Pattern.CASE_INSENSITIVE);
+		Pattern ifBoxPattern = Pattern.compile("if.*Box.*then",Pattern.CASE_INSENSITIVE);
+		Pattern writePattern = Pattern.compile("write\\s*\\(\\s*\"(.*)\"\\s*\\)\\s*;",Pattern.CASE_INSENSITIVE);
 		
 		//loop through the mlms
 		for (File file : files) {
@@ -159,11 +159,11 @@ public class CreateDataDictionary {
 						//create a list of all boxes in the If statement
 						//ignore the box if the logic is NOT Box<i>
 						for (int i = 1; i <= NUM_BOXES; i++) {
-							Pattern p = Pattern.compile("[Ii]f.*Box" + i + ".*then");
+							Pattern p = Pattern.compile("if.*Box" + i + ".*then",Pattern.CASE_INSENSITIVE);
 							m = p.matcher(line);
 							matches = m.find();
 							if (matches) {
-								p = Pattern.compile("[Ii]f.*[nN][oO][tT].*Box" + i + ".*then");
+								p = Pattern.compile("if.*NOT.*Box" + i + ".*then",Pattern.CASE_INSENSITIVE);
 								m = p.matcher(line);
 								matches = m.find();
 								if (!matches) {
