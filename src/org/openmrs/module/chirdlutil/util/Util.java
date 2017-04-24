@@ -26,6 +26,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -63,7 +64,10 @@ import org.openmrs.ConceptClass;
 import org.openmrs.ConceptDatatype;
 import org.openmrs.ConceptName;
 import org.openmrs.Encounter;
+import org.openmrs.EncounterRole;
+import org.openmrs.Field;
 import org.openmrs.Form;
+import org.openmrs.FormField;
 import org.openmrs.Location;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
@@ -1064,5 +1068,60 @@ public class Util
 			return mrn.getIdentifier();
 		}
 		return null;
+	}
+	
+	/**
+	 * CHICA-221
+	 * Gets the provider that has the "Attending Provider" role for the provided encounter
+	 * There should be only one provider with this role for the encounter
+	 * 
+	 * @param encounter
+	 * @return
+	 */
+	public static org.openmrs.Provider getProviderByAttendingProviderEncounterRole(org.openmrs.Encounter encounter)
+	{
+		org.openmrs.Provider provider = null;
+		
+		if(encounter != null)
+		{
+			EncounterService es = Context.getEncounterService();
+			EncounterRole encounterRole = es.getEncounterRoleByName(ChirdlUtilConstants.ENCOUNTER_ROLE_ATTENDING_PROVIDER);
+			Set<org.openmrs.Provider> providers = encounter.getProvidersByRole(encounterRole);
+			
+			if(providers != null && providers.size() > 0) // We should only have one encounter provider with the "Attending Provider" role
+			{
+				Iterator<org.openmrs.Provider> iter = providers.iterator();
+				if(iter.hasNext())
+				{
+					provider = iter.next();
+					
+					if(iter.hasNext())
+					{
+						log.info("More than one provider was found for encounter: " + encounter.getEncounterId());
+					}
+				}
+			}
+		}
+		
+		return provider;
+	}
+
+	/**
+	 * Utility method to build a map of form field name to a Field object.
+	 * 
+	 * @param form The Form used to build the map
+	 * @return Map of form field name to Field objects
+	 */
+	public static Map<String, Field> createFormFieldMap(Form form) {
+		Map<String, Field> formFieldMap = new HashMap<String, Field>();
+		Set<FormField> formFields = form.getFormFields();
+		Iterator<FormField> iter = formFields.iterator();
+		while (iter.hasNext()) {
+			FormField formField = iter.next();
+			Field field = formField.getField();
+			formFieldMap.put(field.getName(), field);
+		}
+		
+		return formFieldMap;
 	}
 }

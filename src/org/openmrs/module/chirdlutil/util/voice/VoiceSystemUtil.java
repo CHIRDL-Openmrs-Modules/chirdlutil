@@ -28,7 +28,7 @@ import org.openmrs.Person;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.chirdlutil.util.HttpUtil;
-import org.openmrs.module.chirdlutilbackports.hibernateBeans.LocationAttributeValue;
+import org.openmrs.module.chirdlutilbackports.hibernateBeans.ChirdlLocationAttributeValue;
 import org.openmrs.module.chirdlutilbackports.service.ChirdlUtilBackportsService;
 
 
@@ -218,7 +218,7 @@ public class VoiceSystemUtil {
 	 */
 	private static String getLocationName(Integer locationId) {
 		ChirdlUtilBackportsService service = Context.getService(ChirdlUtilBackportsService.class);
-		LocationAttributeValue lav = service.getLocationAttributeValue(locationId, "clinicDisplayName");
+		ChirdlLocationAttributeValue lav = service.getLocationAttributeValue(locationId, "clinicDisplayName");
 		if (lav == null) {
 			return null;
 		}

@@ -35,9 +35,7 @@ public class ChirdlUtilActivator extends BaseModuleActivator {
 		try
 		{
 			AdministrationService adminService = Context.getAdministrationService();
-			Context.authenticate(adminService
-				.getGlobalProperty("scheduler.username"), adminService
-				.getGlobalProperty("scheduler.password"));
+			
 			Iterator<GlobalProperty> properties = adminService
 					.getAllGlobalProperties().iterator();
 			GlobalProperty currProperty = null;
@@ -72,6 +70,10 @@ public class ChirdlUtilActivator extends BaseModuleActivator {
 	 */
 	public void stopped() {
 		this.log.info("Shutting down ChirdlUtil Module");
+		
+		// CHICA-961 Add calls to shutdown() to allow the application to shutdown faster
+		org.openmrs.module.chirdlutil.threadmgmt.ThreadManager.getInstance().shutdown();
+		org.openmrs.module.chirdlutil.threadmgmt.PrinterThreadManager.getInstance().shutdown();
 	}
 
 }
