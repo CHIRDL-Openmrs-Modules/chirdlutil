@@ -23,8 +23,6 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.openmrs.module.chirdlutil.util.IOUtil;
-
 /**
  * This class reads a csv file and reassigns mlm priorities accordingly. It expects name and
  * new_priority column. The name is the token name of the rule
@@ -66,7 +64,9 @@ public class ConvertRules {
 			
 			if (!file.getAbsolutePath().equals(outputDirectory)) {
 				if (file.isDirectory()) {
-					updateMLMs(file.listFiles(), outputDirectory);
+					if(!file.getName().contains("retired")){
+						updateMLMs(file.listFiles(), outputDirectory);
+					}
 				} else {
 					processFile(file, outputDirectory);
 				}
@@ -103,14 +103,16 @@ public class ConvertRules {
 			BufferedWriter writer = new BufferedWriter(new FileWriter(newFileName));
 			String line = null;
 			Boolean inLogicSection = false;
+			Boolean inDataSection = false;
+			Boolean inActionSection = false;
 			String result = "";
 			String extraVariables = "";
-			
+			String logicExtraVariables = "";
+			int openIf = 0;
 			while ((line = reader.readLine()) != null) {
 				
-				if (line.trim().length() == 0) {
-					writer.write(line);
-					writer.flush();
+				if (line.trim().length() == 0||line.trim().startsWith("/*")){
+					result+=line+"\n";
 					continue;
 				}
 				
@@ -124,14 +126,39 @@ public class ConvertRules {
 					int index = line.indexOf("T");
 					if (index > 0) {
 						line = line.substring(0, index) + ";;";
+					} else {
+						
+						//replaces time if T divider is missing
+						p = Pattern.compile("(\\s*Date:\\s*\\d\\d\\d\\d-\\d\\d-\\d\\d)(\\s+\\d\\d:\\d\\d:\\d\\d)");
+						m = p.matcher(line);
+						matches = m.find();
+						
+						if (matches) {
+							
+							line = m.replaceFirst("$1");
+						}
+					}
+				}
+				
+				//make sure all open ifs are closed before consume mode
+				if (line.toLowerCase().contains("mode = consume")) {
+					if (openIf > 0) {
+						while (openIf > 0) {
+							result = result + "\nendif;\n";
+							openIf--;
+						}
 					}
 				}
 				
 				//make sure endif has a semicolon
 				if (line.toLowerCase().indexOf("endif") > -1) {
-					int index = line.indexOf(";");
-					if (index == -1) {
-						line = line + ";";
+					if (openIf > 0) {
+						int index = line.indexOf(";");
+						if (index == -1) {
+							line = line + ";";
+						}
+					} else {
+						line = ""; //ignore the line
 					}
 				}
 				
@@ -143,7 +170,9 @@ public class ConvertRules {
 				if (matches) {
 					
 					line = m.replaceFirst("$1$3:=$5");
-					line = line + "\n" + "endif;";
+					if(openIf>0){
+						line = line + "\n" + "endif;";
+					}
 				}
 				
 				p = Pattern.compile("\\s+[Cc][Oo][Nn][Cc][Ll][Uu][Dd][Ee]\\s+");
@@ -162,8 +191,9 @@ public class ConvertRules {
 						
 						line = m.replaceFirst("$1");
 					} else {
-						
-						line = line + "\n" + "endif;";
+						if(openIf>0){
+							line = line + "\n" + "endif;";
+						}
 					}
 				}
 				
@@ -182,46 +212,70 @@ public class ConvertRules {
 				//replace "is in" with "in"
 				line = line.replaceAll("is in", "in");
 				
-				if (line.toLowerCase().indexOf("logic:") > -1) {
-					inLogicSection = true;
+				if (line.toLowerCase().indexOf("data:") > -1) {
+					inDataSection = true;
 				}
 				
+				if (line.toLowerCase().indexOf("logic:") > -1) {
+					inLogicSection = true;
+					inDataSection = false;
+				}
+
 				if (line.toLowerCase().indexOf("action:") > -1) {
+					inActionSection = true;
 					inLogicSection = false;
 				}
 				
 				if (inLogicSection) {
 					//look for calls in the logic section
-					p = Pattern.compile("(.*)([cC][aA][lL][lL]\\s+)");
+					if(line.trim().toLowerCase().startsWith("call")){
+						line = "temp:="+line.trim();
+					}
+					
+					p = Pattern.compile("(\\w+\\s*=\\s*)(no)(\\))");
 					m = p.matcher(line);
 					matches = m.find();
 					
-					//look for calls that already have a variable assignment
-					Pattern p2 = Pattern.compile(".+:=\\s*[Cc][Aa][Ll][Ll]\\s+.+");
-					Matcher m2 = p2.matcher(line);
-					boolean matches2 = m2.find();
-					
-					//make sure calls have an assignment variable in the logic section
-					if (matches && !matches2) {
+					//make sure reserved word "no" has quotes around it
+					if (matches) {
 						
-						line = m.replaceFirst("temp:=$2");
+						line = m.replaceAll("$1\"$2\"$3");
+					}
+					//make sure all open ifs are closed before end of logic section
+					if (line.toLowerCase().contains(";;")) {
+						if (openIf > 0) {
+							while (openIf > 0) {
+								result = result + "\nendif;\n";
+								openIf--;
+							}
+						}
+					}
+				} else {
+					//look for calls that already have a variable assignment
+					p = Pattern.compile(".+:=\\s*[Cc][Aa][Ll][Ll]\\s+.+");
+					m = p.matcher(line);
+					matches = m.find();
+					
+					//move calls with assignments in the action section to the logic section
+					if (matches) {
+						logicExtraVariables += line + "\n";
+						continue;
 					}
 				}
 				
-				p = Pattern.compile("(\\w+\\s*=\\s*)(no)");
+				//fix missing semicolon after Explanation
+				if (line.indexOf("Explanation:") > -1 || line.indexOf("Purpose:") > -1) {
+					line = line.replaceAll(";", "");
+					line = line + ";;";
+				}
+				
+				//fix read Last X {}
+				p = Pattern.compile("(.*)([Rr][Ee][Aa][Dd].+[Ll]ast.+\\d+\\s+)(\\{.*)");
 				m = p.matcher(line);
 				matches = m.find();
 				
-				//make sure reserved word "no" has quotes around it
 				if (matches) {
-					
-					line = m.replaceAll("$1\"$2\"");
-				}
-				
-				//fix missing semicolon after Explanation
-				if (line.indexOf("Explanation:") > -1) {
-					line = line.replaceAll(";", "");
-					line = line + ";;";
+					line = m.replaceFirst("$1$2from $3");
 				}
 				
 				p = Pattern.compile("\\{(.*)\\}");
@@ -247,13 +301,24 @@ public class ConvertRules {
 					}
 				}
 				
-				p = Pattern.compile("\\s*If.*'.*then");
+				p = Pattern.compile("\\s*[Ii]f.*'.*then");
+				m = p.matcher(line);
+				matches = m.find();
+				//replace single quotes with double quotes in If statements
+				if (matches) {
+					line = line.substring(0, m.end()).replaceAll("'", "\"") + line.substring(m.end());
+				}
+				
+				//count open if statements
+				p = Pattern.compile("\\s*[Ii]f.*then");
 				m = p.matcher(line);
 				matches = m.find();
 				
-				//replace single quotes with double quotes in If statements
-				if (matches) {
-					line = line.replaceAll("'", "\"");
+				if (matches&&(inDataSection||inLogicSection||inActionSection)) {
+					openIf++;
+				}
+				if (line.contains("endif")) {
+					openIf--;
 				}
 				
 				result += line + "\n";
@@ -273,26 +338,49 @@ public class ConvertRules {
 			if (result.indexOf("firstname") > -1) {
 				extraVariables += "firstname:= call firstName;\n";
 			}
+			//Add lastName to Data section, if needed
+			if (result.indexOf("lastName") > -1) {
+				extraVariables += "lastName:= call lastName;\n";
+			}
 			
 			//Add Gender to Data section, if needed
-			if (result.indexOf("Gender") > -1 || result.indexOf("hisher") > -1) {
+			if (result.indexOf("Gender") > -1 || result.indexOf("hisher")> -1|| result.indexOf("gender") > -1) {
 				extraVariables += "Gender:= read Last {gender from person};\n";
 			}
+			
 			//Add hisher to Data section, if needed
 			if (result.indexOf("hisher") > -1) {
 				//only add if not already there
 				p = Pattern.compile("hisher\\s*:=");
 				m = p.matcher(result);
 				if (!m.find()) {
-					extraVariables += "If (Gender = M) then hisher := \"his\";\n"+
-							"endif;\n"+
-							"If (Gender = F) then hisher := \"her\";\n"+
-							"endif;\n";
+					extraVariables += "If (Gender = M) then hisher := \"his\";\n" + "endif;\n"
+					        + "If (Gender = F) then hisher := \"her\";\n" + "endif;\n";
 				}
 			}
+			
+			//Add gender to Data section, if needed
+			if (result.indexOf("gender") > -1) {
+				//only add if not already there
+				p = Pattern.compile("\\s+gender\\s*:=");
+				m = p.matcher(result);
+				if (!m.find()) {
+					extraVariables += "If (Gender = M) then gender := \"his\";\n" + "endif;\n"
+					        + "If (Gender = F) then gender := \"her\";\n" + "endif;\n";
+				}
+			}
+			
+			//add extra variables to the data section
 			int index = result.indexOf("Data:");
-			result = result.substring(0, index + 5) + "\n" + extraVariables + "\n"
-			        + result.substring(index + 5, result.length());
+			result = result.substring(0, index + "Data:".length()) + "\n" + extraVariables + "\n"
+			        + result.substring(index + "Data:".length(), result.length());
+			
+			//add extra variables to the logic section
+			if (logicExtraVariables.length() > 0) {
+				index = result.indexOf("Logic:");
+				result = result.substring(0, index + "Logic:".length()) + "\n" + logicExtraVariables + "\n"
+				        + result.substring(index + "Logic:".length(), result.length());
+			}
 			
 			//remove empty If then statements
 			p = Pattern.compile("If[^\\n\\r]+?then\\s+?endif", Pattern.DOTALL);
