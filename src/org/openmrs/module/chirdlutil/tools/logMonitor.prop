@@ -1,5 +1,0 @@
-searchString=Fatal Error
-appToStart=C:/Program Files/Cardiff/Teleform/tfmrgmgr.exe
-processToKill=tfmrgmgr*
-fileToMonitor=C:/temp/tfmrgmgr.log
-pathToPV=C:/Program Files/PrcView/pv.exe

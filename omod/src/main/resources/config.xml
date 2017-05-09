@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//OpenMRS//DTD OpenMRS Config 1.0//EN" "http://resources.openmrs.org/doctype/config-1.0.dtd">
+
+<module configVersion="1.0">
+	
+	<!-- chirdlutil Module Properties -->
+	<id>@MODULE_ID@</id>
+	<name>@MODULE_NAME@</name>
+	<version>@MODULE_VERSION@</version>
+	<package>@MODULE_PACKAGE@</package>
+	<author>Tammy Dugan</author>
+	<description>
+			Contains utility methods and tables for
+			CHIRDL (Child Health Improvement Research and Development Lab)
+	</description>
+
+	<activator>@MODULE_PACKAGE@.ChirdlUtilActivator</activator>
+	
+	<!-- /chirdlutil Module Properties -->
+	
+	<require_version>1.1.10.2283</require_version>
+		<require_modules>
+		<require_module version="2.7.0">org.openmrs.module.chirdlutilbackports</require_module>
+	</require_modules>	
+	
+	<extension>
+		<point>org.openmrs.admin.list</point>
+		<class>org.openmrs.module.chirdlutil.extension.html.AdminList</class>
+	</extension>
+	
+	<globalProperty>
+		<property>chirdlutil.archiveDirectory</property>
+   		<description>Directory of the archived tomcat log files.</description>
+	</globalProperty>
+	<globalProperty>
+        <property>chirdlutil.threadPoolSize</property>
+        <defaultValue>10</defaultValue>
+        <description>The number of available threads for the ThreadManager to use.</description>
+    </globalProperty>
+    <globalProperty>
+        <property>chirdlutil.threadMonitorRefreshRate</property>
+        <defaultValue>10</defaultValue>
+        <description>The refresh rate (in seconds) for the thread pool monitor chart.</description>
+    </globalProperty>
+	
+	<globalProperty>
+		<property>chirdlutil.logDirectory</property>
+   		<description>Directory of the tomcat log files.</description>
+	</globalProperty>
+	
+		<globalProperty>
+		<property>chirdlutil.logRetentionDays</property>
+		<defaultValue>7</defaultValue>
+   		<description>Number of days to keep tomcat logs before archiving</description>
+	</globalProperty>
+	
+	<globalProperty>
+		<property>chirdlutil.archiveRetentionDays</property>
+		<defaultValue>14</defaultValue>
+   		<description>Number of days to keep tomcat logs before deleting from archive</description>
+	</globalProperty>
+	<globalProperty>
+        <property>chirdlutil.outgoingFaxDirectory</property>
+        <description>The location to place the fax control file for outgoing faxes.
+        </description>
+    </globalProperty>
+    <globalProperty>
+        <property>chirdlutil.voiceUsername</property>
+        <description>The username for the voice system.
+        </description>
+    </globalProperty>
+    <globalProperty>
+        <property>chirdlutil.voicePassword</property>
+        <description>The password for the voice system.
+        </description>
+    </globalProperty>
+    <globalProperty>
+        <property>chirdlutil.voiceFilename</property>
+        <defaultValue>Tavoca.txt</defaultValue>
+        <description>The location to place the fax control file for outgoing faxes.
+        </description>
+    </globalProperty>
+    <globalProperty>
+        <property>chirdlutil.voiceUrl</property>
+        <description>The URL to the voice system.
+        </description>
+    </globalProperty>
+    <globalProperty>
+        <property>chirdlutil.voiceHost</property>
+        <description>The web host of the voice system.
+        </description>
+    </globalProperty>
+    <globalProperty>
+        <property>chirdlutil.voicePort</property>
+        <defaultValue>443</defaultValue>
+        <description>The port to use when contacting the voice system.
+        </description>
+    </globalProperty>
+    <globalProperty>
+        <property>chirdlutil.voiceConnectionTimeout</property>
+        <defaultValue>5</defaultValue>
+        <description>The connection timeout for the voice system (in seconds).
+        </description>
+    </globalProperty>
+    <globalProperty>
+        <property>chirdlutil.voiceReadTimeout</property>
+        <defaultValue>5</defaultValue>
+        <description>The read timeout for the voice system (in seconds).
+        </description>
+    </globalProperty>
+    <globalProperty>
+        <property>chirdlutil.pdfToImageScaleValue</property>
+        <defaultValue>1.5f</defaultValue>
+        <description>The scale to use when creating a pdf file into an image (in float format).
+        </description>
+    </globalProperty>
+    <globalProperty>
+        <property>chirdlutil.smtpMailHost</property>
+        <description>SMTP email host used to send outgoing messages.
+        </description>
+    </globalProperty>
+    <globalProperty>
+        <property>chirdlutil.zipEncryptionPassword</property>
+        <description>Password used when zipping files.
+        </description>
+    </globalProperty>
+    <globalProperty>
+        <property>chirdlutil.appointmentCsvFileLocation</property>
+        <description>Directory containnig the CSV file of upcoming appointments.
+        </description>
+    </globalProperty>
+    <globalProperty>
+        <property>chirdlutil.serverConfigFile</property>
+        <description>Location of the server configuration file.
+        </description>
+    </globalProperty>
+    <globalProperty>
+        <property>chirdlutil.printerThreadPoolSize</property>
+        <defaultValue>1</defaultValue>
+        <description>The number of available threads for each printer pool in the PrinterThreadManager to use.</description>
+    </globalProperty>
+    <globalProperty>
+        <property>chirdlutil.SumatraPDFExecutable</property>
+        <description>The location of the SumatraPDF executable for PDF printing.</description>
+    </globalProperty>
+    
+    <!-- Servlets -->  
+    <!-- Accessed through the url /pageContext()/moduleServlet/<moduleId>/<servlet-name> -->
+    <servlet>
+        <servlet-name>threadPoolMonitor</servlet-name>
+        <servlet-class>@MODULE_PACKAGE@.web.ThreadPoolMonitorServlet</servlet-class>
+    </servlet>
+	
+	<!-- Internationalization -->
+	<!-- All message codes should start with @MODULE_ID@.* -->
+	<messages>
+		<lang>en</lang>
+		<file>messages.properties</file>
+	</messages>
+	<!-- /Internationalization -->
+	
+	<mappingFiles>
+		event_log.hbm.xml
+	</mappingFiles>
+</module>
+
