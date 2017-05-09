@@ -15,22 +15,17 @@
 
 package org.openmrs.module.chirdlutil;
 
+import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Map;
-import java.util.Vector;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.io.File;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.dbunit.util.concurrent.Takable;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.chirdlutil.util.Util;
 import org.openmrs.module.chirdlutil.util.IOUtil;
-import org.openmrs.scheduler.SchedulerService;
+import org.openmrs.module.chirdlutil.util.Util;
 import org.openmrs.scheduler.TaskDefinition;
 import org.openmrs.scheduler.tasks.AbstractTask;
 
