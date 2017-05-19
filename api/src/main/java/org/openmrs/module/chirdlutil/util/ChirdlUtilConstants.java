@@ -137,6 +137,7 @@ public final class ChirdlUtilConstants {
 	 * Form Instance Attributes
 	 */
 	public static final String FORM_INST_ATTR_TRIGGER = "trigger";
+	public static final String FORM_INSTANCE_ATTR_FAX_ID = "faxId";
 	/*
 	 * 
 	 */
@@ -171,6 +172,7 @@ public final class ChirdlUtilConstants {
 	public static final String FORM_ATTRIBUTE_AUTO_FAX = "auto-fax";
 	public static final String FORM_ATTRIBUTE_IMAGE_DIRECTORY = "imageDirectory";
 	public static final String FORM_ATTRIBUTE_DISPLAY_GP_HEADER = "displayGroupHeader";
+	
 	/*
 	 * 
 	 */

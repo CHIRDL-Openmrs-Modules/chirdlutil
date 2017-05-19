@@ -25,6 +25,9 @@ import org.openmrs.Patient;
 import org.openmrs.PatientIdentifier;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.chirdlutilbackports.hibernateBeans.FormInstanceAttribute;
+import org.openmrs.module.chirdlutilbackports.hibernateBeans.FormInstanceAttributeValue;
+import org.openmrs.module.chirdlutilbackports.service.ChirdlUtilBackportsService;
 
 import com.biscom.ArrayOfAttachment;
 import com.biscom.ArrayOfRecipientInfo;
@@ -164,10 +167,12 @@ public class FaxUtil {
 	 * @author Meena Sheley 
 	 */
 	
-	public static void faxFileByWebService(File fileToFax, String wsdlLocation, String faxQueue, String faxNumber, 
+	public static String faxFileByWebService(File fileToFax, String wsdlLocation, String faxQueue, String faxNumber, 
 			String userName, String password, String from, String to, String company, Patient patient, String formName, 
 			int resolution, int priority, String sendTime)
 			throws Exception {
+		
+		ChirdlUtilBackportsService chirdlUtilBackportsService = Context.getService(ChirdlUtilBackportsService.class);
 		
 		//Check parameter validity
 		if (fileToFax == null) {
@@ -234,7 +239,7 @@ public class FaxUtil {
 				attachment.setFileContent(fileContents);
 			} catch (IOException e) {
 				log.error("Exception reading contents of fax file: " + fileToFax.getName());
-				return;
+				return null;
 			}
 			ArrayOfAttachment attachments = new ArrayOfAttachment();
 			attachments.getAttachment().add(attachment);
@@ -251,15 +256,23 @@ public class FaxUtil {
 			recInfo.setCompany(company);
 			recipients.getRecipientInfo().add(recInfo);
 			
-			String idTag = EMPTY_STRING; //optional and unknown at this point
+			String idTag = fileToFax.getName(); //optional and unknown at this point
 			String coverPage = EMPTY_STRING;  // empty string will use Eskenazi Health default coverpage
 			String tsi = EMPTY_STRING; //Transmitting Station ID
+			String uniqueId = null;
 			
 			//send fax
 			ResultMessage rm = port.loginAndSendNewFaxMessage("", userName, password, LOGON_THROUGH_USERACCOUNT, idTag, 
 					priority, sendTime, resolution, subject, coverPage,
 					memo, sender, recipients, attachments , tsi);
 			log.info("Fax sent for form: " + rm.getDetail());
+			
+			if (rm != null){
+				uniqueId = rm.getData();
+			}
+			
+			
+			return uniqueId;
 		
 		} catch (Exception e) {
 			log.error("Error faxing file: " + fileToFax, e);
