@@ -267,6 +267,7 @@ public final class ChirdlUtilConstants {
 	public static final String GLOBAL_PROP_HAPI_CHARACTER_ENCODING = "sockethl7listener.hapiCharacterEncoding";
 	public static final String GLOBAL_PROP_UNKNOWN_PROVIDER_ID = "sockethl7listener.unknownProviderId";
 	public static final String GLOBAL_PROP_FORM_TIME_LIMIT = "chica.formTimeLimit";
+	public static final String GLOBAL_PROP_FHIR_CONFIG_FILE = "chirdl_fhir.fhirConfigFile";
 
 	/*
 	 * 
@@ -286,6 +287,11 @@ public final class ChirdlUtilConstants {
 	public static final String GENERAL_INFO_EMPTY_STRING = "";
 	public static final String GENERAL_INFO_CARRIAGE_RETURN_LINE_FEED = "\r\n";
 	public static final String GENERAL_INFO_DASH = "-";
+	public static final String GENERAL_INFO_QUESTION_MARK = "?";
+	public static final String GENERAL_INFO_EQUAL = "=";
+	public static final String GENERAL_INFO_AMPERSAND = "&";
+	public static final String GENERAL_INFO_PIPE_DELIMITER = "|";
+	
 	/*
 	 * 
 	 */
@@ -350,6 +356,10 @@ public final class ChirdlUtilConstants {
 	public static final String PARAMETER_PATIENT_ID = "patientId";
 	public static final String PARAMETER_PROVIDER_ID = "providerId";
 	public static final String PARAMETER_FORM_TIME_LIMIT = "formTimeLimit";
+	public static final String PARAMETER_CODE = "code";
+	public static final String PARAMETER_GENDER = "gender";
+	public static final String PARAMETER_PATIENT = "patient";
+	public static final String PARAMETER_IDENTIFIER = "identifier";
 	
 	/*
 	 * 
@@ -612,6 +622,9 @@ public final class ChirdlUtilConstants {
 	public static final String GENDER_UNKNOWN = "U";
 	public static final String GENDER_MALE = "M";
 	public static final String GENDER_FEMALE = "F";
+	public static final String GENDER_FEMALE_STRING = "female";
+	public static final String GENDER_MALE_STRING = "male";
+	public static final String GENDER_UNKNOWN_STRING = "unknown";
 	
 }
 
