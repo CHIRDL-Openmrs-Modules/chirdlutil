@@ -266,6 +266,8 @@ public final class ChirdlUtilConstants {
 	public static final String GLOBAL_PROP_UNKNOWN_PROVIDER_ID = "sockethl7listener.unknownProviderId";
 	public static final String GLOBAL_PROP_FORM_TIME_LIMIT = "chica.formTimeLimit";
 	public static final String GLOBAL_PROP_FHIR_CONFIG_FILE = "chirdl_fhir.fhirConfigFile";
+	public static final String GLOBAL_PROP_EXPORT_OBS_HOST = "chica.exportObsHost";
+	public static final String GLOBAL_PROP_EXPORT_OBS_PORT = "chica.exportObsPort";
 
 	/*
 	 * 
@@ -520,6 +522,11 @@ public final class ChirdlUtilConstants {
 	public static final String HL7_START_OF_MESSAGE = "\u000b";
     public static final String HL7_SEGMENT_SEPARATOR = "\r";
     public static final String HL7_END_OF_MESSGAE = "\u001c";
+    public static final String HL7_ORU = "ORU";
+	public static final String HL7_EVENT_CODE_R01 = "R01";
+	public static final String HL7_VERSION_2_5 = "2.5";
+	public static final String MSH_PROCESSING_ID = "P"; // Production;
+	public static final String PV1_PATIENT_CLASS = "Outpatient";
 	
 	/*
 	 * HL7 Acknowledgment Codes
@@ -573,6 +580,8 @@ public final class ChirdlUtilConstants {
 	public static final String DATE_FORMAT_yyyy_MM_dd = "yyyyMMdd";
 	public static final String DATE_FORMAT_MMM_d_yyyy = "MMM d yyyy";
 	public static final String DATE_FORMAT_h_mm_a = "h:mma";
+	public static final String DATE_FORMAT_HH_mm_ss = "HHmmss";
+	
 	/*
 	 * Fax service
 	 */
@@ -626,5 +635,10 @@ public final class ChirdlUtilConstants {
 	public static final String GENDER_MALE_STRING = "male";
 	public static final String GENDER_UNKNOWN_STRING = "unknown";
 	
+	/*
+	 * Default host and port
+	 */
+	public static final String DEFAULT_HOST = "localhost";
+	public static final Integer DEFAULT_PORT = 0;
 }
 
