@@ -360,6 +360,8 @@ public final class ChirdlUtilConstants {
 	public static final String PARAMETER_GENDER = "gender";
 	public static final String PARAMETER_PATIENT = "patient";
 	public static final String PARAMETER_IDENTIFIER = "identifier";
+	public static final String PARAMETER_FORM_ID = "formId";
+	public static final String PARAMETER_FORM_INSTANCE_ID = "formInstanceId";
 	
 	/*
 	 * 
