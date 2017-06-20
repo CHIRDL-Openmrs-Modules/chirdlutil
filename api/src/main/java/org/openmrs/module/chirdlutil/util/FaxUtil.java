@@ -229,7 +229,8 @@ public class FaxUtil {
 				
 			//add attachments
 			Attachment attachment = new Attachment();
-			attachment.setFileName(fileToFax.getName());
+			String filename =  fileToFax.getName();
+			attachment.setFileName(filename);
 			byte[] fileContents;
 			try {
 				FileInputStream fin = new FileInputStream(fileToFax);
@@ -255,8 +256,7 @@ public class FaxUtil {
 			recInfo.setFaxNumber(faxNumber);
 			recInfo.setCompany(company);
 			recipients.getRecipientInfo().add(recInfo);
-			
-			String idTag = fileToFax.getName(); //optional and unknown at this point
+			String idTag = filename.substring(0,filename.lastIndexOf(".")); //optional and unknown at this point
 			String coverPage = EMPTY_STRING;  // empty string will use Eskenazi Health default coverpage
 			String tsi = EMPTY_STRING; //Transmitting Station ID
 			String uniqueId = null;
