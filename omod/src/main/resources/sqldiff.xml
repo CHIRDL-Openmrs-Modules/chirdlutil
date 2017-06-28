@@ -268,4 +268,21 @@ drop TABLE IF EXISTS chirdlutil_location_tag_attribute;
 			Where schedulable_class = 'org.openmrs.module.chirdlutil.AppointmentVoiceCalls';
         </sql>
     </diff>
+    <diff>
+        <version>1.1.1</version>
+        <author>David Ely</author>
+        <date>June 27, 2017</date>
+        <description>
+            CHICA-1039 Remove global properties and location attribute related to AppointmentVoiceCalls
+        </description>
+        <sql>
+            Delete From global_property 
+            Where property In ('chirdlutil.appointmentCsvFileLocation', 'chirdlutil.voiceUsername', 'chirdlutil.voicePassword', 'chirdlutil.voiceFilename', 'chirdlutil.voiceHost', 'chirdlutil.voiceUrl', 'chirdlutil.voicePort', 'chirdlutil.voiceConnectionTimeout', 'chirdlutil.voiceReadTimeout');
+            
+            Delete From chirdlutilbackports_location_attribute_value 
+            Where location_attribute_id = (Select location_attribute_id From chirdlutilbackports_location_attribute Where name = 'clinicAppointmentName');
+            
+            Delete From chirdlutilbackports_location_attribute Where name = 'clinicAppointmentName';
+        </sql>
+    </diff>
 </sqldiff>

@@ -65,50 +65,6 @@
         </description>
     </globalProperty>
     <globalProperty>
-        <property>chirdlutil.voiceUsername</property>
-        <description>The username for the voice system.
-        </description>
-    </globalProperty>
-    <globalProperty>
-        <property>chirdlutil.voicePassword</property>
-        <description>The password for the voice system.
-        </description>
-    </globalProperty>
-    <globalProperty>
-        <property>chirdlutil.voiceFilename</property>
-        <defaultValue>Tavoca.txt</defaultValue>
-        <description>The location to place the fax control file for outgoing faxes.
-        </description>
-    </globalProperty>
-    <globalProperty>
-        <property>chirdlutil.voiceUrl</property>
-        <description>The URL to the voice system.
-        </description>
-    </globalProperty>
-    <globalProperty>
-        <property>chirdlutil.voiceHost</property>
-        <description>The web host of the voice system.
-        </description>
-    </globalProperty>
-    <globalProperty>
-        <property>chirdlutil.voicePort</property>
-        <defaultValue>443</defaultValue>
-        <description>The port to use when contacting the voice system.
-        </description>
-    </globalProperty>
-    <globalProperty>
-        <property>chirdlutil.voiceConnectionTimeout</property>
-        <defaultValue>5</defaultValue>
-        <description>The connection timeout for the voice system (in seconds).
-        </description>
-    </globalProperty>
-    <globalProperty>
-        <property>chirdlutil.voiceReadTimeout</property>
-        <defaultValue>5</defaultValue>
-        <description>The read timeout for the voice system (in seconds).
-        </description>
-    </globalProperty>
-    <globalProperty>
         <property>chirdlutil.pdfToImageScaleValue</property>
         <defaultValue>1.5f</defaultValue>
         <description>The scale to use when creating a pdf file into an image (in float format).
@@ -122,11 +78,6 @@
     <globalProperty>
         <property>chirdlutil.zipEncryptionPassword</property>
         <description>Password used when zipping files.
-        </description>
-    </globalProperty>
-    <globalProperty>
-        <property>chirdlutil.appointmentCsvFileLocation</property>
-        <description>Directory containnig the CSV file of upcoming appointments.
         </description>
     </globalProperty>
     <globalProperty>
