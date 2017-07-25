@@ -268,6 +268,8 @@ public final class ChirdlUtilConstants {
 	public static final String GLOBAL_PROP_FHIR_CONFIG_FILE = "chirdl_fhir.fhirConfigFile";
 	public static final String GLOBAL_PROP_EXPORT_OBS_HOST = "chica.exportObsHost";
 	public static final String GLOBAL_PROP_EXPORT_OBS_PORT = "chica.exportObsPort";
+	public static final String GLOBAL_PROP_EXPORT_PHYSICIAN_OBS_HOST = "chica.exportPhysicianObsHost";
+	public static final String GLOBAL_PROP_EXPORT_PHYSICIAN_OBS_PORT = "chica.exportPhysicianObsPort";
 
 	/*
 	 * 
