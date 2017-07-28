@@ -25,9 +25,6 @@ import org.openmrs.Patient;
 import org.openmrs.PatientIdentifier;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.chirdlutilbackports.hibernateBeans.FormInstanceAttribute;
-import org.openmrs.module.chirdlutilbackports.hibernateBeans.FormInstanceAttributeValue;
-import org.openmrs.module.chirdlutilbackports.service.ChirdlUtilBackportsService;
 
 import com.biscom.ArrayOfAttachment;
 import com.biscom.ArrayOfRecipientInfo;
@@ -172,7 +169,6 @@ public class FaxUtil {
 			int resolution, int priority, String sendTime)
 			throws Exception {
 		
-		ChirdlUtilBackportsService chirdlUtilBackportsService = Context.getService(ChirdlUtilBackportsService.class);
 		
 		//Check parameter validity
 		if (fileToFax == null) {

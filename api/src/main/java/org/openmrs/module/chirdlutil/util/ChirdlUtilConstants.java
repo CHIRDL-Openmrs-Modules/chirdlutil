@@ -585,6 +585,7 @@ public final class ChirdlUtilConstants {
 	public static final String DATE_FORMAT_h_mm_a = "h:mma";
 	public static final String DATE_FORMAT_HH_mm_ss = "HHmmss";
 	public static final String DATE_FORMAT_MM_dd_yyyy_hh_mm_ss = "MM/dd/yyyy hh:mm:ss";
+	public static final String DATE_FORMAT_MM_dd_YYYY = "MM/dd/yyyy";
 	
 	/*
 	 * Fax service
