@@ -31,8 +31,11 @@ import org.openmrs.module.chirdlutilbackports.hibernateBeans.FormInstanceTag;
 import org.openmrs.util.OpenmrsUtil;
 
 import com.itextpdf.text.Document;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.RandomAccessFileOrArray;
@@ -469,8 +472,9 @@ public class IOUtil
 	 * 
 	 * @param tiff
 	 * @param pdf
+	 * @throws Exception 
 	 */
-	public static void convertTifToPDF(String tiff,OutputStream pdf) {
+	public static void convertTifToPDF(String tiff,OutputStream pdf) throws Exception {
 		
 		try {
 			Document document = new Document(PageSize.LETTER,0, 0, 0, 0);
@@ -479,9 +483,9 @@ public class IOUtil
 			Float pageHeight = rect.getHeight();
 			
 			PdfWriter.getInstance(document, pdf);
-			document.open();
 			
 			RandomAccessFileOrArray ra = new RandomAccessFileOrArray(tiff);
+			document.open();
 			int pages = TiffImage.getNumberOfPages(ra);
 			for (int i = 1; i <= pages; i++) {
 				Image image = TiffImage.getTiffImage(ra, i);
@@ -498,9 +502,11 @@ public class IOUtil
 			}
 
 			document.close();
+			ra.close();
 		}
 		catch (Exception e) {
-			log.error("", e);
+			log.error("Error converting tiff to PDF", e);
+			throw e;
 		}
 		
 	}
@@ -651,5 +657,40 @@ public class IOUtil
 		}
 		
 		return null;
+	}
+	
+	/**
+	 * Writes a PDF document to an ouput stream containing the phrase "Forms Not Available".
+	 * 
+	 * @param outputStream The output stream destination of the PDF document.
+	 * @param additionalMessage Appends this string after teh "Forms Not Available" phrase.
+	 * @throws Exception
+	 */
+	public static void createFormNotAvailablePDF (OutputStream outputStream, String additionalMessage) throws Exception {
+		Document document = new Document();
+		PdfWriter.getInstance(document, outputStream);
+		document.open();
+		float fontSize = 40f;
+		float additionalMessageFontSize = 10f;
+		
+		Paragraph p1 = new Paragraph("\n\nForm", FontFactory.getFont(FontFactory.TIMES_BOLD, fontSize));
+		p1.setAlignment(Element.ALIGN_CENTER);
+		document.add(p1);
+		
+		Paragraph p2 = new Paragraph("Not", FontFactory.getFont(FontFactory.TIMES_BOLD, fontSize));
+		p2.setAlignment(Element.ALIGN_CENTER);
+		document.add(p2);
+		
+		Paragraph p3 = new Paragraph("Available", FontFactory.getFont(FontFactory.TIMES_BOLD, fontSize));
+		p3.setAlignment(Element.ALIGN_CENTER);
+		document.add(p3);
+		
+		if (additionalMessage != null) {
+			Paragraph p4 = new Paragraph("\n" + additionalMessage, FontFactory.getFont(FontFactory.TIMES_BOLD, additionalMessageFontSize));
+			p4.setAlignment(Element.ALIGN_CENTER);
+			document.add(p4);
+		}
+		
+		document.close();
 	}
 }

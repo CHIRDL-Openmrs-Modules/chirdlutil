@@ -1,15 +1,15 @@
-package org.openmrs.module.chirdlutil.threadmgmt;
+package org.openmrs.module.chirdlutil.test;
 
-
+import org.junit.Ignore;
+import org.junit.Test;
+import org.openmrs.module.chirdlutil.threadmgmt.ChirdlRunnable;
+import org.openmrs.module.chirdlutil.threadmgmt.ThreadManager;
 
 public class TestThreadManager {
 	
-	/**
-	 * Auto generated method comment
-	 * 
-	 * @param args
-	 */
-	public static void main(String[] args) {
+	@Test
+	@Ignore
+	public void testThreadManager() {
 		ThreadManager manager = ThreadManager.getInstance();
 		for (int i = 0; i < 1000; i++) {
 			int priority = -1;
