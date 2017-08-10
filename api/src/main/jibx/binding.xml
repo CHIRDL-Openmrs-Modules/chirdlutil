@@ -7,10 +7,14 @@
   <mapping class="org.openmrs.module.chirdlutil.xmlBeans.serverconfig.MobileClients" name="mobileClients">
         <collection field="mobileClients">
             <structure name="mobileClient" type="org.openmrs.module.chirdlutil.xmlBeans.serverconfig.MobileClient">
-                <value style="attribute" name="user" field="user" />
-                <value style="attribute" name="primaryFormId" field="primaryFormId" />
-                <collection field="secondaryFormIds">
-                    <value name="secondaryFormId"/>
+                <value style="attribute" name="user" field="user" usage="required" />
+                <value style="attribute" name="primaryFormId" field="primaryFormId" usage="required" />
+                <collection field="secondaryForms" usage="optional">
+                    <structure name="secondaryForm" type="org.openmrs.module.chirdlutil.xmlBeans.serverconfig.SecondaryForm">
+                        <value style="attribute" name="id" field="id" usage="required" />
+                        <value style="attribute" name="priority" field="priority" usage="required" />
+                        <value style="attribute" name="weight" field="weight" usage="required" />
+                    </structure>
                 </collection>
             </structure>
         </collection>
