@@ -74,6 +74,24 @@ public class MobileClient {
     public void setSecondaryForms(SecondaryForm[] secondaryForms) {
     	this.secondaryForms = secondaryForms;
     }
+    
+    /**
+     * Retrieve the secondary form weight based on ID.
+     * 
+     * @param secondaryFormId The ID of the form used to retrieve the weight
+     * @return the weight or null if the form cannot be found by the ID provided
+     */
+    public Double getSecondaryFormWeight(String secondaryFormId) {
+    	if (secondaryForms != null) {
+    		for (SecondaryForm secondaryForm : secondaryForms) {
+    			if (secondaryForm.getId().equals(secondaryFormId)) {
+    				return secondaryForm.getWeight();
+    			}
+    		}
+    	}
+    	
+    	return null;
+    }
 
 	/**
 	 * @see java.lang.Object#hashCode()
