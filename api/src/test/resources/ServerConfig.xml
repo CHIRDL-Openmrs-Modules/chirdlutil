@@ -6,9 +6,9 @@
             <secondaryForm id="form4" priority="1"/>
         </mobileClient>
         <mobileClient user="user2" primaryFormId="form1" maxSecondaryFormWeight="0.8">
-            <secondaryForm id="form2" priority="3" weight="0.3"/>
-            <secondaryForm id="form3" priority="1" weight="0.3"/>
-            <secondaryForm id="form4" priority="2" weight="0.3"/>
+            <secondaryForm id="form2" priority="3"/>
+            <secondaryForm id="form3" priority="1"/>
+            <secondaryForm id="form4" priority="2"/>
         </mobileClient>
     </mobileClients>
     <formConfig>
