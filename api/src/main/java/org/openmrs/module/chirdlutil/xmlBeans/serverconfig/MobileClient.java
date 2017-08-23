@@ -26,6 +26,7 @@ public class MobileClient {
 
 	private String user;
 	private String primaryFormId;
+	private Double maxSecondaryFormWeight;
 	private SecondaryForm[] secondaryForms;
 	
     /**
@@ -67,30 +68,26 @@ public class MobileClient {
     public void setPrimaryFormId(String primaryFormId) {
     	this.primaryFormId = primaryFormId;
     }
+	
+	/**
+	 * @return the maxSecondaryFormWeight
+	 */
+	public Double getMaxSecondaryFormWeight() {
+		return maxSecondaryFormWeight;
+	}
+	
+	/**
+	 * @param maxSecondaryFormWeight the maxSecondaryFormWeight to set
+	 */
+	public void setMaxSecondaryFormWeight(Double maxSecondaryFormWeight) {
+		this.maxSecondaryFormWeight = maxSecondaryFormWeight;
+	}
 
 	/**
      * @param secondaryForms the mobileForms to set
      */
     public void setSecondaryForms(SecondaryForm[] secondaryForms) {
     	this.secondaryForms = secondaryForms;
-    }
-    
-    /**
-     * Retrieve the secondary form weight based on ID.
-     * 
-     * @param secondaryFormId The ID of the form used to retrieve the weight
-     * @return the weight or null if the form cannot be found by the ID provided
-     */
-    public Double getSecondaryFormWeight(String secondaryFormId) {
-    	if (secondaryForms != null) {
-    		for (SecondaryForm secondaryForm : secondaryForms) {
-    			if (secondaryForm.getId().equals(secondaryFormId)) {
-    				return secondaryForm.getWeight();
-    			}
-    		}
-    	}
-    	
-    	return null;
     }
 
 	/**
@@ -100,6 +97,7 @@ public class MobileClient {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((maxSecondaryFormWeight == null) ? 0 : maxSecondaryFormWeight.hashCode());
 		result = prime * result + ((primaryFormId == null) ? 0 : primaryFormId.hashCode());
 		result = prime * result + Arrays.hashCode(secondaryForms);
 		result = prime * result + ((user == null) ? 0 : user.hashCode());
@@ -118,6 +116,11 @@ public class MobileClient {
 		if (getClass() != obj.getClass())
 			return false;
 		MobileClient other = (MobileClient) obj;
+		if (maxSecondaryFormWeight == null) {
+			if (other.maxSecondaryFormWeight != null)
+				return false;
+		} else if (!maxSecondaryFormWeight.equals(other.maxSecondaryFormWeight))
+			return false;
 		if (primaryFormId == null) {
 			if (other.primaryFormId != null)
 				return false;
@@ -138,7 +141,7 @@ public class MobileClient {
 	 */
 	@Override
 	public String toString() {
-		return "MobileClient [user=" + user + ", primaryFormId=" + primaryFormId + ", secondaryForms="
-		        + Arrays.toString(secondaryForms) + "]";
+		return "MobileClient [user=" + user + ", primaryFormId=" + primaryFormId + ", maxSecondaryFormWeight="
+		        + maxSecondaryFormWeight + ", secondaryForms=" + Arrays.toString(secondaryForms) + "]";
 	}
 }

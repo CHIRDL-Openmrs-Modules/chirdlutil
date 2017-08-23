@@ -2,7 +2,6 @@ package org.openmrs.module.chirdlutil.test.util;
 
 import static org.junit.Assert.assertEquals;
 
-import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -573,22 +572,17 @@ public class TestUtil extends BaseModuleContextSensitiveTest {
 		
 		Integer formNameCount = 4;
 		Integer priority = 1;
-		Double weight = new Double(0.5);
-		DecimalFormat df = new DecimalFormat("#.#");
 		for (SecondaryForm secondaryForm : secondaryForms) {
 			// Verify they come back in the correct order by priority;
 			Assert.assertEquals("form" + formNameCount, secondaryForm.getId());
 			Assert.assertEquals(priority, secondaryForm.getPriority());
-			Assert.assertEquals(weight, secondaryForm.getWeight());
 			formNameCount--;
 			priority++;
-			weight = (weight - new Double(0.1));
-			weight = Double.parseDouble(df.format(weight));
 		}
 		
-		Assert.assertEquals(new Double(0.5), mobileClient.getSecondaryFormWeight("form4"));
-		Assert.assertEquals(new Double(0.4), mobileClient.getSecondaryFormWeight("form3"));
-		Assert.assertEquals(new Double(0.3), mobileClient.getSecondaryFormWeight("form2"));
+		Assert.assertEquals(new Double("0.5"), serverConfig.getMobileFormById("form4").getWeight());
+		Assert.assertEquals(new Double("0.4"), serverConfig.getMobileFormById("form3").getWeight());
+		Assert.assertEquals(new Double("0.3"), serverConfig.getMobileFormById("form2").getWeight());
 		
 		MobileForm mobileForm = serverConfig.getMobileFormById("form1");
 		Assert.assertNotNull(mobileForm);

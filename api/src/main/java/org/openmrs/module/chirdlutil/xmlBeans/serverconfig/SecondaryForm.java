@@ -23,7 +23,6 @@ public class SecondaryForm {
 	
 	private String id;
 	private Integer priority;
-	private Double weight;
 	
 	/**
 	 * @return the id
@@ -52,20 +51,6 @@ public class SecondaryForm {
 	public void setPriority(Integer priority) {
 		this.priority = priority;
 	}
-	
-	/**
-	 * @return the weight
-	 */
-	public Double getWeight() {
-		return weight;
-	}
-	
-	/**
-	 * @param weight the weight to set
-	 */
-	public void setWeight(Double weight) {
-		this.weight = weight;
-	}
 
 	/**
 	 * @see java.lang.Object#hashCode()
@@ -76,7 +61,6 @@ public class SecondaryForm {
 		int result = 1;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((priority == null) ? 0 : priority.hashCode());
-		result = prime * result + ((weight == null) ? 0 : weight.hashCode());
 		return result;
 	}
 
@@ -102,11 +86,6 @@ public class SecondaryForm {
 				return false;
 		} else if (!priority.equals(other.priority))
 			return false;
-		if (weight == null) {
-			if (other.weight != null)
-				return false;
-		} else if (!weight.equals(other.weight))
-			return false;
 		return true;
 	}
 
@@ -115,6 +94,6 @@ public class SecondaryForm {
 	 */
 	@Override
 	public String toString() {
-		return "SecondaryForm [id=" + id + ", priority=" + priority + ", weight=" + weight + "]";
+		return "SecondaryForm [id=" + id + ", priority=" + priority + "]";
 	}
 }

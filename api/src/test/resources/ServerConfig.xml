@@ -1,11 +1,11 @@
 <serverConfig>
     <mobileClients>
-        <mobileClient user="user1" primaryFormId="form1">
-            <secondaryForm id="form2" priority="3" weight="0.3"/>
-            <secondaryForm id="form3" priority="2" weight="0.4"/>
-            <secondaryForm id="form4" priority="1" weight="0.5"/>
+        <mobileClient user="user1" primaryFormId="form1" maxSecondaryFormWeight="1.0">
+            <secondaryForm id="form2" priority="3"/>
+            <secondaryForm id="form3" priority="2"/>
+            <secondaryForm id="form4" priority="1"/>
         </mobileClient>
-        <mobileClient user="user2" primaryFormId="form1">
+        <mobileClient user="user2" primaryFormId="form1" maxSecondaryFormWeight="0.8">
             <secondaryForm id="form2" priority="3" weight="0.3"/>
             <secondaryForm id="form3" priority="1" weight="0.3"/>
             <secondaryForm id="form4" priority="2" weight="0.3"/>
@@ -17,24 +17,28 @@
             <startState>Form1_create</startState>
             <endState>JIT_FINISHED</endState>
             <pageUrl>/openmrs/module/chica/form1.form</pageUrl>
+            <weight>0.5</weight>
         </form>
         <form id="form2">
             <name>Form2_create</name>
             <startState>Form2_mobile_create</startState>
             <endState>JIT_FINISHED</endState>
             <pageUrl>/openmrs/module/chica/form2.form</pageUrl>
+            <weight>0.3</weight>
         </form>
         <form id="form3">
             <name>Form3_create</name>
             <startState>Form3_mobile_create</startState>
             <endState>JIT_FINISHED</endState>
             <pageUrl>/openmrs/module/chica/form3.form</pageUrl>
+            <weight>0.4</weight>
         </form>
         <form id="form4">
             <name>Form4_create</name>
             <startState>Form4_mobile_create</startState>
             <endState>JIT_FINISHED</endState>
             <pageUrl>/openmrs/module/chica/form4.form</pageUrl>
+            <weight>0.5</weight>
         </form>
     </formConfig>
     <pdfImageMerge>
