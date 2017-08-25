@@ -99,13 +99,11 @@ public class ServerConfig {
 			}
 			
 			SecondaryForm[] secondaryForms = client.getSecondaryForms();
-			if (secondaryForms != null) {
-				for (SecondaryForm secondaryForm : secondaryForms) {
-					String id = secondaryForm.getId();
-					MobileForm form = getMobileFormById(id);
-					if (form != null) {
-						forms.add(form);
-					}
+			for (SecondaryForm secondaryForm : secondaryForms) {
+				String id = secondaryForm.getId();
+				MobileForm form = getMobileFormById(id);
+				if (form != null) {
+					forms.add(form);
 				}
 			}
 		}
@@ -157,10 +155,6 @@ public class ServerConfig {
 		}
 		
 		SecondaryForm[] clientSecondaryForms = client.getSecondaryForms();
-		if (clientSecondaryForms == null) {
-			return null;
-		}
-		
 		for (SecondaryForm clientSecondaryForm : clientSecondaryForms) {
 			String formId = clientSecondaryForm.getId();
 			MobileForm form = getMobileFormById(formId);

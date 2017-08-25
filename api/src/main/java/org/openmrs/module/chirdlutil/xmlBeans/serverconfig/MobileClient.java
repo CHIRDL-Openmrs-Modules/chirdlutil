@@ -28,6 +28,7 @@ public class MobileClient {
 	private String primaryFormId;
 	private Double maxSecondaryFormWeight;
 	private SecondaryForm[] secondaryForms;
+	private SecondaryForm[] NO_SECONDARY_FORMS = new SecondaryForm[0];
 	
     /**
      * @return the user
@@ -48,7 +49,7 @@ public class MobileClient {
      */
     public SecondaryForm[] getSecondaryForms() {
     	if (secondaryForms == null) {
-    		return null;
+    		return NO_SECONDARY_FORMS;
     	}
     	
     	Arrays.sort(secondaryForms, new SecondaryFormComparator());

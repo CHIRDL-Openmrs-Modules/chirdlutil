@@ -804,11 +804,7 @@ public class Util
         		return primaryForm.getPageUrl();
 	        }
 	        
-	        SecondaryForm[] secondaryForms = client.getSecondaryForms();
-	        if (secondaryForms == null) {
-	        	return null;
-	        }
-	        
+	        SecondaryForm[] secondaryForms = client.getSecondaryForms();	        
 	        for (SecondaryForm secondaryForm : secondaryForms) {
 	        	String secondaryFormId = secondaryForm.getId();
 	        	MobileForm mobileForm = config.getMobileFormById(secondaryFormId);
