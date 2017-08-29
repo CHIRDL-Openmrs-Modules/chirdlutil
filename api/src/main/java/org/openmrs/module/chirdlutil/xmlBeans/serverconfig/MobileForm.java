@@ -25,6 +25,7 @@ public class MobileForm {
 	private String startState;
 	private String endState;
 	private String pageUrl;
+	private Double weight;
 	
     /**
      * @return the name
@@ -96,31 +97,87 @@ public class MobileForm {
 	    this.id = id;
     }
     
+	/**
+	 * @return the weight
+	 */
+	public Double getWeight() {
+		return weight;
+	}
+	
+	/**
+	 * @param weight the weight to set
+	 */
+	public void setWeight(Double weight) {
+		this.weight = weight;
+	}
+
     /**
-     * @see java.lang.Object#toString()
-     */
-    public String toString() {
-    	StringBuffer buffer = new StringBuffer("MobileForm:\n");
-    	buffer.append("\tid: " + id + "\n");
-    	buffer.append("\tname: " + name + "\n");
-    	buffer.append("\tstartState: " + startState + "\n");
-    	buffer.append("\tendState: " + endState + "\n");
-    	buffer.append("\tpageUrl: " + pageUrl + "\n");
-    	
-    	return buffer.toString();
-    }
-    
-    /**
-     * @see java.lang.Object#hashCode()
-     */
-    public int hashCode() {
-        int hash = 1;
-        hash = hash * 17 + (id == null ? 0 : id.hashCode());
-        hash = hash * 31 + (name == null ? 0 : name.hashCode());
-        hash = hash * 45 + (startState == null ? 0 : startState.hashCode());
-        hash = hash * 59 + (endState == null ? 0 : endState.hashCode());
-        hash = hash * 73 + (pageUrl == null ? 0 : pageUrl.hashCode());
-        
-        return hash;
-    }
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "MobileForm [id=" + id + ", name=" + name + ", startState=" + startState + ", endState=" + endState
+		        + ", pageUrl=" + pageUrl + ", weight=" + weight + "]";
+	}
+
+	/**
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((endState == null) ? 0 : endState.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((pageUrl == null) ? 0 : pageUrl.hashCode());
+		result = prime * result + ((startState == null) ? 0 : startState.hashCode());
+		result = prime * result + ((weight == null) ? 0 : weight.hashCode());
+		return result;
+	}
+
+	/**
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		MobileForm other = (MobileForm) obj;
+		if (endState == null) {
+			if (other.endState != null)
+				return false;
+		} else if (!endState.equals(other.endState))
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (pageUrl == null) {
+			if (other.pageUrl != null)
+				return false;
+		} else if (!pageUrl.equals(other.pageUrl))
+			return false;
+		if (startState == null) {
+			if (other.startState != null)
+				return false;
+		} else if (!startState.equals(other.startState))
+			return false;
+		if (weight == null) {
+			if (other.weight != null)
+				return false;
+		} else if (!weight.equals(other.weight))
+			return false;
+		return true;
+	}
 }
