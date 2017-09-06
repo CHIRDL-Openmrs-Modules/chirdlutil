@@ -18,8 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-
-
 /**
  *
  * @author Steve McKee
@@ -100,13 +98,12 @@ public class ServerConfig {
 				}
 			}
 			
-			String[] secondaryFormIds = client.getSecondaryFormIds();
-			if (secondaryFormIds != null) {
-				for (String id : secondaryFormIds) {
-					MobileForm form = getMobileFormById(id);
-					if (form != null) {
-						forms.add(form);
-					}
+			SecondaryForm[] secondaryForms = client.getSecondaryForms();
+			for (SecondaryForm secondaryForm : secondaryForms) {
+				String id = secondaryForm.getId();
+				MobileForm form = getMobileFormById(id);
+				if (form != null) {
+					forms.add(form);
 				}
 			}
 		}
@@ -157,12 +154,9 @@ public class ServerConfig {
 			return null;
 		}
 		
-		String[] formIds = client.getSecondaryFormIds();
-		if (formIds == null) {
-			return null;
-		}
-		
-		for (String formId : formIds) {
+		SecondaryForm[] clientSecondaryForms = client.getSecondaryForms();
+		for (SecondaryForm clientSecondaryForm : clientSecondaryForms) {
+			String formId = clientSecondaryForm.getId();
 			MobileForm form = getMobileFormById(formId);
 			if (form != null) {
 				secondaryForms.add(form);

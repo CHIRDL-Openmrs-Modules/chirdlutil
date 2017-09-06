@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
@@ -18,7 +17,6 @@ import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -78,11 +76,8 @@ import org.openmrs.api.ObsService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.chirdlutil.xmlBeans.serverconfig.MobileClient;
 import org.openmrs.module.chirdlutil.xmlBeans.serverconfig.MobileForm;
+import org.openmrs.module.chirdlutil.xmlBeans.serverconfig.SecondaryForm;
 import org.openmrs.module.chirdlutil.xmlBeans.serverconfig.ServerConfig;
-
-import au.com.bytecode.opencsv.CSVReader;
-import au.com.bytecode.opencsv.bean.CsvToBean;
-import au.com.bytecode.opencsv.bean.HeaderColumnNameTranslateMappingStrategy;
 
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.DecodeHintType;
@@ -122,9 +117,6 @@ public class Util
 	public static final String MONTH_ABBR = "mo";
 	public static final String WEEK_ABBR = "wk";
 	public static final String DAY_ABBR = "do";
-	
-	private static final String APPOINTMENT_FILE_NAME = "Appointments";
-	private static final String APPOINTMENT_FILE_EXTENSION = ".csv";
 	
 	private static ServerConfig serverConfig = null;
 	private static long lastUpdatedServerConfig = System.currentTimeMillis();
@@ -812,15 +804,12 @@ public class Util
         		return primaryForm.getPageUrl();
 	        }
 	        
-	        String[] secondaryFormIds = client.getSecondaryFormIds();
-	        if (secondaryFormIds == null) {
-	        	return null;
-	        }
-	        
-	        for (String secondaryFormId : secondaryFormIds) {
-	        	MobileForm secondaryForm = config.getMobileFormById(secondaryFormId);
-	        	if (secondaryForm != null && formName.equals(secondaryForm.getName())) {
-	        		return secondaryForm.getPageUrl();
+	        SecondaryForm[] secondaryForms = client.getSecondaryForms();	        
+	        for (SecondaryForm secondaryForm : secondaryForms) {
+	        	String secondaryFormId = secondaryForm.getId();
+	        	MobileForm mobileForm = config.getMobileFormById(secondaryFormId);
+	        	if (mobileForm != null && formName.equals(mobileForm.getName())) {
+	        		return mobileForm.getPageUrl();
 	        	}
 	        }
 	        
