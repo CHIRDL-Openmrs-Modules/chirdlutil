@@ -282,6 +282,8 @@ public final class ChirdlUtilConstants {
 	public static final String GENERAL_INFO_UNDERSCORE = "_";
 	public static final String GENERAL_INFO_TRUE = "true";
 	public static final String GENERAL_INFO_FALSE = "false";
+	public static final String GENERAL_INFO_YES = "yes";
+	public static final String GENERAL_INFO_NO = "no";
 	public static final String GENERAL_INFO_FORWARD_SLASH = "/";
 	public static final String GENERAL_INFO_BACK_SLASH = "\\";
 	public static final String GENERAL_INFO_NUMBER_SIGN = "#";
@@ -293,6 +295,8 @@ public final class ChirdlUtilConstants {
 	public static final String GENERAL_INFO_EQUAL = "=";
 	public static final String GENERAL_INFO_AMPERSAND = "&";
 	public static final String GENERAL_INFO_PIPE_DELIMITER = "|";
+	public static final String GENERAL_INFO_Y = "Y";
+	public static final String GENERAL_INFO_N = "N";
 	
 	/*
 	 * 
@@ -364,6 +368,10 @@ public final class ChirdlUtilConstants {
 	public static final String PARAMETER_IDENTIFIER = "identifier";
 	public static final String PARAMETER_FORM_ID = "formId";
 	public static final String PARAMETER_FORM_INSTANCE_ID = "formInstanceId";
+	public static final String PARAMETER_FIELD_NAME = "fieldName";
+	public static final String PARAMETER_CONCEPT = "concept";
+	public static final String PARAMETER_RULE_ID = "ruleId";
+	public static final String PARAMETER_FORM_FIELD_ID = "formFieldId";
 	
 	/*
 	 * 
