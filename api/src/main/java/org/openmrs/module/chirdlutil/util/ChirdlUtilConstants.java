@@ -89,6 +89,7 @@ public final class ChirdlUtilConstants {
 	 */
 	public static final String LOC_TAG_ATTR_ACTIVE_PRINTER_STATION = "ActivePrinterStation";
 	public static final String LOC_TAG_ATTR_AGE_LIMIT_AT_CHECKIN = "CheckinAgeLimit";
+	public static final String LOC_TAG_ATTR_PRIMARY_PHYSICIAN_FORM = "primaryPhysicianForm"; 
 	/*
 	 * 
 	 */
@@ -172,6 +173,9 @@ public final class ChirdlUtilConstants {
 	public static final String FORM_ATTRIBUTE_AUTO_FAX = "auto-fax";
 	public static final String FORM_ATTRIBUTE_IMAGE_DIRECTORY = "imageDirectory";
 	public static final String FORM_ATTRIBUTE_DISPLAY_GP_HEADER = "displayGroupHeader";
+	public static final String FORM_ATTRIBUTE_URL = "url";
+	public static final String FORM_ATTRIBUTE_START_STATE = "startState";
+	public static final String FORM_ATTRIBUTE_END_STATE = "endState";
 	/*
 	 * 
 	 */
