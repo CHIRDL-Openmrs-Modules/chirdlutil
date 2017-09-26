@@ -17,6 +17,7 @@ import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,6 +28,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.UUID;
@@ -78,6 +80,9 @@ import org.openmrs.module.chirdlutil.xmlBeans.serverconfig.MobileClient;
 import org.openmrs.module.chirdlutil.xmlBeans.serverconfig.MobileForm;
 import org.openmrs.module.chirdlutil.xmlBeans.serverconfig.SecondaryForm;
 import org.openmrs.module.chirdlutil.xmlBeans.serverconfig.ServerConfig;
+import org.openmrs.module.chirdlutilbackports.hibernateBeans.EncounterAttribute;
+import org.openmrs.module.chirdlutilbackports.hibernateBeans.EncounterAttributeValue;
+import org.openmrs.module.chirdlutilbackports.service.ChirdlUtilBackportsService;
 
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.DecodeHintType;
@@ -1049,5 +1054,94 @@ public class Util
 		}
 		
 		return formFieldMap;
+	}
+	
+	/**
+	 * CHICA-1063
+	 * Method used to hash a string using SHA-256
+	 * SHA-256 is used because it creates a string with less characters than SHA-512
+	 * This is needed specifically to keep the url provided to Glooko shorter
+	 * 
+	 * @param strToHash
+	 * @param base64EncodeValue - true to return a Base64 encoded version
+	 * @return hashed value
+	 */
+	public static String hashStringSHA256(String strToHash, boolean base64EncodeValue)
+	{
+		MessageDigest md;
+		byte[] input;
+		try {
+			md = MessageDigest.getInstance(ChirdlUtilConstants.SHA_256);
+			input = strToHash.getBytes(ChirdlUtilConstants.ENCODING_UTF8);
+		}
+        catch (UnsupportedEncodingException e) {
+        	log.error("Unsupported Encoding: " + ChirdlUtilConstants.ENCODING_UTF8, e);
+	        return null;
+        }
+        catch (NoSuchAlgorithmException e) {
+        	log.error("System cannot find encryption algorithm: " + ChirdlUtilConstants.SHA_256, e);
+	        return null;
+        }
+       
+		byte[] hashed = md.digest(input);
+		if(base64EncodeValue){
+			return new String(Base64.encodeBase64(hashed));
+		}
+		
+		return new String (hashed);	
+	}
+	
+	/**
+	 * CHICA-1063
+	 * Generate salt - OpenMRS has a method for this, but doesn't use SecureRandom
+	 * @return
+	 */
+	public static byte[] generateSecureRandomToken()
+	{
+		byte[] salt = new byte[16];
+		Random random = new SecureRandom();
+		random.nextBytes(salt);
+		return salt;
+	}
+	
+	/**
+	 * CHICA-1063 Moved this existing method into Util class
+	 * DWE CHICA-633
+	 * 
+	 * Store an encounter attribute value
+	 * 
+	 * @param encounter
+	 * @param attributeName - the name of the encounter attribute
+	 * @param valueText - the value to store in the value_text field
+	 */
+	public static void storeEncounterAttributeAsValueText(org.openmrs.Encounter encounter, String attributeName, String valueText)
+	{
+		ChirdlUtilBackportsService chirdlutilbackportsService = Context.getService(ChirdlUtilBackportsService.class);
+
+		try
+		{
+			EncounterAttribute encounterAttribute = chirdlutilbackportsService.getEncounterAttributeByName(attributeName);
+			EncounterAttributeValue encounterAttributeValue = chirdlutilbackportsService.getEncounterAttributeValueByAttribute(encounter.getEncounterId(), encounterAttribute);
+			
+			if(encounterAttributeValue == null) // Attribute value doesn't exist for this encounter, create a new one
+			{
+				encounterAttributeValue = new EncounterAttributeValue(encounterAttribute, encounter.getEncounterId(), valueText);
+				encounterAttributeValue.setCreator(encounter.getCreator());
+				encounterAttributeValue.setDateCreated(encounter.getDateCreated());
+				encounterAttributeValue.setUuid(UUID.randomUUID().toString());
+				
+				chirdlutilbackportsService.saveEncounterAttributeValue(encounterAttributeValue);
+			}
+			else
+			{ 
+				// I can't think of a case where the visit number would change or need to be updated
+				// just log it for now
+				log.error("Encounter attribute already exists for encounterId: " + encounter.getEncounterId() + " attributeName: " + attributeName);
+			}	
+		}
+		catch(Exception e)
+		{
+			log.error("Error storing encounter attribute value encounterId: " + encounter.getEncounterId() + " attributeName: " + attributeName, e);
+		}
 	}
 }

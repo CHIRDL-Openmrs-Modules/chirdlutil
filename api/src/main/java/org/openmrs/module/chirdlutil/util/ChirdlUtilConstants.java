@@ -56,6 +56,7 @@ public final class ChirdlUtilConstants {
 	public static final String PERSON_ATTRIBUTE_PATIENT_ACCOUNT_NUMBER = "Patient Account Number";
 	public static final String PERSON_ATTRIBUTE_ETHNICITY = "Ethnicity";
 	public static final String PERSON_ATTRIBUTE_EMAIL = "email";
+	public static final String PERSON_ATTRIBUTE_GLOOKO_CODE = "GlookoCode";
 
 	/*
 	 * 
@@ -476,6 +477,14 @@ public final class ChirdlUtilConstants {
 	 */
 	
 	/*
+	 * Hashing
+	 */
+	public static final String SHA_256 = "SHA-256";
+	/*
+	 * 
+	 */
+	
+	/*
 	 * Location strings
 	 */
 	public static final String LOCATION_RIIUMG = "RIIUMG";
@@ -569,6 +578,8 @@ public final class ChirdlUtilConstants {
 	 */
 	public static final String ENCOUNTER_ATTRIBUTE_VISIT_NUMBER = "Visit Number";
 	public static final String ENCOUNTER_ATTRIBUTE_ORIGINAL_LOCATION = "Original Location";
+	public static final String ENCOUNTER_ATTRIBUTE_GLOOKO_DATA_TYPE = "Glooko Data Type";
+	
 	
 	/*
 	 * Scheduled task properties 
