@@ -56,6 +56,7 @@ public final class ChirdlUtilConstants {
 	public static final String PERSON_ATTRIBUTE_PATIENT_ACCOUNT_NUMBER = "Patient Account Number";
 	public static final String PERSON_ATTRIBUTE_ETHNICITY = "Ethnicity";
 	public static final String PERSON_ATTRIBUTE_EMAIL = "email";
+	public static final String PERSON_ATTRIBUTE_GLOOKO_CODE = "GlookoCode";
 
 	/*
 	 * 
@@ -88,6 +89,7 @@ public final class ChirdlUtilConstants {
 	 */
 	public static final String LOC_TAG_ATTR_ACTIVE_PRINTER_STATION = "ActivePrinterStation";
 	public static final String LOC_TAG_ATTR_AGE_LIMIT_AT_CHECKIN = "CheckinAgeLimit";
+	public static final String LOC_TAG_ATTR_PRIMARY_PHYSICIAN_FORM = "primaryPhysicianForm"; 
 	/*
 	 * 
 	 */
@@ -171,6 +173,9 @@ public final class ChirdlUtilConstants {
 	public static final String FORM_ATTRIBUTE_AUTO_FAX = "auto-fax";
 	public static final String FORM_ATTRIBUTE_IMAGE_DIRECTORY = "imageDirectory";
 	public static final String FORM_ATTRIBUTE_DISPLAY_GP_HEADER = "displayGroupHeader";
+	public static final String FORM_ATTRIBUTE_URL = "url";
+	public static final String FORM_ATTRIBUTE_START_STATE = "startState";
+	public static final String FORM_ATTRIBUTE_END_STATE = "endState";
 	/*
 	 * 
 	 */
@@ -480,6 +485,14 @@ public final class ChirdlUtilConstants {
 	 */
 	
 	/*
+	 * Hashing
+	 */
+	public static final String SHA_256 = "SHA-256";
+	/*
+	 * 
+	 */
+	
+	/*
 	 * Location strings
 	 */
 	public static final String LOCATION_RIIUMG = "RIIUMG";
@@ -573,6 +586,8 @@ public final class ChirdlUtilConstants {
 	 */
 	public static final String ENCOUNTER_ATTRIBUTE_VISIT_NUMBER = "Visit Number";
 	public static final String ENCOUNTER_ATTRIBUTE_ORIGINAL_LOCATION = "Original Location";
+	public static final String ENCOUNTER_ATTRIBUTE_GLOOKO_DATA_TYPE = "Glooko Data Type";
+	
 	
 	/*
 	 * Scheduled task properties 
