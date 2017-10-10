@@ -139,6 +139,7 @@ public final class ChirdlUtilConstants {
 	 * Form Instance Attributes
 	 */
 	public static final String FORM_INST_ATTR_TRIGGER = "trigger";
+	public static final String FORM_INSTANCE_ATTR_FAX_ID = "faxId";
 	/*
 	 * 
 	 */
@@ -598,6 +599,8 @@ public final class ChirdlUtilConstants {
 	public static final String DATE_FORMAT_MMM_d_yyyy = "MMM d yyyy";
 	public static final String DATE_FORMAT_h_mm_a = "h:mma";
 	public static final String DATE_FORMAT_HH_mm_ss = "HHmmss";
+	public static final String DATE_FORMAT_MM_dd_yyyy_hh_mm_ss = "MM/dd/yyyy hh:mm:ss";
+	public static final String DATE_FORMAT_MM_dd_YYYY = "MM/dd/yyyy";
 	
 	/*
 	 * Fax service
