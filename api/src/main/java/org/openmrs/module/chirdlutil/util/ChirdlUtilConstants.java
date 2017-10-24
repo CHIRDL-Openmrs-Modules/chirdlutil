@@ -90,6 +90,7 @@ public final class ChirdlUtilConstants {
 	public static final String LOC_TAG_ATTR_ACTIVE_PRINTER_STATION = "ActivePrinterStation";
 	public static final String LOC_TAG_ATTR_AGE_LIMIT_AT_CHECKIN = "CheckinAgeLimit";
 	public static final String LOC_TAG_ATTR_PRIMARY_PHYSICIAN_FORM = "primaryPhysicianForm"; 
+	public static final String LOC_TAG_ATTR_PRIMARY_PATIENT_FORM = "primaryPatientForm"; 
 	/*
 	 * 
 	 */
@@ -176,9 +177,19 @@ public final class ChirdlUtilConstants {
 	public static final String FORM_ATTRIBUTE_URL = "url";
 	public static final String FORM_ATTRIBUTE_START_STATE = "startState";
 	public static final String FORM_ATTRIBUTE_END_STATE = "endState";
+	public static final String FORM_ATTRIBUTE_REPRINT_STATE = "reprintState";
+	public static final String FORM_ATTRIBUTE_IS_PRIMARY_PATIENT_FORM = "isPrimaryPatientForm";
+	public static final String FORM_ATTRIBUTE_IS_PRIMARY_PHYSICIAN_FORM = "isPrimaryPhysicianForm";
 	/*
 	 * 
 	 */
+	
+	/*
+	 * Form Type
+	 */
+	public static final String PATIENT_FORM_TYPE = "PatientFormType";
+	public static final String PHYSICIAN_FORM_TYPE = "PhysicianFormType";
+	
 	
 	/*
 	 * Form Attributes Values
@@ -618,12 +629,7 @@ public final class ChirdlUtilConstants {
 	 * Hapi constants
 	 */
 	public static final String HAPI_CHARSET_PROPERTY_KEY = "ca.uhn.hl7v2.llp.charset";
-	/*
-	 * 
-	 */
-	
-	public static final String FORM_PWS = "PWS";
-	
+
 	/*
 	 * Greaseboard indicators for PWS Ready 
 	 */
@@ -657,5 +663,12 @@ public final class ChirdlUtilConstants {
 	 */
 	public static final String DEFAULT_HOST = "localhost";
 	public static final Integer DEFAULT_PORT = 0;
+	
+	/*
+	 * GreaseBoard Action Drop down values
+	 */
+	public static final String OPTION_PRINT_PATIENT_FORM = "Print Patient Form";
+	public static final String OPTION_PRINT_PHYSICIAN_FORM = "Print Physician Form";
+	
 }
 
