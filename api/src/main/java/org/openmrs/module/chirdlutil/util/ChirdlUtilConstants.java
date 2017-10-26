@@ -667,8 +667,8 @@ public final class ChirdlUtilConstants {
 	/*
 	 * GreaseBoard Action Drop down values
 	 */
-	public static final String OPTION_PRINT_PATIENT_FORM = "Print Patient Form";
-	public static final String OPTION_PRINT_PHYSICIAN_FORM = "Print Physician Form";
+	public static final String OPTION_PRINT_PATIENT_FORM = "Print Pre-Screener";
+	public static final String OPTION_PRINT_PHYSICIAN_FORM = "Print Physician Worksheet";
 	
 }
 
