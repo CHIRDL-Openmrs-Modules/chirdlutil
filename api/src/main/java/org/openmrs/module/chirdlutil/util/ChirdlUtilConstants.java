@@ -276,6 +276,7 @@ public final class ChirdlUtilConstants {
 	public static final String GLOBAL_PROP_EXPORT_OBS_PORT = "chica.exportObsPort";
 	public static final String GLOBAL_PROP_EXPORT_PHYSICIAN_OBS_HOST = "chica.exportPhysicianObsHost";
 	public static final String GLOBAL_PROP_EXPORT_PHYSICIAN_OBS_PORT = "chica.exportPhysicianObsPort";
+	public static final String GLOBAL_PROP_EMAIL_SMTP_HOST = "chirdlutil.smtpMailHost";
 
 	/*
 	 * 
@@ -299,6 +300,9 @@ public final class ChirdlUtilConstants {
 	public static final String GENERAL_INFO_EQUAL = "=";
 	public static final String GENERAL_INFO_AMPERSAND = "&";
 	public static final String GENERAL_INFO_PIPE_DELIMITER = "|";
+	public static final String GENERAL_INFO_SINGLE_SPACE = " ";
+	public static final String GENERAL_INFO_OPEN_PAREN = "(";
+	public static final String GENERAL_INFO_CLOSE_PAREN = ")";
 	
 	/*
 	 * 
@@ -660,5 +664,10 @@ public final class ChirdlUtilConstants {
 	 */
 	public static final String DEFAULT_HOST = "localhost";
 	public static final Integer DEFAULT_PORT = 0;
+	
+	/*
+	 * Email constants
+	 */
+	public static final String EMAIL_SMTP_HOST_PROPERTY = "mail.smtp.host";
 }
 
