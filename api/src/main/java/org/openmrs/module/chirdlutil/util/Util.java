@@ -1144,4 +1144,24 @@ public class Util
 			log.error("Error storing encounter attribute value encounterId: " + encounter.getEncounterId() + " attributeName: " + attributeName, e);
 		}
 	}
+	
+	/**
+	 * Return the non-formatted version of the MRN.
+	 * 
+	 * @param patient The patient used to retrieve the MRN.
+	 * @return The MRN with no formatting or null if the MRN cannot be located.
+	 */
+	public static String getMedicalRecordNoFormatting(Patient patient) {
+		if (patient != null) {
+			PatientIdentifier patientIdentifier = patient.getPatientIdentifier();
+			if(patientIdentifier != null) {
+				String identifier = patientIdentifier.getIdentifier();
+				if(identifier != null){
+					return identifier.replaceAll("-", "");
+				}
+			}
+		}
+		
+    	return null;
+	}
 }
