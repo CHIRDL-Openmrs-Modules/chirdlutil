@@ -140,6 +140,7 @@ public final class ChirdlUtilConstants {
 	 * Form Instance Attributes
 	 */
 	public static final String FORM_INST_ATTR_TRIGGER = "trigger";
+	public static final String FORM_INSTANCE_ATTR_FAX_ID = "faxId";
 	/*
 	 * 
 	 */
@@ -286,6 +287,7 @@ public final class ChirdlUtilConstants {
 	public static final String GLOBAL_PROP_EXPORT_OBS_PORT = "chica.exportObsPort";
 	public static final String GLOBAL_PROP_EXPORT_PHYSICIAN_OBS_HOST = "chica.exportPhysicianObsHost";
 	public static final String GLOBAL_PROP_EXPORT_PHYSICIAN_OBS_PORT = "chica.exportPhysicianObsPort";
+	public static final String GLOBAL_PROP_EMAIL_SMTP_HOST = "chirdlutil.smtpMailHost";
 
 	/*
 	 * 
@@ -309,6 +311,9 @@ public final class ChirdlUtilConstants {
 	public static final String GENERAL_INFO_EQUAL = "=";
 	public static final String GENERAL_INFO_AMPERSAND = "&";
 	public static final String GENERAL_INFO_PIPE_DELIMITER = "|";
+	public static final String GENERAL_INFO_SINGLE_SPACE = " ";
+	public static final String GENERAL_INFO_OPEN_PAREN = "(";
+	public static final String GENERAL_INFO_CLOSE_PAREN = ")";
 	
 	/*
 	 * 
@@ -609,6 +614,8 @@ public final class ChirdlUtilConstants {
 	public static final String DATE_FORMAT_MMM_d_yyyy = "MMM d yyyy";
 	public static final String DATE_FORMAT_h_mm_a = "h:mma";
 	public static final String DATE_FORMAT_HH_mm_ss = "HHmmss";
+	public static final String DATE_FORMAT_MM_dd_yyyy_hh_mm_ss = "MM/dd/yyyy hh:mm:ss";
+	public static final String DATE_FORMAT_MM_dd_YYYY = "MM/dd/yyyy";
 	
 	/*
 	 * Fax service
@@ -670,5 +677,8 @@ public final class ChirdlUtilConstants {
 	public static final String OPTION_PRINT_PATIENT_FORM = "Print Pre-Screener";
 	public static final String OPTION_PRINT_PHYSICIAN_FORM = "Print Physician Worksheet";
 	
+	 * Email constants
+	 */
+	public static final String EMAIL_SMTP_HOST_PROPERTY = "mail.smtp.host";
 }
 

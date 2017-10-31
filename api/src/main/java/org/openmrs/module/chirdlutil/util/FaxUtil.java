@@ -164,10 +164,11 @@ public class FaxUtil {
 	 * @author Meena Sheley 
 	 */
 	
-	public static void faxFileByWebService(File fileToFax, String wsdlLocation, String faxQueue, String faxNumber, 
+	public static String faxFileByWebService(File fileToFax, String wsdlLocation, String faxQueue, String faxNumber, 
 			String userName, String password, String from, String to, String company, Patient patient, String formName, 
 			int resolution, int priority, String sendTime)
 			throws Exception {
+		
 		
 		//Check parameter validity
 		if (fileToFax == null) {
@@ -224,7 +225,8 @@ public class FaxUtil {
 				
 			//add attachments
 			Attachment attachment = new Attachment();
-			attachment.setFileName(fileToFax.getName());
+			String filename =  fileToFax.getName();
+			attachment.setFileName(filename);
 			byte[] fileContents;
 			try {
 				FileInputStream fin = new FileInputStream(fileToFax);
@@ -234,7 +236,7 @@ public class FaxUtil {
 				attachment.setFileContent(fileContents);
 			} catch (IOException e) {
 				log.error("Exception reading contents of fax file: " + fileToFax.getName());
-				return;
+				return null;
 			}
 			ArrayOfAttachment attachments = new ArrayOfAttachment();
 			attachments.getAttachment().add(attachment);
@@ -250,16 +252,23 @@ public class FaxUtil {
 			recInfo.setFaxNumber(faxNumber);
 			recInfo.setCompany(company);
 			recipients.getRecipientInfo().add(recInfo);
-			
-			String idTag = EMPTY_STRING; //optional and unknown at this point
+			String idTag = filename.substring(0,filename.lastIndexOf(".")); //optional and unknown at this point
 			String coverPage = EMPTY_STRING;  // empty string will use Eskenazi Health default coverpage
 			String tsi = EMPTY_STRING; //Transmitting Station ID
+			String uniqueId = null;
 			
 			//send fax
 			ResultMessage rm = port.loginAndSendNewFaxMessage("", userName, password, LOGON_THROUGH_USERACCOUNT, idTag, 
 					priority, sendTime, resolution, subject, coverPage,
 					memo, sender, recipients, attachments , tsi);
 			log.info("Fax sent for form: " + rm.getDetail());
+			
+			if (rm != null){
+				uniqueId = rm.getData();
+			}
+			
+			
+			return uniqueId;
 		
 		} catch (Exception e) {
 			log.error("Error faxing file: " + fileToFax, e);

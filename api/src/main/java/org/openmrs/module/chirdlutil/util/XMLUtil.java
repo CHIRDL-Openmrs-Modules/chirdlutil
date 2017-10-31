@@ -472,6 +472,13 @@ public class XMLUtil
 			return xmlFile;
 		}
 		
+		File pendingArchiveDirectory = new File(pendingDirectory, ChirdlUtilConstants.FILE_ARCHIVE);
+		xmlFile = findMergeXmlFile(pendingDirectory, pendingArchiveDirectory, locationId, formId, formInstanceId);
+		
+		if (xmlFile != null && xmlFile.exists()) {
+			return xmlFile;
+		}
+		
 		File archiveDirectory = new File(mergeDirectory, ChirdlUtilConstants.FILE_ARCHIVE);
 		xmlFile = findMergeXmlFile(mergeDirectory, archiveDirectory, locationId, formId, formInstanceId);
 		
