@@ -677,6 +677,7 @@ public final class ChirdlUtilConstants {
 	public static final String OPTION_PRINT_PATIENT_FORM = "Print Pre-Screener";
 	public static final String OPTION_PRINT_PHYSICIAN_FORM = "Print Physician Worksheet";
 	
+	/*
 	 * Email constants
 	 */
 	public static final String EMAIL_SMTP_HOST_PROPERTY = "mail.smtp.host";
