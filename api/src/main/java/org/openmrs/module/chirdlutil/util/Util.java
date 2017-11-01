@@ -1157,7 +1157,7 @@ public class Util
 			if(patientIdentifier != null) {
 				String identifier = patientIdentifier.getIdentifier();
 				if(identifier != null){
-					return identifier.replaceAll("-", "");
+					return identifier.replaceAll(ChirdlUtilConstants.GENERAL_INFO_DASH, ChirdlUtilConstants.GENERAL_INFO_EMPTY_STRING);
 				}
 			}
 		}
