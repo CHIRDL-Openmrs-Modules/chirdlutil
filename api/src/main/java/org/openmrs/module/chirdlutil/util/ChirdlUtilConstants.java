@@ -109,14 +109,7 @@ public final class ChirdlUtilConstants {
 	public static final String STATE_PSF_WAIT_FOR_ELECTRONIC_SUBMISSION = "PSF WAIT FOR ELECTRONIC SUBMISSION";
 	public static final String STATE_PWS_PROCESS = "PWS_process";
 	public static final String STATE_PWS_WAIT_FOR_SUBMISSION = "PWS WAIT FOR SUBMISSION";
-	public static final String STATE_QUERY_KITE_PWS = "QUERY KITE PWS";
-	public static final String STATE_QUERY_KITE_PSF = "QUERY KITE PSF";
-	public static final String STATE_QUERY_KITE_ALIAS = "QUERY KITE Alias";
 	public static final String STATE_RANDOMIZE = "Randomize";
-	public static final String STATE_PSF_PRINTED = "PSF_printed";
-	public static final String STATE_PSF_PROCESS = "PSF_process";
-	public static final String STATE_PWS_PRINTED = "PWS_printed";
-	public static final String STATE_FINISHED = "FINISHED";
 	public static final String STATE_GREASE_BOARD_PRINT_PWS = "Grease Board Print PWS";
 	
 	/*
