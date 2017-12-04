@@ -21,14 +21,16 @@ public class TranslationDescriptor {
 	
 	private String fileName = null;
 	private String translation = null;
+	private String english = null;
 	
     /**
      * @param fileName2
      * @param translation2
      */
-    public TranslationDescriptor(String fileName, String translation) {
+    public TranslationDescriptor(String fileName, String translation, String english) {
 	    this.fileName = fileName;
 	    this.translation = translation;
+	    this.english = english;
     }
 
 	/**
@@ -57,6 +59,22 @@ public class TranslationDescriptor {
      */
     public void setTranslation(String translation) {
     	this.translation = translation;
+    }
+
+	
+    /**
+     * @return the english
+     */
+    public String getEnglish() {
+    	return english;
+    }
+
+	
+    /**
+     * @param english the english to set
+     */
+    public void setEnglish(String english) {
+    	this.english = english;
     }
 	
 	

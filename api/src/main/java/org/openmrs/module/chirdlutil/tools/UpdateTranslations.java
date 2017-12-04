@@ -89,6 +89,7 @@ public class UpdateTranslations {
 			lineNum++;
 			String fileName = translationDescriptor.getFileName();
 			String translation = translationDescriptor.getTranslation();
+			String english = translationDescriptor.getEnglish();
 			
 			if (fileName == null || fileName.length() == 0 || translation == null || translation.length() == 0) {
 				System.err.print("Line " + lineNum + " was skipped because the filname name or translations were invalid.");
@@ -117,9 +118,13 @@ public class UpdateTranslations {
 					
 					while ((line = reader.readLine()) != null) {
 						
-						//Look for the line with the spanish translation
-						if (line.contains("At Spanish")) {
-							line = "write (\"" + translation + "\") At Spanish;";
+						if (line.toLowerCase().contains("write") && !line.contains("At Spanish")) {
+							line = "write (\"" + english + "\");";
+						} else {
+							//Look for the line with the spanish translation
+							if (line.contains("At Spanish")) {
+								line = "write (\"" + translation + "\") At Spanish;";
+							}
 						}
 						writer.write(line + "\n");
 						
@@ -181,17 +186,25 @@ public class UpdateTranslations {
 			String line = br.readLine();
 			String fileName = "";
 			String translation = "";
+			String english = "";
 			
 			while (line != null) {
 				int index = line.indexOf("Filename:");
 				if (index > -1) {
 					fileName = line.substring(index + "Filename:".length()).trim();
 				}
+				index = line.indexOf("English:");
+				
+				if (index > -1) {
+					english = line.substring(index + "English:".length()).trim();
+				}
 				index = line.indexOf("Update:");
 				if (index > -1) {
 					translation = line.substring(index + "Update:".length()).trim();
-					list.add(new TranslationDescriptor(fileName, translation));
+					list.add(new TranslationDescriptor(fileName, translation, english));
+					
 				}
+				
 				line = br.readLine();
 			}
 		}
