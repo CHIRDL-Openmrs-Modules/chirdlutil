@@ -118,7 +118,8 @@ public class UpdateTranslations {
 					
 					while ((line = reader.readLine()) != null) {
 						
-						if (line.toLowerCase().contains("write") && !line.contains("At Spanish")) {
+						if (line.toLowerCase().contains("write") && !line.trim().toLowerCase().startsWith("explanation:")
+						        && !line.contains("At Spanish")) {
 							line = "write (\"" + english + "\");";
 						} else {
 							//Look for the line with the spanish translation
