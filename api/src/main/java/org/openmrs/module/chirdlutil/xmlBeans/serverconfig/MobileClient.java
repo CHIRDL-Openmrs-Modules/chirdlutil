@@ -13,16 +13,22 @@
  */
 package org.openmrs.module.chirdlutil.xmlBeans.serverconfig;
 
+import java.util.Arrays;
+
+import org.openmrs.module.chirdlutil.util.SecondaryFormComparator;
 
 /**
- *
+ * Bean to hold the mobile client information
+ * 
  * @author Steve McKee
  */
 public class MobileClient {
 
 	private String user;
 	private String primaryFormId;
-	private String[] secondaryFormIds;
+	private Double maxSecondaryFormWeight;
+	private SecondaryForm[] secondaryForms;
+	private SecondaryForm[] NO_SECONDARY_FORMS = new SecondaryForm[0];
 	
     /**
      * @return the user
@@ -39,10 +45,15 @@ public class MobileClient {
     }
 	
     /**
-     * @return the secondaryFormIds
+     * @return the secondaryForms
      */
-    public String[] getSecondaryFormIds() {
-    	return secondaryFormIds;
+    public SecondaryForm[] getSecondaryForms() {
+    	if (secondaryForms == null) {
+    		return NO_SECONDARY_FORMS;
+    	}
+    	
+    	Arrays.sort(secondaryForms, new SecondaryFormComparator());
+    	return secondaryForms;
     }
 
     /**
@@ -58,44 +69,80 @@ public class MobileClient {
     public void setPrimaryFormId(String primaryFormId) {
     	this.primaryFormId = primaryFormId;
     }
+	
+	/**
+	 * @return the maxSecondaryFormWeight
+	 */
+	public Double getMaxSecondaryFormWeight() {
+		return maxSecondaryFormWeight;
+	}
+	
+	/**
+	 * @param maxSecondaryFormWeight the maxSecondaryFormWeight to set
+	 */
+	public void setMaxSecondaryFormWeight(Double maxSecondaryFormWeight) {
+		this.maxSecondaryFormWeight = maxSecondaryFormWeight;
+	}
 
 	/**
-     * @param secondaryFormIds the mobileForms to set
+     * @param secondaryForms the mobileForms to set
      */
-    public void setSecondaryFormIds(String[] secondaryFormIds) {
-    	this.secondaryFormIds = secondaryFormIds;
+    public void setSecondaryForms(SecondaryForm[] secondaryForms) {
+    	this.secondaryForms = secondaryForms;
     }
-    
-    /**
-     * @see java.lang.Object#toString()
-     */
-    public String toString() {
-    	StringBuffer buffer = new StringBuffer("MobileClient:\n");
-    	buffer.append("\tuser: " + user + "\n");
-    	buffer.append("\tprimaryFormId: " + primaryFormId + "\n");
-    	if (secondaryFormIds != null && secondaryFormIds.length > 0) {
-    		buffer.append("\tsecondaryFormIds:\n");
-    		for (String id : secondaryFormIds) {
-    			buffer.append("\t\t" + id + "\n");
-    		}
-    	}
-    	
-    	return buffer.toString();
-    }
-    
-    /**
-     * @see java.lang.Object#hashCode()
-     */
-    public int hashCode() {
-        int hash = 1;
-        hash = hash * 17 + (user == null ? 0 : user.hashCode());
-        hash = hash * 31 + (primaryFormId == null ? 0 : primaryFormId.hashCode());
-        if (secondaryFormIds != null) {
-	        for (String id : secondaryFormIds) {
-	        	hash = hash * 13 + (id == null ? 0 : id.hashCode());
-	        }
-        }
-        
-        return hash;
-    }
+
+	/**
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((maxSecondaryFormWeight == null) ? 0 : maxSecondaryFormWeight.hashCode());
+		result = prime * result + ((primaryFormId == null) ? 0 : primaryFormId.hashCode());
+		result = prime * result + Arrays.hashCode(secondaryForms);
+		result = prime * result + ((user == null) ? 0 : user.hashCode());
+		return result;
+	}
+
+	/**
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		MobileClient other = (MobileClient) obj;
+		if (maxSecondaryFormWeight == null) {
+			if (other.maxSecondaryFormWeight != null)
+				return false;
+		} else if (!maxSecondaryFormWeight.equals(other.maxSecondaryFormWeight))
+			return false;
+		if (primaryFormId == null) {
+			if (other.primaryFormId != null)
+				return false;
+		} else if (!primaryFormId.equals(other.primaryFormId))
+			return false;
+		if (!Arrays.equals(secondaryForms, other.secondaryForms))
+			return false;
+		if (user == null) {
+			if (other.user != null)
+				return false;
+		} else if (!user.equals(other.user))
+			return false;
+		return true;
+	}
+
+	/**
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "MobileClient [user=" + user + ", primaryFormId=" + primaryFormId + ", maxSecondaryFormWeight="
+		        + maxSecondaryFormWeight + ", secondaryForms=" + Arrays.toString(secondaryForms) + "]";
+	}
 }

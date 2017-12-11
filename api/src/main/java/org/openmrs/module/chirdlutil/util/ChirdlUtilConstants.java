@@ -56,6 +56,7 @@ public final class ChirdlUtilConstants {
 	public static final String PERSON_ATTRIBUTE_PATIENT_ACCOUNT_NUMBER = "Patient Account Number";
 	public static final String PERSON_ATTRIBUTE_ETHNICITY = "Ethnicity";
 	public static final String PERSON_ATTRIBUTE_EMAIL = "email";
+	public static final String PERSON_ATTRIBUTE_GLOOKO_CODE = "GlookoCode";
 
 	/*
 	 * 
@@ -88,6 +89,8 @@ public final class ChirdlUtilConstants {
 	 */
 	public static final String LOC_TAG_ATTR_ACTIVE_PRINTER_STATION = "ActivePrinterStation";
 	public static final String LOC_TAG_ATTR_AGE_LIMIT_AT_CHECKIN = "CheckinAgeLimit";
+	public static final String LOC_TAG_ATTR_PRIMARY_PHYSICIAN_FORM = "primaryPhysicianForm"; 
+	public static final String LOC_TAG_ATTR_PRIMARY_PATIENT_FORM = "primaryPatientForm"; 
 	/*
 	 * 
 	 */
@@ -106,18 +109,7 @@ public final class ChirdlUtilConstants {
 	public static final String STATE_PSF_WAIT_FOR_ELECTRONIC_SUBMISSION = "PSF WAIT FOR ELECTRONIC SUBMISSION";
 	public static final String STATE_PWS_PROCESS = "PWS_process";
 	public static final String STATE_PWS_WAIT_FOR_SUBMISSION = "PWS WAIT FOR SUBMISSION";
-	public static final String STATE_QUERY_KITE_PWS = "QUERY KITE PWS";
-	public static final String STATE_QUERY_KITE_PSF = "QUERY KITE PSF";
-	public static final String STATE_QUERY_KITE_ALIAS = "QUERY KITE Alias";
-	public static final String STATE_PSF_CREATE = "PSF_create";
 	public static final String STATE_RANDOMIZE = "Randomize";
-	public static final String STATE_PSF_PRINTED = "PSF_printed";
-	public static final String STATE_PSF_PROCESS = "PSF_process";
-	public static final String STATE_PWS_CREATE = "PWS_create";
-	public static final String STATE_PWS_PRINTED = "PWS_printed";
-	public static final String STATE_FINISHED = "FINISHED";
-	public static final String STATE_PSF_REPRINT = "PSF_reprint";
-	public static final String STATE_PWS_REPRINT = "PWS_reprint";
 	public static final String STATE_GREASE_BOARD_PRINT_PWS = "Grease Board Print PWS";
 	
 	/*
@@ -172,9 +164,22 @@ public final class ChirdlUtilConstants {
 	public static final String FORM_ATTRIBUTE_AUTO_FAX = "auto-fax";
 	public static final String FORM_ATTRIBUTE_IMAGE_DIRECTORY = "imageDirectory";
 	public static final String FORM_ATTRIBUTE_DISPLAY_GP_HEADER = "displayGroupHeader";
+	public static final String FORM_ATTRIBUTE_URL = "url";
+	public static final String FORM_ATTRIBUTE_START_STATE = "startState";
+	public static final String FORM_ATTRIBUTE_END_STATE = "endState";
+	public static final String FORM_ATTRIBUTE_REPRINT_STATE = "reprintState";
+	public static final String FORM_ATTRIBUTE_IS_PRIMARY_PATIENT_FORM = "isPrimaryPatientForm";
+	public static final String FORM_ATTRIBUTE_IS_PRIMARY_PHYSICIAN_FORM = "isPrimaryPhysicianForm";
 	/*
 	 * 
 	 */
+	
+	/*
+	 * Form Type
+	 */
+	public static final String PATIENT_FORM_TYPE = "PatientFormType";
+	public static final String PHYSICIAN_FORM_TYPE = "PhysicianFormType";
+	
 	
 	/*
 	 * Form Attributes Values
@@ -271,6 +276,7 @@ public final class ChirdlUtilConstants {
 	public static final String GLOBAL_PROP_EXPORT_OBS_PORT = "chica.exportObsPort";
 	public static final String GLOBAL_PROP_EXPORT_PHYSICIAN_OBS_HOST = "chica.exportPhysicianObsHost";
 	public static final String GLOBAL_PROP_EXPORT_PHYSICIAN_OBS_PORT = "chica.exportPhysicianObsPort";
+	public static final String GLOBAL_PROP_EMAIL_SMTP_HOST = "chirdlutil.smtpMailHost";
 
 	/*
 	 * 
@@ -294,6 +300,9 @@ public final class ChirdlUtilConstants {
 	public static final String GENERAL_INFO_EQUAL = "=";
 	public static final String GENERAL_INFO_AMPERSAND = "&";
 	public static final String GENERAL_INFO_PIPE_DELIMITER = "|";
+	public static final String GENERAL_INFO_SINGLE_SPACE = " ";
+	public static final String GENERAL_INFO_OPEN_PAREN = "(";
+	public static final String GENERAL_INFO_CLOSE_PAREN = ")";
 	
 	/*
 	 * 
@@ -473,6 +482,14 @@ public final class ChirdlUtilConstants {
 	 */
 	
 	/*
+	 * Hashing
+	 */
+	public static final String SHA_256 = "SHA-256";
+	/*
+	 * 
+	 */
+	
+	/*
 	 * Location strings
 	 */
 	public static final String LOCATION_RIIUMG = "RIIUMG";
@@ -566,6 +583,8 @@ public final class ChirdlUtilConstants {
 	 */
 	public static final String ENCOUNTER_ATTRIBUTE_VISIT_NUMBER = "Visit Number";
 	public static final String ENCOUNTER_ATTRIBUTE_ORIGINAL_LOCATION = "Original Location";
+	public static final String ENCOUNTER_ATTRIBUTE_GLOOKO_DATA_TYPE = "Glooko Data Type";
+	
 	
 	/*
 	 * Scheduled task properties 
@@ -606,12 +625,7 @@ public final class ChirdlUtilConstants {
 	 * Hapi constants
 	 */
 	public static final String HAPI_CHARSET_PROPERTY_KEY = "ca.uhn.hl7v2.llp.charset";
-	/*
-	 * 
-	 */
-	
-	public static final String FORM_PWS = "PWS";
-	
+
 	/*
 	 * Greaseboard indicators for PWS Ready 
 	 */
@@ -645,5 +659,16 @@ public final class ChirdlUtilConstants {
 	 */
 	public static final String DEFAULT_HOST = "localhost";
 	public static final Integer DEFAULT_PORT = 0;
+	
+	/*
+	 * GreaseBoard Action Drop down values
+	 */
+	public static final String OPTION_PRINT_PATIENT_FORM = "Print Pre-Screener";
+	public static final String OPTION_PRINT_PHYSICIAN_FORM = "Print Physician Worksheet";
+	
+	/*
+	 * Email constants
+	 */
+	public static final String EMAIL_SMTP_HOST_PROPERTY = "mail.smtp.host";
 }
 
