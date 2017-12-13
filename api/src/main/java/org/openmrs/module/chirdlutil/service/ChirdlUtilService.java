@@ -40,8 +40,4 @@ public interface ChirdlUtilService {
 	 */
 	public List<EventLog> getEventLogs(Integer eventId, Integer locationId, Integer formId, Integer studyId, String event, 
 		Date startDate, Date endDate, Integer userId, String description);
-	
-	public boolean tableExists(String tableName);
-
-	public void executeSql(String sql);	
 }
