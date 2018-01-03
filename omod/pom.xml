@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.openmrs.module</groupId>
 		<artifactId>chirdlutil</artifactId>
-		<version>1.16.0</version>
+		<version>1.17.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>chirdlutil-omod</artifactId>
 	<packaging>jar</packaging>
@@ -88,6 +88,14 @@
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpcore</artifactId>
         </dependency>
+        <dependency>
+			<groupId>org.openmrs.module</groupId>
+			<artifactId>legacyui-omod</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>			
+		</dependency>
 	</dependencies>
 
 	<build>
