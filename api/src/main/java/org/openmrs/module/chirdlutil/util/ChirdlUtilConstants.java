@@ -295,6 +295,7 @@ public final class ChirdlUtilConstants {
 	public static final String GENERAL_INFO_UNDERSCORE = "_";
 	public static final String GENERAL_INFO_TRUE = "true";
 	public static final String GENERAL_INFO_FALSE = "false";
+	public static final String GENERAL_INFO_YES = "Yes";
 	public static final String GENERAL_INFO_FORWARD_SLASH = "/";
 	public static final String GENERAL_INFO_BACK_SLASH = "\\";
 	public static final String GENERAL_INFO_NUMBER_SIGN = "#";
@@ -380,6 +381,12 @@ public final class ChirdlUtilConstants {
 	public static final String PARAMETER_IDENTIFIER = "identifier";
 	public static final String PARAMETER_FORM_ID = "formId";
 	public static final String PARAMETER_FORM_INSTANCE_ID = "formInstanceId";
+	public static final String PARAMETER_CANCEL_PROCESS = "cancelProcess";
+	public static final String PARAMTER_PRINTER_COPY = "printerCopy";
+	public static final String PARAMTER_FAXABLE_FORM = "faxableForm";
+	public static final String PARAMTER_SCANNABLE_FORM = "scannableForm";
+	public static final String PARAMTER_SCORABLE_FORM = "scorableForm";
+	public static final String PARAMETER_FORM_TO_EDIT = "formToEdit";
 	
 	/*
 	 * 
