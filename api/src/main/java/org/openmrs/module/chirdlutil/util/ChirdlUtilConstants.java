@@ -381,6 +381,9 @@ public final class ChirdlUtilConstants {
 	public static final String PARAMTER_SCANNABLE_FORM = "scannableForm";
 	public static final String PARAMTER_SCORABLE_FORM = "scorableForm";
 	public static final String PARAMETER_FORM_TO_EDIT = "formToEdit";
+	public static final String PARAMETER_SENDING_APPLICATION = "sendingApplication";
+	public static final String PARAMETER_SENDING_FACILITY = "sendingFacility";
+	public static final String PARAMETER_NEW_ENCOUNTER_CREATED = "newEncounterCreated";
 	
 	/*
 	 * 
