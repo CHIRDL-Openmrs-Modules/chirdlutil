@@ -41,6 +41,7 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.icepdf.core.exceptions.PDFException;
@@ -1132,11 +1133,9 @@ public class Util
 				
 				chirdlutilbackportsService.saveEncounterAttributeValue(encounterAttributeValue);
 			}
-			else
-			{ 
-				// I can't think of a case where the visit number would change or need to be updated
-				// just log it for now
-				log.error("Encounter attribute already exists for encounterId: " + encounter.getEncounterId() + " attributeName: " + attributeName);
+			else if(StringUtils.isNotEmpty(encounterAttributeValue.getValueText()) && StringUtils.isNotEmpty(valueText) && !encounterAttributeValue.getValueText().equalsIgnoreCase(valueText))
+			{ 		
+				log.error("Encounter attribute already exists, but does not match the existing value for encounterId: " + encounter.getEncounterId() + " attributeName: " + attributeName + " existingValue: " + encounterAttributeValue.getValueText() + " newValue: " + valueText);		
 			}	
 		}
 		catch(Exception e)
