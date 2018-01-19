@@ -277,6 +277,12 @@ public final class ChirdlUtilConstants {
 	public static final String GLOBAL_PROP_EXPORT_PHYSICIAN_OBS_HOST = "chica.exportPhysicianObsHost";
 	public static final String GLOBAL_PROP_EXPORT_PHYSICIAN_OBS_PORT = "chica.exportPhysicianObsPort";
 	public static final String GLOBAL_PROP_EMAIL_SMTP_HOST = "chirdlutil.smtpMailHost";
+	public static final String GLOBAL_PROP_PARSE_INSURANCE_CODE_FROM_IN1_35= "chica.parseInsurancePlanCodeFrom_IN1-35";
+	public static final String GLOBAL_PROP_PARSE_CARRIER_CODE = "chica.parseCarrierCode";
+	public static final String GLOBAL_PROP_PARSE_VISIT_NUMBER_FROM_PV1_19 = "chica.parseVisitNumberFrom_PV1_19";
+	public static final String GLOBAL_PROP_PARSE_OBS_FROM_REGISTRATION = "chica.parseObsFromRegistration";
+	public static final String GLOBAL_PROP_DATA_SOURCE_MEDICAL_RECORD = "chica.dataSourceMedicalRecord";
+	public static final String GLOBAL_PROP_DATA_SOURCE_VITALS = "chica.dataSourceVitals";
 
 	/*
 	 * 
