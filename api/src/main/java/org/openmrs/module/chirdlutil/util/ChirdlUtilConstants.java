@@ -460,6 +460,9 @@ public final class ChirdlUtilConstants {
 	 * Concept information
 	 */
 	public static final String CONCEPT_DATATYPE_TEXT = "Text";
+	public static final String CONCEPT_DATATYPE_CODED = "Coded";
+	public static final String CONCEPT_DATATYPE_NUMERIC = "Numeric";
+	public static final String CONCEPT_DATATYPE_DATETIME = "Datetime";
 	public static final String CONCEPT_CLASS_CHICA = "CHICA";
 	/*
 	 * 
