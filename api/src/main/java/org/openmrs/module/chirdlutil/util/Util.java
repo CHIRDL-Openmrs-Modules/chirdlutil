@@ -1124,7 +1124,20 @@ public class Util
 			EncounterAttribute encounterAttribute = chirdlutilbackportsService.getEncounterAttributeByName(attributeName);
 			EncounterAttributeValue encounterAttributeValue = chirdlutilbackportsService.getEncounterAttributeValueByAttribute(encounter.getEncounterId(), encounterAttribute);
 			
-			if(encounterAttributeValue == null) // Attribute value doesn't exist for this encounter, create a new one
+			boolean existingVoided = false;
+			if(encounterAttributeValue != null && StringUtils.isNotEmpty(encounterAttributeValue.getValueText()) && StringUtils.isNotEmpty(valueText) && !encounterAttributeValue.getValueText().equalsIgnoreCase(valueText))
+			{ 		
+				// Attribute already exists, void the old one, and create a new one
+				encounterAttributeValue.setVoided(true);
+				encounterAttributeValue.setVoidedBy(Context.getAuthenticatedUser());
+				encounterAttributeValue.setVoidReason("New value: " + valueText);
+				encounterAttributeValue.setDateVoided(new Date());
+				
+				chirdlutilbackportsService.saveEncounterAttributeValue(encounterAttributeValue);
+				existingVoided = true;
+			}
+			
+			if(encounterAttributeValue == null || existingVoided) // Create a new attribute if one didn't exist or if we voided an existing one
 			{
 				encounterAttributeValue = new EncounterAttributeValue(encounterAttribute, encounter.getEncounterId(), valueText);
 				encounterAttributeValue.setCreator(encounter.getCreator());
@@ -1132,10 +1145,6 @@ public class Util
 				encounterAttributeValue.setUuid(UUID.randomUUID().toString());
 				
 				chirdlutilbackportsService.saveEncounterAttributeValue(encounterAttributeValue);
-			}
-			else if(StringUtils.isNotEmpty(encounterAttributeValue.getValueText()) && StringUtils.isNotEmpty(valueText) && !encounterAttributeValue.getValueText().equalsIgnoreCase(valueText))
-			{ 		
-				log.error("Encounter attribute already exists, but does not match the existing value for encounterId: " + encounter.getEncounterId() + " attributeName: " + attributeName + " existingValue: " + encounterAttributeValue.getValueText() + " newValue: " + valueText);		
 			}	
 		}
 		catch(Exception e)
