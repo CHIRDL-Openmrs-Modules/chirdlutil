@@ -111,6 +111,7 @@ public final class ChirdlUtilConstants {
 	public static final String STATE_PWS_WAIT_FOR_SUBMISSION = "PWS WAIT FOR SUBMISSION";
 	public static final String STATE_RANDOMIZE = "Randomize";
 	public static final String STATE_GREASE_BOARD_PRINT_PWS = "Grease Board Print PWS";
+	public static final String STATE_FINISHED = "FINISHED";
 	
 	/*
 	 * 
@@ -277,6 +278,7 @@ public final class ChirdlUtilConstants {
 	public static final String GLOBAL_PROP_EXPORT_PHYSICIAN_OBS_HOST = "chica.exportPhysicianObsHost";
 	public static final String GLOBAL_PROP_EXPORT_PHYSICIAN_OBS_PORT = "chica.exportPhysicianObsPort";
 	public static final String GLOBAL_PROP_EMAIL_SMTP_HOST = "chirdlutil.smtpMailHost";
+	public static final String GLOBAL_PROP_GREASEBOARD_CHECKOUT_STATE = "chica.greaseboardCheckoutState";
 
 	/*
 	 * 
