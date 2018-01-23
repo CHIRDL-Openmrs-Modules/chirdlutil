@@ -683,5 +683,7 @@ public final class ChirdlUtilConstants {
 	 * Email constants
 	 */
 	public static final String EMAIL_SMTP_HOST_PROPERTY = "mail.smtp.host";
+	
+	public static final String ENCOUNTER_ATTR_VALUE_VOID_REASON = "New Value: ";
 }
 

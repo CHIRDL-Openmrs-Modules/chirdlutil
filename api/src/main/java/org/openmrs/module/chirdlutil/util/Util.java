@@ -1130,7 +1130,7 @@ public class Util
 				// Attribute already exists, void the old one, and create a new one
 				encounterAttributeValue.setVoided(true);
 				encounterAttributeValue.setVoidedBy(Context.getAuthenticatedUser());
-				encounterAttributeValue.setVoidReason("New value: " + valueText);
+				encounterAttributeValue.setVoidReason(ChirdlUtilConstants.ENCOUNTER_ATTR_VALUE_VOID_REASON + valueText);
 				encounterAttributeValue.setDateVoided(new Date());
 				
 				chirdlutilbackportsService.saveEncounterAttributeValue(encounterAttributeValue);
