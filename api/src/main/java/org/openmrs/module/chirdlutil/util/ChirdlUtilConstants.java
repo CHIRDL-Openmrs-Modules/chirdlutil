@@ -111,6 +111,7 @@ public final class ChirdlUtilConstants {
 	public static final String STATE_PWS_WAIT_FOR_SUBMISSION = "PWS WAIT FOR SUBMISSION";
 	public static final String STATE_RANDOMIZE = "Randomize";
 	public static final String STATE_GREASE_BOARD_PRINT_PWS = "Grease Board Print PWS";
+	public static final String STATE_FINISHED = "FINISHED";
 	
 	/*
 	 * 
@@ -277,6 +278,7 @@ public final class ChirdlUtilConstants {
 	public static final String GLOBAL_PROP_EXPORT_PHYSICIAN_OBS_HOST = "chica.exportPhysicianObsHost";
 	public static final String GLOBAL_PROP_EXPORT_PHYSICIAN_OBS_PORT = "chica.exportPhysicianObsPort";
 	public static final String GLOBAL_PROP_EMAIL_SMTP_HOST = "chirdlutil.smtpMailHost";
+	public static final String GLOBAL_PROP_GREASEBOARD_CHECKOUT_STATE = "chica.greaseboardCheckoutState";
 	public static final String GLOBAL_PROP_PARSE_INSURANCE_CODE_FROM_IN1_35= "chica.parseInsurancePlanCodeFrom_IN1-35";
 	public static final String GLOBAL_PROP_PARSE_CARRIER_CODE = "chica.parseCarrierCode";
 	public static final String GLOBAL_PROP_PARSE_VISIT_NUMBER_FROM_PV1_19 = "chica.parseVisitNumberFrom_PV1_19";
@@ -603,6 +605,7 @@ public final class ChirdlUtilConstants {
 	public static final String ENCOUNTER_ATTRIBUTE_VISIT_NUMBER = "Visit Number";
 	public static final String ENCOUNTER_ATTRIBUTE_ORIGINAL_LOCATION = "Original Location";
 	public static final String ENCOUNTER_ATTRIBUTE_GLOOKO_DATA_TYPE = "Glooko Data Type";
+	public static final String ENCOUNTER_ATTRIBUTE_VISIT_TYPE = "Visit Type";
 	
 	
 	/*
@@ -689,5 +692,7 @@ public final class ChirdlUtilConstants {
 	 * Email constants
 	 */
 	public static final String EMAIL_SMTP_HOST_PROPERTY = "mail.smtp.host";
+	
+	public static final String ENCOUNTER_ATTR_VALUE_VOID_REASON = "New Value: ";
 }
 
