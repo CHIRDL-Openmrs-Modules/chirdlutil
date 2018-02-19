@@ -41,6 +41,7 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.icepdf.core.exceptions.PDFException;
@@ -1123,7 +1124,20 @@ public class Util
 			EncounterAttribute encounterAttribute = chirdlutilbackportsService.getEncounterAttributeByName(attributeName);
 			EncounterAttributeValue encounterAttributeValue = chirdlutilbackportsService.getEncounterAttributeValueByAttribute(encounter.getEncounterId(), encounterAttribute);
 			
-			if(encounterAttributeValue == null) // Attribute value doesn't exist for this encounter, create a new one
+			boolean existingVoided = false;
+			if(encounterAttributeValue != null && StringUtils.isNotEmpty(encounterAttributeValue.getValueText()) && StringUtils.isNotEmpty(valueText) && !encounterAttributeValue.getValueText().equalsIgnoreCase(valueText))
+			{ 		
+				// Attribute already exists, void the old one, and create a new one
+				encounterAttributeValue.setVoided(true);
+				encounterAttributeValue.setVoidedBy(Context.getAuthenticatedUser());
+				encounterAttributeValue.setVoidReason(ChirdlUtilConstants.ENCOUNTER_ATTR_VALUE_VOID_REASON + valueText);
+				encounterAttributeValue.setDateVoided(new Date());
+				
+				chirdlutilbackportsService.saveEncounterAttributeValue(encounterAttributeValue);
+				existingVoided = true;
+			}
+			
+			if(encounterAttributeValue == null || existingVoided) // Create a new attribute if one didn't exist or if we voided an existing one
 			{
 				encounterAttributeValue = new EncounterAttributeValue(encounterAttribute, encounter.getEncounterId(), valueText);
 				encounterAttributeValue.setCreator(encounter.getCreator());
@@ -1131,12 +1145,6 @@ public class Util
 				encounterAttributeValue.setUuid(UUID.randomUUID().toString());
 				
 				chirdlutilbackportsService.saveEncounterAttributeValue(encounterAttributeValue);
-			}
-			else
-			{ 
-				// I can't think of a case where the visit number would change or need to be updated
-				// just log it for now
-				log.error("Encounter attribute already exists for encounterId: " + encounter.getEncounterId() + " attributeName: " + attributeName);
 			}	
 		}
 		catch(Exception e)

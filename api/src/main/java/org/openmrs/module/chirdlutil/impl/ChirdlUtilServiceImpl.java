@@ -51,14 +51,4 @@ public class ChirdlUtilServiceImpl implements ChirdlUtilService {
 	    return getChirdlUtilDAO().getEventLogs(eventId, locationId, formId, studyId, event, startDate, 
 	    	endDate, userId, description);
     }
-    
-    public boolean tableExists(String tableName)
-	{
-		return getChirdlUtilDAO().tableExists(tableName);	
-	}
-	
-	public void executeSql(String sql)
-	{
-		getChirdlUtilDAO().executeSql(sql);
-	}
 }
