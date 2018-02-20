@@ -1174,47 +1174,4 @@ public class Util
 		
     	return null;
 	}
-	
-	/**
-	 * CHICA-1125/CHICA-1169 Moved code into util method
-	 * 
-	 * Util method to find a patient by MRN_OTHER
-	 * This method will remove leading zeros from the received mrn
-	 * Checks to see if the received mrn contains a "-", if not, it will add one before the last character
-	 * If a match is not found by using the received mrn without leading zeros, a search will be performed by adding 1 leading zero
-	 * 
-	 * Example, when the received mrn is 0000999995, a search will be performed using 99999-5, if a match is not found, this method
-	 * will try 099999-5
-	 * 
-	 * @param mrn
-	 * @return
-	 */
-	public static Patient getPatientByMRNOther(String mrn)
-	{
-		PatientService patientService = Context.getService(PatientService.class);
-		Patient patient = null;
-		
-		if (StringUtils.isNotEmpty(mrn)) {
-			mrn = Util.removeLeadingZeros(mrn);
-			if (!mrn.contains(ChirdlUtilConstants.GENERAL_INFO_DASH) && mrn.length() > 1) {
-				mrn = mrn.substring(0, mrn.length() - 1) + ChirdlUtilConstants.GENERAL_INFO_DASH + mrn.substring(mrn.length()-1);
-			}
-
-			PatientIdentifierType identifierType = patientService.getPatientIdentifierTypeByName(ChirdlUtilConstants.IDENTIFIER_TYPE_MRN);
-			List<PatientIdentifierType> identifierTypes = new ArrayList<PatientIdentifierType>();
-			identifierTypes.add(identifierType);
-
-			List<Patient> patients = patientService.getPatientsByIdentifier(null, mrn, identifierTypes,true); // CHICA-977 Use getPatientsByIdentifier() as a temporary solution to openmrs TRUNK-5089
-			if (patients.size() == 0){
-				patients = patientService.getPatientsByIdentifier(null, "0" + mrn, identifierTypes,true); // CHICA-977 Use getPatientsByIdentifier() as a temporary solution to openmrs TRUNK-5089
-			}
-
-			if (patients.size() > 0)
-			{
-				patient = patients.get(0);
-			}
-		}
-		
-		return patient;
-	}
 }
