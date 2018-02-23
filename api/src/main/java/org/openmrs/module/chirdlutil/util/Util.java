@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
@@ -18,7 +17,7 @@ import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.text.DateFormat;
+import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,6 +28,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.UUID;
@@ -41,6 +41,7 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.icepdf.core.exceptions.PDFException;
@@ -72,17 +73,19 @@ import org.openmrs.Location;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
 import org.openmrs.PatientIdentifier;
+import org.openmrs.PatientIdentifierType;
 import org.openmrs.api.ConceptService;
 import org.openmrs.api.EncounterService;
 import org.openmrs.api.ObsService;
+import org.openmrs.api.PatientService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.chirdlutil.xmlBeans.serverconfig.MobileClient;
 import org.openmrs.module.chirdlutil.xmlBeans.serverconfig.MobileForm;
+import org.openmrs.module.chirdlutil.xmlBeans.serverconfig.SecondaryForm;
 import org.openmrs.module.chirdlutil.xmlBeans.serverconfig.ServerConfig;
-
-import au.com.bytecode.opencsv.CSVReader;
-import au.com.bytecode.opencsv.bean.CsvToBean;
-import au.com.bytecode.opencsv.bean.HeaderColumnNameTranslateMappingStrategy;
+import org.openmrs.module.chirdlutilbackports.hibernateBeans.EncounterAttribute;
+import org.openmrs.module.chirdlutilbackports.hibernateBeans.EncounterAttributeValue;
+import org.openmrs.module.chirdlutilbackports.service.ChirdlUtilBackportsService;
 
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.DecodeHintType;
@@ -122,9 +125,6 @@ public class Util
 	public static final String MONTH_ABBR = "mo";
 	public static final String WEEK_ABBR = "wk";
 	public static final String DAY_ABBR = "do";
-	
-	private static final String APPOINTMENT_FILE_NAME = "Appointments";
-	private static final String APPOINTMENT_FILE_EXTENSION = ".csv";
 	
 	private static ServerConfig serverConfig = null;
 	private static long lastUpdatedServerConfig = System.currentTimeMillis();
@@ -812,15 +812,12 @@ public class Util
         		return primaryForm.getPageUrl();
 	        }
 	        
-	        String[] secondaryFormIds = client.getSecondaryFormIds();
-	        if (secondaryFormIds == null) {
-	        	return null;
-	        }
-	        
-	        for (String secondaryFormId : secondaryFormIds) {
-	        	MobileForm secondaryForm = config.getMobileFormById(secondaryFormId);
-	        	if (secondaryForm != null && formName.equals(secondaryForm.getName())) {
-	        		return secondaryForm.getPageUrl();
+	        SecondaryForm[] secondaryForms = client.getSecondaryForms();	        
+	        for (SecondaryForm secondaryForm : secondaryForms) {
+	        	String secondaryFormId = secondaryForm.getId();
+	        	MobileForm mobileForm = config.getMobileFormById(secondaryFormId);
+	        	if (mobileForm != null && formName.equals(mobileForm.getName())) {
+	        		return mobileForm.getPageUrl();
 	        	}
 	        }
 	        
@@ -1061,4 +1058,164 @@ public class Util
 		
 		return formFieldMap;
 	}
+	
+	/**
+	 * CHICA-1063
+	 * Method used to hash a string using SHA-256
+	 * SHA-256 is used because it creates a string with less characters than SHA-512
+	 * This is needed specifically to keep the url provided to Glooko shorter
+	 * 
+	 * @param strToHash
+	 * @param base64EncodeValue - true to return a Base64 encoded version
+	 * @return hashed value
+	 */
+	public static String hashStringSHA256(String strToHash, boolean base64EncodeValue)
+	{
+		MessageDigest md;
+		byte[] input;
+		try {
+			md = MessageDigest.getInstance(ChirdlUtilConstants.SHA_256);
+			input = strToHash.getBytes(ChirdlUtilConstants.ENCODING_UTF8);
+		}
+        catch (UnsupportedEncodingException e) {
+        	log.error("Unsupported Encoding: " + ChirdlUtilConstants.ENCODING_UTF8, e);
+	        return null;
+        }
+        catch (NoSuchAlgorithmException e) {
+        	log.error("System cannot find encryption algorithm: " + ChirdlUtilConstants.SHA_256, e);
+	        return null;
+        }
+       
+		byte[] hashed = md.digest(input);
+		if(base64EncodeValue){
+			return new String(Base64.encodeBase64(hashed));
+		}
+		
+		return new String (hashed);	
+	}
+	
+	/**
+	 * CHICA-1063
+	 * Generate salt - OpenMRS has a method for this, but doesn't use SecureRandom
+	 * @return
+	 */
+	public static byte[] generateSecureRandomToken()
+	{
+		byte[] salt = new byte[16];
+		Random random = new SecureRandom();
+		random.nextBytes(salt);
+		return salt;
+	}
+	
+	/**
+	 * CHICA-1063 Moved this existing method into Util class
+	 * DWE CHICA-633
+	 * 
+	 * Store an encounter attribute value
+	 * 
+	 * @param encounter
+	 * @param attributeName - the name of the encounter attribute
+	 * @param valueText - the value to store in the value_text field
+	 */
+	public static void storeEncounterAttributeAsValueText(org.openmrs.Encounter encounter, String attributeName, String valueText)
+	{
+		ChirdlUtilBackportsService chirdlutilbackportsService = Context.getService(ChirdlUtilBackportsService.class);
+
+		try
+		{
+			EncounterAttribute encounterAttribute = chirdlutilbackportsService.getEncounterAttributeByName(attributeName);
+			EncounterAttributeValue encounterAttributeValue = chirdlutilbackportsService.getEncounterAttributeValueByAttribute(encounter.getEncounterId(), encounterAttribute);
+			
+			boolean existingVoided = false;
+			if(encounterAttributeValue != null && StringUtils.isNotEmpty(encounterAttributeValue.getValueText()) && StringUtils.isNotEmpty(valueText) && !encounterAttributeValue.getValueText().equalsIgnoreCase(valueText))
+			{ 		
+				// Attribute already exists, void the old one, and create a new one
+				encounterAttributeValue.setVoided(true);
+				encounterAttributeValue.setVoidedBy(Context.getAuthenticatedUser());
+				encounterAttributeValue.setVoidReason(ChirdlUtilConstants.ENCOUNTER_ATTR_VALUE_VOID_REASON + valueText);
+				encounterAttributeValue.setDateVoided(new Date());
+				
+				chirdlutilbackportsService.saveEncounterAttributeValue(encounterAttributeValue);
+				existingVoided = true;
+			}
+			
+			if(encounterAttributeValue == null || existingVoided) // Create a new attribute if one didn't exist or if we voided an existing one
+			{
+				encounterAttributeValue = new EncounterAttributeValue(encounterAttribute, encounter.getEncounterId(), valueText);
+				encounterAttributeValue.setCreator(encounter.getCreator());
+				encounterAttributeValue.setDateCreated(encounter.getDateCreated());
+				encounterAttributeValue.setUuid(UUID.randomUUID().toString());
+				
+				chirdlutilbackportsService.saveEncounterAttributeValue(encounterAttributeValue);
+			}	
+		}
+		catch(Exception e)
+		{
+			log.error("Error storing encounter attribute value encounterId: " + encounter.getEncounterId() + " attributeName: " + attributeName, e);
+		}
+	}
+	
+	/**
+	 * Return the non-formatted version of the MRN.
+	 * 
+	 * @param patient The patient used to retrieve the MRN.
+	 * @return The MRN with no formatting or null if the MRN cannot be located.
+	 */
+	public static String getMedicalRecordNoFormatting(Patient patient) {
+		if (patient != null) {
+			PatientIdentifier patientIdentifier = patient.getPatientIdentifier();
+			if(patientIdentifier != null) {
+				String identifier = patientIdentifier.getIdentifier();
+				if(identifier != null){
+					return identifier.replaceAll(ChirdlUtilConstants.GENERAL_INFO_DASH, ChirdlUtilConstants.GENERAL_INFO_EMPTY_STRING);
+				}
+			}
+		}
+		
+    	return null;
+	}
+	
+	/**
+	 * CHICA-1125/CHICA-1169 Moved code into util method
+	 * 
+	 * Util method to find a patient by MRN_OTHER
+	 * This method will remove leading zeros from the received mrn
+	 * Checks to see if the received mrn contains a "-", if not, it will add one before the last character
+	 * If a match is not found by using the received mrn without leading zeros, a search will be performed by adding 1 leading zero
+	 * 
+	 * Example, when the received mrn is 0000999995, a search will be performed using 99999-5, if a match is not found, this method
+	 * will try 099999-5
+	 * 
+	 * @param mrn
+	 * @return
+	 */
+	public static Patient getPatientByMRNOther(String mrn)
+	{
+		PatientService patientService = Context.getService(PatientService.class);
+		Patient patient = null;
+		
+		if (StringUtils.isNotEmpty(mrn)) {
+			mrn = Util.removeLeadingZeros(mrn);
+			if (!mrn.contains(ChirdlUtilConstants.GENERAL_INFO_DASH) && mrn.length() > 1) {
+				mrn = mrn.substring(0, mrn.length() - 1) + ChirdlUtilConstants.GENERAL_INFO_DASH + mrn.substring(mrn.length()-1);
+			}
+
+			PatientIdentifierType identifierType = patientService.getPatientIdentifierTypeByName(ChirdlUtilConstants.IDENTIFIER_TYPE_MRN);
+			List<PatientIdentifierType> identifierTypes = new ArrayList<PatientIdentifierType>();
+			identifierTypes.add(identifierType);
+
+			List<Patient> patients = patientService.getPatientsByIdentifier(null, mrn, identifierTypes,true); // CHICA-977 Use getPatientsByIdentifier() as a temporary solution to openmrs TRUNK-5089
+			if (patients.size() == 0){
+				patients = patientService.getPatientsByIdentifier(null, "0" + mrn, identifierTypes,true); // CHICA-977 Use getPatientsByIdentifier() as a temporary solution to openmrs TRUNK-5089
+			}
+
+			if (patients.size() > 0)
+			{
+				patient = patients.get(0);
+			}
+		}
+		
+		return patient;
+	}
+
 }

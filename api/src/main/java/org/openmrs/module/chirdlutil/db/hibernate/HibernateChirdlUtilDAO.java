@@ -94,43 +94,5 @@ public class HibernateChirdlUtilDAO implements ChirdlUtilDAO {
 		
 		return logs;
     }
-	public boolean tableExists(String tableName)
-	{
-		try
-		{
-			Connection con = this.sessionFactory.getCurrentSession()
-					.connection();
-			DatabaseMetaData dbmd = con.getMetaData();
-
-			// Check if table exists
-
-			ResultSet rs = dbmd.getTables(null, null, tableName, null);
-
-			if (rs.next())
-			{
-				return true;
-			}
-		} catch (Exception e)
-		{
-			this.log.error(e.getMessage());
-			this.log.error(e);
-		}
-		return false;
-	}
-
-	public void executeSql(String sql)
-	{
-		Connection con = this.sessionFactory.getCurrentSession().connection();
-		try
-		{
-			Statement stmt = con.createStatement();
-			stmt.execute(sql);
-			con.commit();
-		} catch (Exception e)
-		{
-			this.log.error(e.getMessage());
-			this.log.error(e);
-		}
-	}
 }
 
