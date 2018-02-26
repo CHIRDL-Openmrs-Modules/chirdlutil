@@ -285,7 +285,7 @@ public final class ChirdlUtilConstants {
 	public static final String GLOBAL_PROP_PARSE_OBS_FROM_REGISTRATION = "chica.parseObsFromRegistration";
 	public static final String GLOBAL_PROP_DATA_SOURCE_MEDICAL_RECORD = "chica.dataSourceMedicalRecord";
 	public static final String GLOBAL_PROP_DATA_SOURCE_VITALS = "chica.dataSourceVitals";
-
+	
 	/*
 	 * 
 	 */
@@ -627,6 +627,8 @@ public final class ChirdlUtilConstants {
 	public static final String DATE_FORMAT_HH_mm_ss = "HHmmss";
 	public static final String DATE_FORMAT_MM_dd_yyyy_hh_mm_ss = "MM/dd/yyyy hh:mm:ss";
 	public static final String DATE_FORMAT_MM_dd_YYYY = "MM/dd/yyyy";
+	public static final String DATE_FORMAT_HYPHEN_yyyy_MM_dd = "yyyy-MM-dd";
+	public static final String DATE_FORMAT_MMM_dd_comma_yyyy = "MMM dd, yyyy";
 	
 	/*
 	 * Fax service
