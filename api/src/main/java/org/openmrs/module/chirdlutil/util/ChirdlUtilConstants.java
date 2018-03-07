@@ -392,6 +392,7 @@ public final class ChirdlUtilConstants {
 	public static final String PARAMETER_SENDING_APPLICATION = "sendingApplication";
 	public static final String PARAMETER_SENDING_FACILITY = "sendingFacility";
 	public static final String PARAMETER_NEW_ENCOUNTER_CREATED = "newEncounterCreated";
+	public static final String PARAMETER_HL7_EVENT_TYPE_CODE = "HL7EventTypeCode";
 	
 	/*
 	 * 
@@ -568,6 +569,7 @@ public final class ChirdlUtilConstants {
 	public static final String HL7_VERSION_2_5 = "2.5";
 	public static final String MSH_PROCESSING_ID = "P"; // Production;
 	public static final String PV1_PATIENT_CLASS = "Outpatient";
+	public static final String HL7_EVENT_CODE_A10 = "A10";
 	
 	/*
 	 * HL7 Acknowledgment Codes
@@ -695,6 +697,6 @@ public final class ChirdlUtilConstants {
 	 */
 	public static final String EMAIL_SMTP_HOST_PROPERTY = "mail.smtp.host";
 	
-	public static final String ENCOUNTER_ATTR_VALUE_VOID_REASON = "New Value: ";
+	public static final String ATTR_VALUE_VOID_REASON = "New Value: ";
 }
 
