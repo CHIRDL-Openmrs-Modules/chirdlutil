@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.openmrs.module</groupId>
 		<artifactId>chirdlutil</artifactId>
-		<version>1.17.2</version>
+		<version>1.17.3</version>
 	</parent>
 	<artifactId>chirdlutil-omod</artifactId>
 	<packaging>jar</packaging>
