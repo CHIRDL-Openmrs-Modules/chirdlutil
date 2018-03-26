@@ -1,6 +1,6 @@
 <%@ include file="/WEB-INF/template/include.jsp"%>
 <%@ include file="/WEB-INF/template/header.jsp"%>
-<openmrs:require allPrivileges="View Locations" otherwise="/login.htm" redirect="/module/chirdlutil/printerThreadPoolMonitor.form" />
+<openmrs:require allPrivileges="Manage CHIRDLUTIL" otherwise="/login.htm" redirect="/module/chirdlutil/printerThreadPoolMonitor.form" />
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>   
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 

@@ -1,6 +1,6 @@
 <%@ include file="/WEB-INF/template/include.jsp" %>
 <%@ include file="/WEB-INF/template/header.jsp" %>
-<openmrs:require allPrivileges="View Encounters, View Patients, View Concept Classes" otherwise="/login.htm" redirect="/module/atd/logViewer.form" />
+<openmrs:require allPrivileges="Manage CHIRDLUTIL" otherwise="/login.htm" redirect="/module/chirdlutil/logViewer.form" />
 <link href="${pageContext.request.contextPath}/moduleResources/chirdlutil/chirdlutil.css" type="text/css" rel="stylesheet" />
 <script language="JavaScript" src="${pageContext.request.contextPath}/moduleResources/chirdlutil/chirdlutil.js"></script>
 <style>

@@ -3,6 +3,7 @@ package org.openmrs.module.chirdlutil.service;
 import java.util.Date;
 import java.util.List;
 
+import org.openmrs.annotation.Authorized;
 import org.openmrs.module.chirdlutil.hibernateBeans.EventLog;
 
 /**
@@ -19,6 +20,7 @@ public interface ChirdlUtilService {
 	 * 
 	 * @return The EventLog stored in the database.
 	 */
+	@Authorized()
 	public EventLog logEvent(EventLog eventLog);
 	
 	/**
@@ -38,6 +40,8 @@ public interface ChirdlUtilService {
 	 * 
 	 * @return List of EventLog object matching the search criteria.  This will not return null.
 	 */
+	@Authorized()
 	public List<EventLog> getEventLogs(Integer eventId, Integer locationId, Integer formId, Integer studyId, String event, 
 		Date startDate, Date endDate, Integer userId, String description);
+	
 }
