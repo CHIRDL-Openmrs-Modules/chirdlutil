@@ -1,9 +1,13 @@
+<%@ include file="/WEB-INF/template/include.jsp"%>
+<%@ include file="/WEB-INF/template/header.jsp"%>
 <%@ page import="java.lang.management.*" %>
 <%@ page import="java.util.*" %>
+<openmrs:require allPrivileges="Manage CHIRDLUTIL" otherwise="/login.htm" redirect="/module/chirdlutil/memoryLeakMonitor.form" />
 <html>
 <head>
   <title>JVM Memory Monitor</title>
 </head>
+<body>
 <!-- Code adapted from http://www.freshblurbs.com/explaining-java-lang-outofmemoryerror-permgen-space -->
 <table border="0" width="100%">
 <tr><td colspan="2" align="center"><h3>Memory MXBean</h3></td></tr>
@@ -34,4 +38,6 @@ ManagementFactory.getMemoryMXBean().getNonHeapMemoryUsage()
 }
 %>
 
-</table> 
+</table>
+</body> 
+</html>

@@ -4,7 +4,7 @@
 
 	<groupId>org.openmrs.module</groupId>
 	<artifactId>chirdlutil</artifactId>
-	<version>1.17.2</version>
+	<version>1.17.3</version>
 	<packaging>pom</packaging>
 	<name>chirdlutil</name>
 	<description>Parent project for chirdlutil</description>
@@ -27,13 +27,13 @@
 			<dependency>
 				<groupId>org.openmrs.module</groupId>
 				<artifactId>logic-api</artifactId>
-				<version>0.5.3</version>
+				<version>0.5.4</version>
 				<scope>provided</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.openmrs.module</groupId>
 				<artifactId>chirdlutilbackports-api</artifactId>
-				<version>2.9.1</version>
+				<version>2.9.2</version>
 				<scope>provided</scope>
 			</dependency>
 			<dependency>
@@ -269,7 +269,7 @@
 	</dependencyManagement>
 
 	<properties>
-		<openMRSVersion>2.0.6.1</openMRSVersion>
+		<openMRSVersion>2.0.6.2</openMRSVersion>
 	</properties>
 
 	<build>
