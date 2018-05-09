@@ -59,6 +59,15 @@ public class ConceptPair {
     public void setAnswerConceptName(String answerConceptName) {
     	this.answerConceptName = answerConceptName;
     }
+    
+	/**
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "ConceptPair [questionConceptName=" + questionConceptName + ", answerConceptName=" + answerConceptName
+				+ "]";
+	}
 	
     /**
      * @see java.lang.Object#hashCode()

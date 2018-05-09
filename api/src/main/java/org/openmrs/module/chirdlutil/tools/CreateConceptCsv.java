@@ -140,10 +140,16 @@ public class CreateConceptCsv {
 
 				}
 
-				reader.close();
+				
 
 			} catch (Exception e) {
 				e.printStackTrace();
+			}finally{
+				try {
+					reader.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 
 		}
@@ -203,11 +209,17 @@ public class CreateConceptCsv {
 				csvWriter.writeNext(item);
 				csvWriter.flush();
 			}
-			csvWriter.close();
+			
 
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw e;
+		}finally{
+			try {
+				csvWriter.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 
 	}
