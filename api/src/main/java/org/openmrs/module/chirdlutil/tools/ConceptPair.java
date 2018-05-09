@@ -60,5 +60,36 @@ public class ConceptPair {
     	this.answerConceptName = answerConceptName;
     }
 	
-	
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+    public int hashCode() {
+        int hash = 1;
+        hash = hash * 17 + (questionConceptName == null ? 0 : questionConceptName.hashCode());
+        hash = hash * 31 + (answerConceptName == null ? 0 : answerConceptName.hashCode());
+        
+        return hash;
+    }
+    
+    @Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ConceptPair other = (ConceptPair) obj;
+		if (questionConceptName == null) {
+			if (other.questionConceptName != null)
+				return false;
+		} else if (!questionConceptName.equals(other.questionConceptName))
+			return false;
+		if (answerConceptName == null) {
+			if (other.answerConceptName != null)
+				return false;
+		} else if (!answerConceptName.equals(other.answerConceptName))
+			return false;
+		return true;
+	}
 }
