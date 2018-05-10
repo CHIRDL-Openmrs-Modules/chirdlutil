@@ -21,7 +21,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -77,7 +77,7 @@ public class CreateConceptCsv {
 			File[] directories = new File[parentDirectories.size()];
 			directories = parentDirectories.toArray(directories);
 
-			HashSet<ConceptPair> set = new HashSet<ConceptPair>();
+			TreeSet<ConceptPair> set = new TreeSet<ConceptPair>();
 			createConceptFile(directories, set);
 			exportConcepts(outputFile, set);
 		} else {
@@ -92,7 +92,7 @@ public class CreateConceptCsv {
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	public static void createConceptFile(File[] files, HashSet<ConceptPair> set)
+	public static void createConceptFile(File[] files, TreeSet<ConceptPair> set)
 			throws FileNotFoundException, IOException {
 		Pattern storeObsPattern = Pattern.compile("CALL\\s*storeObs\\s*With\\s*\"(.+)\"\\s*,\\s*\"(.+)\"\\s*;",
 				Pattern.CASE_INSENSITIVE);
@@ -161,7 +161,7 @@ public class CreateConceptCsv {
 	 * @param set
 	 * @throws IOException
 	 */
-	public static void exportConcepts(File outputFile, HashSet<ConceptPair> set) throws IOException {
+	public static void exportConcepts(File outputFile, TreeSet<ConceptPair> set) throws IOException {
 		BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
 		CSVWriter csvWriter = null;
 		try {
@@ -175,7 +175,7 @@ public class CreateConceptCsv {
 			columnNames[4] = "units";
 			columnNames[5] = "parent concept";
 			csvWriter.writeNext(columnNames);
-			HashSet<String> questionNames = new HashSet<String>();
+			TreeSet<String> questionNames = new TreeSet<String>();
 			
 			//write the question answer pairs
 			for (ConceptPair conceptPair : set) {

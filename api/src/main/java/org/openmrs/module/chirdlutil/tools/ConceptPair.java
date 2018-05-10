@@ -17,7 +17,7 @@ package org.openmrs.module.chirdlutil.tools;
 /**
  *
  */
-public class ConceptPair {
+public class ConceptPair implements Comparable {
 	
 	private String questionConceptName = null;
 	private String answerConceptName = null;
@@ -100,5 +100,17 @@ public class ConceptPair {
 		} else if (!answerConceptName.equals(other.answerConceptName))
 			return false;
 		return true;
+	}
+
+	@Override
+	public int compareTo(Object pair2) {
+
+		String question1 = this.getQuestionConceptName();
+		String question2 = ((ConceptPair) pair2).getQuestionConceptName();
+
+		String answer1 = this.getAnswerConceptName();
+		String answer2 = ((ConceptPair) pair2).getAnswerConceptName();
+
+		return (question1 + "_" + answer1).compareTo((question2 + "_" + answer2));
 	}
 }
