@@ -30,6 +30,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openmrs.module.chirdlutil.util.IOUtil;
 
 import au.com.bytecode.opencsv.CSVReader;
@@ -41,206 +43,207 @@ import au.com.bytecode.opencsv.bean.HeaderColumnNameTranslateMappingStrategy;
  * to include it.
  */
 public class AddPSFStoreNotes {
-	
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		
-		try {
-			if (args == null || args.length < 2) {
-				System.err.println("A minimum number of two arguments (a rule directory and a csv file) are required.");
-				return;
-			}
-			
-			//The last argument is the csv file
-			//The preceeding arguments are the directories to search for mlms
-			String storeNotesFile = args[args.length - 1];
-			ArrayList<File> parentDirectories = new ArrayList<File>();
-			for (int i = 0; i < args.length - 1; i++) {
-				try {
-					parentDirectories.add(new File(args[i]));
-				}
-				catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-			processFile(parentDirectories, new File(storeNotesFile));
-			
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	//Make sure the new storeNotes file exists and is in the correct format
-	public static void processFile(ArrayList<File> parentDirectories, File storeNotesFile) throws FileNotFoundException,
-	    IOException {
-		if (!storeNotesFile.exists()) {
-			System.err.print("File: "+storeNotesFile.getPath()+" does not exist.");
-			return;
-		}
-		
-		if (storeNotesFile.getName().endsWith(".csv")) {
-			addStoreNote(parentDirectories, storeNotesFile);
-		}
-	}
-	
-	//Look for each mlm file listed in the csv file add the PSF storeNotes
-	public static void addStoreNote(ArrayList<File> parentDirectories, File storeNotesFile) throws FileNotFoundException,
-	    IOException {
-		
-		List<NoteContentDescriptor> psfNotes = getNoteInfo(new FileInputStream(storeNotesFile));
-		File result = null;
-		int lineNum = 1;
-		//look through each entry in the csv file
-		for (NoteContentDescriptor noteDescriptor : psfNotes) {
-			lineNum++;
-			String noHeading = noteDescriptor.getNoHeading().trim();
-			String yesHeading = noteDescriptor.getYesHeading().trim();
-			String noNote = noteDescriptor.getNoNote().trim();
-			String yesNote = noteDescriptor.getYesNote().trim();
-			String ruleName = noteDescriptor.getRuleName().trim();
-			
-			if (ruleName == null || ruleName.length() == 0 || ((noHeading == null || noHeading.length() == 0)&&
-					(yesHeading == null || yesHeading.length() == 0))) {
-				System.err.print("Line "+ lineNum+" was skipped because the rule name or headings were invalid.");
-				continue;//skip because there is not enough content for a storeNote
-			}
-			
-			if (!ruleName.endsWith(".mlm")) {
-				ruleName += ".mlm";
-			}
-			
-			//look for the mlm file
-			for (File currParentDirectory : parentDirectories) {
-				result = searchDirectoryForFile(currParentDirectory, ruleName);
-				if (result != null) {
-					break;
-				}
-			}
-			
-			if (result == null) {
-				System.out.println("Could not find file " + ruleName);
-			} else {
-				String mlmOldFileName = result.getPath();
-				String mlmNewFileName = mlmOldFileName + "new";
-				//write the storeNote in the proper place
-				try {
-					BufferedReader reader = new BufferedReader(new FileReader(mlmOldFileName));
-					BufferedWriter writer = new BufferedWriter(new FileWriter(mlmNewFileName));
-					String line = null;
-					
-					while ((line = reader.readLine()) != null) {
-						Pattern p = null;
-						Matcher m = null;
-						boolean matches = false;
-						writer.write(line + "\n");
+    
+    private static final Log LOG = LogFactory.getLog(AddPSFStoreNotes.class);
+    
+    /**
+     * @param args
+     */
+    public static void main(String[] args) {
+        
+        try {
+            if (args == null || args.length < 2) {
+                LOG.error("A minimum number of two arguments (a rule directory and a csv file) are required.");
+                return;
+            }
+            
+            //The last argument is the csv file
+            //The preceeding arguments are the directories to search for mlms
+            String storeNotesFile = args[args.length - 1];
+            ArrayList<File> parentDirectories = new ArrayList<>();
+            for (int i = 0; i < args.length - 1; i++) {
+                try {
+                    parentDirectories.add(new File(args[i]));
+                }
+                catch (Exception e) {
+                    LOG.error(e);
+                }
+            }
+            processFile(parentDirectories, new File(storeNotesFile));
+            
+        }
+        catch (Exception e) {
+            LOG.error(e);
+        }
+    }
+    
+    //Make sure the new storeNotes file exists and is in the correct format
+    public static void processFile(ArrayList<File> parentDirectories, File storeNotesFile) throws IOException {
+        if (!storeNotesFile.exists()) {
+            LOG.error("File: "+storeNotesFile.getPath()+" does not exist.");
+            return;
+        }
+        
+        if (storeNotesFile.getName().endsWith(".csv")) {
+            addStoreNote(parentDirectories, storeNotesFile);
+        }
+    }
+    
+    //Look for each mlm file listed in the csv file add the PSF storeNotes
+    public static void addStoreNote(ArrayList<File> parentDirectories, File storeNotesFile) throws IOException {
+        
+        List<NoteContentDescriptor> psfNotes = getNoteInfo(new FileInputStream(storeNotesFile));
+        File result = null;
+        int lineNum = 1;
+        //look through each entry in the csv file
+        for (NoteContentDescriptor noteDescriptor : psfNotes) {
+            lineNum++;
+            String noHeading = noteDescriptor.getNoHeading().trim();
+            String yesHeading = noteDescriptor.getYesHeading().trim();
+            String noNote = noteDescriptor.getNoNote().trim();
+            String yesNote = noteDescriptor.getYesNote().trim();
+            String ruleName = noteDescriptor.getRuleName().trim();
+            
+            if (ruleName == null || ruleName.length() == 0 || ((noHeading == null || noHeading.length() == 0)&&
+                    (yesHeading == null || yesHeading.length() == 0))) {
+                LOG.error("Line "+ lineNum+" was skipped because the rule name or headings were invalid.");
+                continue;//skip because there is not enough content for a storeNote
+            }
+            
+            if (!ruleName.endsWith(".mlm")) {
+                ruleName += ".mlm";
+            }
+            
+            //look for the mlm file
+            for (File currParentDirectory : parentDirectories) {
+                result = searchDirectoryForFile(currParentDirectory, ruleName);
+                if (result != null) {
+                    break;
+                }
+            }
+            
+            if (result == null) {
+                LOG.error("Could not find file " + ruleName);
+            } else {
+                String mlmOldFileName = result.getPath();
+                String mlmNewFileName = mlmOldFileName + "new";
+                //write the storeNote in the proper place
+                try {
+                    BufferedReader reader = new BufferedReader(new FileReader(mlmOldFileName));
+                    BufferedWriter writer = new BufferedWriter(new FileWriter(mlmNewFileName));
+                    String line = null;
+                    
+                    while ((line = reader.readLine()) != null) {
+                        Pattern p = null;
+                        Matcher m = null;
+                        boolean matches = false;
+                        writer.write(line + "\n");
 
-						//Look for Box1 if statement
-						p = Pattern.compile("\\s*[Ii]f.*Box1.*then");
-						m = p.matcher(line);
-						matches = m.find();
-						if (matches) {
-							if (yesNote != null && yesNote.length() > 0 && yesHeading != null && yesHeading.length() > 0) {
-								writer.write("\tCALL storeNote With \""+yesNote+"\", \""+yesHeading+"\";\n");
-							}
-						}
-						
-						//Look for Box2 if statement
-						p = Pattern.compile("\\s*[Ii]f.*Box2.*then");
-						m = p.matcher(line);
-						matches = m.find();
-						if (matches) {
-							if (noNote != null && noNote.length() > 0 && noHeading != null && noHeading.length() > 0) {
-								writer.write("\tCALL storeNote With \""+noNote+"\", \""+noHeading+"\";\n");
-							}
-						}
-						
-						writer.flush();	
-					}
-					
-					writer.close();
-					reader.close();
-				}
-				catch (Exception e) {
-					e.printStackTrace();
-				}
-				try {
-					//update the old file and remove the temp file
-					IOUtil.copyFile(mlmNewFileName, mlmOldFileName);
-					IOUtil.deleteFile(mlmNewFileName);
-				}
-				catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-	
-	//recursively search directories for the file
-	private static File searchDirectoryForFile(File directory, String filename) {
-		
-		//don't search the retired directory
-		if (directory.getPath().contains("_retired")) {
-			return null;
-		}
-		
-		File file = new File(directory, filename);
-		
-		if (file.exists()) {
-			return file;
-		}
-		
-		File[] files = directory.listFiles();
-		
-		for (File currFile : files) {
-			if (currFile.isDirectory()) {
-				File result = searchDirectoryForFile(currFile, filename);
-				
-				if (result != null) {
-					return result;
-				}
-			}
-		}
-		return null;
-	}
-	
-	//parse the csv file to get a list of NoteContentDescriptor objects for each of the rows
-	private static List<NoteContentDescriptor> getNoteInfo(InputStream inputStream) throws FileNotFoundException,
-	    IOException {
-		
-		List<NoteContentDescriptor> list = null;
-		try {
-			InputStreamReader inStreamReader = new InputStreamReader(inputStream);
-			CSVReader reader = new CSVReader(inStreamReader, ',');
-			HeaderColumnNameTranslateMappingStrategy<NoteContentDescriptor> strat = new HeaderColumnNameTranslateMappingStrategy<NoteContentDescriptor>();
-			
-			Map<String, String> map = new HashMap<String, String>();
-			
-			map.put("Rule name", "ruleName");
-			map.put("Note if Yes", "yesNote");
-			map.put("Note if No", "noNote");
-			map.put("Heading if Yes", "yesHeading");
-			map.put("Heading if No", "noHeading");
-			
-			strat.setType(NoteContentDescriptor.class);
-			strat.setColumnMapping(map);
-			
-			CsvToBean<NoteContentDescriptor> csv = new CsvToBean<NoteContentDescriptor>();
-			list = csv.parse(strat, reader);
-			
-			if (list == null) {
-				return new ArrayList<NoteContentDescriptor>();
-			}
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-		finally {
-			inputStream.close();
-		}
-		return list;
-	}
-	
+                        //Look for Box1 if statement
+                        p = Pattern.compile("\\s*[Ii]f.*Box1.*then");
+                        m = p.matcher(line);
+                        matches = m.find();
+                        if (matches) {
+                            if (yesNote != null && yesNote.length() > 0 && yesHeading != null && yesHeading.length() > 0) {
+                                writer.write("\tCALL storeNote With \""+yesNote+"\", \""+yesHeading+"\";\n");
+                            }
+                        }
+                        
+                        //Look for Box2 if statement
+                        p = Pattern.compile("\\s*[Ii]f.*Box2.*then");
+                        m = p.matcher(line);
+                        matches = m.find();
+                        if (matches) {
+                            if (noNote != null && noNote.length() > 0 && noHeading != null && noHeading.length() > 0) {
+                                writer.write("\tCALL storeNote With \""+noNote+"\", \""+noHeading+"\";\n");
+                            }
+                        }
+                        
+                        writer.flush();    
+                    }
+                    
+                    writer.close();
+                    reader.close();
+                }
+                catch (Exception e) {
+                    LOG.error(e);
+                }
+                try {
+                    //update the old file and remove the temp file
+                    IOUtil.copyFile(mlmNewFileName, mlmOldFileName);
+                    IOUtil.deleteFile(mlmNewFileName);
+                }
+                catch (Exception e) {
+                    LOG.error(e);
+                }
+            }
+        }
+    }
+    
+    //recursively search directories for the file
+    private static File searchDirectoryForFile(File directory, String filename) {
+        
+        //don't search the retired directory
+        if (directory.getPath().contains("_retired")) {
+            return null;
+        }
+        
+        File file = new File(directory, filename);
+        
+        if (file.exists()) {
+            return file;
+        }
+        
+        File[] files = directory.listFiles();
+        
+        for (File currFile : files) {
+            if (currFile.isDirectory()) {
+                File result = searchDirectoryForFile(currFile, filename);
+                
+                if (result != null) {
+                    return result;
+                }
+            }
+        }
+        return null;
+    }
+    
+    //parse the csv file to get a list of NoteContentDescriptor objects for each of the rows
+    private static List<NoteContentDescriptor> getNoteInfo(InputStream inputStream) throws FileNotFoundException,
+        IOException {
+        
+        List<NoteContentDescriptor> list = null;
+        try {
+            InputStreamReader inStreamReader = new InputStreamReader(inputStream);
+            CSVReader reader = new CSVReader(inStreamReader, ',');
+            HeaderColumnNameTranslateMappingStrategy<NoteContentDescriptor> strat = 
+                    new HeaderColumnNameTranslateMappingStrategy<>();
+            
+            Map<String, String> map = new HashMap<>();
+            
+            map.put("Rule name", "ruleName");
+            map.put("Note if Yes", "yesNote");
+            map.put("Note if No", "noNote");
+            map.put("Heading if Yes", "yesHeading");
+            map.put("Heading if No", "noHeading");
+            
+            strat.setType(NoteContentDescriptor.class);
+            strat.setColumnMapping(map);
+            
+            CsvToBean<NoteContentDescriptor> csv = new CsvToBean<>();
+            list = csv.parse(strat, reader);
+            
+            if (list == null) {
+                return new ArrayList<>();
+            }
+        }
+        catch (Exception e) {
+            LOG.error(e);
+        }
+        finally {
+            inputStream.close();
+        }
+        return list;
+    }
+    
 }

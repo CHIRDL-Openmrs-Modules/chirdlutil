@@ -28,6 +28,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openmrs.module.chirdlutil.util.IOUtil;
 
 import au.com.bytecode.opencsv.CSVReader;
@@ -38,172 +40,175 @@ import au.com.bytecode.opencsv.bean.HeaderColumnNameTranslateMappingStrategy;
  * This class reads a csv file and reassigns mlm priorities accordingly. It expects name and new_priority column. The name is the token name of the rule
  */
 public class UpdateMLMPriorities {
-	
-	/**
-	 *
-	 * 
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		
-		try {
-			if (args == null || args.length < 2) {
-				return;
-			}
-			
-			//The last argument is the csv file
-			//The preceeding arguments are the directories to search for mlms
-			String newPrioritiesFile = args[args.length - 1];
-			ArrayList<File> parentDirectories = new ArrayList<File>();
-			for (int i = 0; i < args.length - 1; i++) {
-				try {
-					parentDirectories.add(new File(args[i]));
-				}
-				catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-			processFile(parentDirectories, new File(newPrioritiesFile));
-			
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	//Make sure the new priorities files exists and is in the correct format
-	public static void processFile(ArrayList<File> parentDirectories, File newPrioritiesFile) throws FileNotFoundException, IOException {
-		if (!newPrioritiesFile.exists()) {
-			return;
-		}
-		
-		if (newPrioritiesFile.getName().endsWith(".csv")) {
-			updatePriorities(parentDirectories, newPrioritiesFile);
-		}
-	}
-	
-	//Look for each mlm file listed in the csv file and update its priority
-	public static void updatePriorities(ArrayList<File> parentDirectories, File newPrioritiesFile) throws FileNotFoundException, IOException {
-		
-		List<PriorityDescriptor> prioritiesToFix = getPriorityInfo(new FileInputStream(newPrioritiesFile));
-		File result = null;
-		//look through each entry in the csv file
-		for (PriorityDescriptor priorityDescriptor : prioritiesToFix) {
-			String newPriority = priorityDescriptor.getNewPriority();
-			String ruleName = priorityDescriptor.getName();
-			
-			if(!ruleName.endsWith(".mlm")){
-				ruleName+=".mlm";
-			}	
-			
-			//look for the mlm file
-			for (File currParentDirectory : parentDirectories) {
-				result = searchDirectoryForFile(currParentDirectory, ruleName);
-				if (result != null) {
-					break;
-				}
-			}
-			
-			if (result == null) {
-				System.out.println("Could not find file " + ruleName);
-			} else {
-				String mlmOldFileName = result.getPath();
-				String mlmNewFileName = mlmOldFileName + "new";
-				//rewrite the priority line with the new priority
-				try {
-					BufferedReader reader = new BufferedReader(new FileReader(mlmOldFileName));
-					BufferedWriter writer = new BufferedWriter(new FileWriter(mlmNewFileName));
-					String line = null;
-					
-					while ((line = reader.readLine()) != null) {
-						
-						//look for the write sections
-						if (line.toLowerCase().indexOf("priority:") > -1) {
-							writer.write("Priority: " + newPriority + ";;\n");
-						} else {
-							writer.write(line+"\n");
-							writer.flush();
-						}
-					}
-					
-					writer.close();
-					reader.close();
-				}
-				catch (Exception e) {
-					e.printStackTrace();
-				}
-				try {
-					//update the old file and remove the temp file
-	                IOUtil.copyFile(mlmNewFileName, mlmOldFileName);
-	                IOUtil.deleteFile(mlmNewFileName);
+    
+    private static final Log LOG = LogFactory.getLog(UpdateMLMPriorities.class);
+    
+    /**
+     *
+     * 
+     * @param args
+     */
+    public static void main(String[] args) {
+        
+        try {
+            if (args == null || args.length < 2) {
+                return;
+            }
+            
+            //The last argument is the csv file
+            //The preceding arguments are the directories to search for mlms
+            String newPrioritiesFile = args[args.length - 1];
+            ArrayList<File> parentDirectories = new ArrayList<>();
+            for (int i = 0; i < args.length - 1; i++) {
+                try {
+                    parentDirectories.add(new File(args[i]));
                 }
                 catch (Exception e) {
-	                e.printStackTrace();
+                    LOG.error(e);
                 }
-			}
-		}
-	}
-	
-	//recursively search directories for the file
-	private static File searchDirectoryForFile(File directory, String filename) {
-						
-		//don't search the retired directory
-		if(directory.getPath().contains("_retired")){
-			return null;
-		}
-		
-		File file = new File(directory.getPath() + File.separator + filename);
-		
-		if (file.exists()) {
-			return file;
-		}
-		
-		File[] files = directory.listFiles();
-		
-		for (File currFile : files) {
-			if (currFile.isDirectory()) {
-				File result = searchDirectoryForFile(currFile, filename);
-				
-				if (result != null) {
-					return result;
-				}
-			}
-		}
-		return null;
-	}
-	
-	//parse the csv file to get a list of PriorityDescriptor objects for each of the rows
-	private static List<PriorityDescriptor> getPriorityInfo(InputStream inputStream) throws FileNotFoundException,
-	                                                                                IOException {
-		
-		List<PriorityDescriptor> list = null;
-		try {
-			InputStreamReader inStreamReader = new InputStreamReader(inputStream);
-			CSVReader reader = new CSVReader(inStreamReader, ',');
-			HeaderColumnNameTranslateMappingStrategy<PriorityDescriptor> strat = new HeaderColumnNameTranslateMappingStrategy<PriorityDescriptor>();
-			
-			Map<String, String> map = new HashMap<String, String>();
-			
-			map.put("name", "name");
-			map.put("new_priority", "newPriority");
-			
-			strat.setType(PriorityDescriptor.class);
-			strat.setColumnMapping(map);
-			
-			CsvToBean<PriorityDescriptor> csv = new CsvToBean<PriorityDescriptor>();
-			list = csv.parse(strat, reader);
-			
-			if (list == null) {
-				return new ArrayList<PriorityDescriptor>();
-			}
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-		finally {
-			inputStream.close();
-		}
-		return list;
-	}
-	
+            }
+            processFile(parentDirectories, new File(newPrioritiesFile));
+            
+        }
+        catch (Exception e) {
+            LOG.error(e);
+        }
+    }
+    
+    //Make sure the new priorities files exists and is in the correct format
+    public static void processFile(ArrayList<File> parentDirectories, File newPrioritiesFile) throws FileNotFoundException, IOException {
+        if (!newPrioritiesFile.exists()) {
+            return;
+        }
+        
+        if (newPrioritiesFile.getName().endsWith(".csv")) {
+            updatePriorities(parentDirectories, newPrioritiesFile);
+        }
+    }
+    
+    //Look for each mlm file listed in the csv file and update its priority
+    public static void updatePriorities(ArrayList<File> parentDirectories, File newPrioritiesFile) throws FileNotFoundException, IOException {
+        
+        List<PriorityDescriptor> prioritiesToFix = getPriorityInfo(new FileInputStream(newPrioritiesFile));
+        File result = null;
+        //look through each entry in the csv file
+        for (PriorityDescriptor priorityDescriptor : prioritiesToFix) {
+            String newPriority = priorityDescriptor.getNewPriority();
+            String ruleName = priorityDescriptor.getName();
+            
+            if(!ruleName.endsWith(".mlm")){
+                ruleName+=".mlm";
+            }    
+            
+            //look for the mlm file
+            for (File currParentDirectory : parentDirectories) {
+                result = searchDirectoryForFile(currParentDirectory, ruleName);
+                if (result != null) {
+                    break;
+                }
+            }
+            
+            if (result == null) {
+                LOG.error("Could not find file " + ruleName);
+            } else {
+                String mlmOldFileName = result.getPath();
+                String mlmNewFileName = mlmOldFileName + "new";
+                //rewrite the priority line with the new priority
+                try {
+                    BufferedReader reader = new BufferedReader(new FileReader(mlmOldFileName));
+                    BufferedWriter writer = new BufferedWriter(new FileWriter(mlmNewFileName));
+                    String line = null;
+                    
+                    while ((line = reader.readLine()) != null) {
+                        
+                        //look for the write sections
+                        if (line.toLowerCase().indexOf("priority:") > -1) {
+                            writer.write("Priority: " + newPriority + ";;\n");
+                        } else {
+                            writer.write(line+"\n");
+                            writer.flush();
+                        }
+                    }
+                    
+                    writer.close();
+                    reader.close();
+                }
+                catch (Exception e) {
+                    LOG.error(e);
+                }
+                try {
+                    //update the old file and remove the temp file
+                    IOUtil.copyFile(mlmNewFileName, mlmOldFileName);
+                    IOUtil.deleteFile(mlmNewFileName);
+                }
+                catch (Exception e) {
+                    LOG.error(e);
+                }
+            }
+        }
+    }
+    
+    //recursively search directories for the file
+    private static File searchDirectoryForFile(File directory, String filename) {
+                        
+        //don't search the retired directory
+        if(directory.getPath().contains("_retired")){
+            return null;
+        }
+        
+        File file = new File(directory.getPath() + File.separator + filename);
+        
+        if (file.exists()) {
+            return file;
+        }
+        
+        File[] files = directory.listFiles();
+        
+        for (File currFile : files) {
+            if (currFile.isDirectory()) {
+                File result = searchDirectoryForFile(currFile, filename);
+                
+                if (result != null) {
+                    return result;
+                }
+            }
+        }
+        return null;
+    }
+    
+    //parse the csv file to get a list of PriorityDescriptor objects for each of the rows
+    private static List<PriorityDescriptor> getPriorityInfo(InputStream inputStream) throws FileNotFoundException,
+                                                                                    IOException {
+        
+        List<PriorityDescriptor> list = null;
+        try {
+            InputStreamReader inStreamReader = new InputStreamReader(inputStream);
+            CSVReader reader = new CSVReader(inStreamReader, ',');
+            HeaderColumnNameTranslateMappingStrategy<PriorityDescriptor> strat = 
+                    new HeaderColumnNameTranslateMappingStrategy<>();
+            
+            Map<String, String> map = new HashMap<>();
+            
+            map.put("name", "name");
+            map.put("new_priority", "newPriority");
+            
+            strat.setType(PriorityDescriptor.class);
+            strat.setColumnMapping(map);
+            
+            CsvToBean<PriorityDescriptor> csv = new CsvToBean<>();
+            list = csv.parse(strat, reader);
+            
+            if (list == null) {
+                return new ArrayList<>();
+            }
+        }
+        catch (Exception e) {
+            LOG.error(e);
+        }
+        finally {
+            inputStream.close();
+        }
+        return list;
+    }
+    
 }

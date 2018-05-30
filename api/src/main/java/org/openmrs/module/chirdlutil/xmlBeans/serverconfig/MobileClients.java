@@ -22,49 +22,76 @@ import java.util.ArrayList;
  */
 public class MobileClients {
 
-	private ArrayList<MobileClient> mobileClients;
+    private ArrayList<MobileClient> mobileClients;
 
     /**
      * @return the mobileClients
      */
     public ArrayList<MobileClient> getMobileClients() {
-    	return mobileClients;
+        return this.mobileClients;
     }
-	
+    
     /**
      * @param mobileClients the mobileClients to set
      */
     public void setMobileClients(ArrayList<MobileClient> mobileClients) {
-    	this.mobileClients = mobileClients;
+        this.mobileClients = mobileClients;
     }
     
     /**
      * @see java.lang.Object#toString()
      */
+    @Override
     public String toString() {
-    	StringBuffer buffer = new StringBuffer("MobileClients:\n");
-    	if (mobileClients != null && mobileClients.size() > 0) {
-    		for (MobileClient client : mobileClients) {
-    			buffer.append(client.toString());
-    		}
-    	} else {
-    		buffer.append("\tNo mobile clients exist.");
-    	}
-    	
-    	return buffer.toString();
+        StringBuffer buffer = new StringBuffer("MobileClients:\n");
+        if (this.mobileClients != null && this.mobileClients.size() > 0) {
+            for (MobileClient client : this.mobileClients) {
+                buffer.append(client.toString());
+            }
+        } else {
+            buffer.append("\tNo mobile clients exist.");
+        }
+        
+        return buffer.toString();
     }
-    
+
     /**
      * @see java.lang.Object#hashCode()
      */
+    @Override
     public int hashCode() {
         int hash = 1;
-        if (mobileClients != null) {
-	        for (MobileClient client : mobileClients) {
-	        	hash = hash * 13 + (client == null ? 0 : client.hashCode());
-	        }
+        if (this.mobileClients != null) {
+            for (MobileClient client : this.mobileClients) {
+                hash = hash * 13 + (client == null ? 0 : client.hashCode());
+            }
         }
         
         return hash;
+    }
+
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        MobileClients other = (MobileClients) obj;
+        if (this.mobileClients == null) {
+            if (other.mobileClients != null) {
+                return false;
+            }
+        } else if (!this.mobileClients.equals(other.mobileClients)) {
+            return false;
+        }
+        return true;
     }
 }
