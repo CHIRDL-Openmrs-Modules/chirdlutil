@@ -90,7 +90,7 @@ public class AddPSFStoreNotes {
     }
     
     //Look for each mlm file listed in the csv file add the PSF storeNotes
-    public static void addStoreNote(ArrayList<File> parentDirectories, File storeNotesFile) throws IOException {
+    public static void addStoreNote(List<File> parentDirectories, File storeNotesFile) throws IOException {
         
         List<NoteContentDescriptor> psfNotes = getNoteInfo(new FileInputStream(storeNotesFile));
         File result = null;

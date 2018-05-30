@@ -40,7 +40,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class FindAndReplace {
     
-    static final Log LOG = LogFactory.getLog(FindAndReplace.class);
+    private static final Log LOG = LogFactory.getLog(FindAndReplace.class);
     
     JTextField directoryField = new JTextField(30);
     JTextField findField = new JTextField(30);
