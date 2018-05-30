@@ -122,10 +122,9 @@ public class CreateConceptCsv {
             if (!mlmFilename.endsWith("mlm")) {
                 continue;
             }
-            BufferedReader reader = new BufferedReader(new FileReader(mlmFilename));
 
             // process each line of the mlm looking for storeObs
-            try {
+            try (BufferedReader reader = new BufferedReader(new FileReader(mlmFilename))) {
                 String line = null;
                 while ((line = reader.readLine()) != null) {
 
@@ -140,23 +139,11 @@ public class CreateConceptCsv {
                     if (matches) {
                         ConceptPair conceptPair = new ConceptPair(m.group(1), m.group(2));
                         set.add(conceptPair);
-
                     }
-
                 }
-
-                
-
             } catch (Exception e) {
                 LOG.error(e);
-            }finally{
-                try {
-                    reader.close();
-                } catch (Exception e) {
-                    LOG.error(e);
-                }
             }
-
         }
     }
 
@@ -167,10 +154,8 @@ public class CreateConceptCsv {
      * @throws IOException
      */
     public static void exportConcepts(File outputFile, TreeSet<ConceptPair> set) throws IOException {
-        BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
-        CSVWriter csvWriter = null;
-        try {
-            csvWriter = new CSVWriter(writer);
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
+                CSVWriter csvWriter = new CSVWriter(writer);) {
             String[] columnNames = new String[6];
 
             columnNames[0] = "name";
@@ -214,18 +199,9 @@ public class CreateConceptCsv {
                 csvWriter.writeNext(item);
                 csvWriter.flush();
             }
-            
-
         } catch (IOException e) {
             LOG.error(e);
             throw e;
-        }finally{
-            try {
-                csvWriter.close();
-            } catch (Exception e) {
-                LOG.error(e);
-            }
         }
-
     }
 }

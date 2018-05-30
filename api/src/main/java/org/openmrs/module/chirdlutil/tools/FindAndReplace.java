@@ -204,6 +204,7 @@ public class FindAndReplace {
                 break;
             }
             
+            progressMonitor.setProgress(++count);
             progressMonitor.setNote("Processing: " + sourceFile.getAbsolutePath());
             if (sourceFile.isDirectory()) {
                 List<File> childFiles = Arrays.asList(sourceFile.listFiles());
@@ -214,17 +215,18 @@ public class FindAndReplace {
             
             String origFilename = sourceFile.getName();
             File parentDirectory = sourceFile.getParentFile();
-            BufferedInputStream fileReader = null;
             File newFile = new File(parentDirectory, origFilename + System.currentTimeMillis());
-            newFile.createNewFile();
-            BufferedOutputStream fileWriter = null;
+            if (!newFile.createNewFile()) {
+                LOG.error("Could not create new file: " + newFile.getAbsolutePath());
+                continue;
+            }
+            
             byte[] searchBytes = searchString.getBytes();
             byte[] replaceBytes = replaceString.getBytes();
             int searchSize = searchBytes.length;
             Queue byteQueue = new LinkedList();
-            try {
-                fileReader = new BufferedInputStream(new FileInputStream(sourceFile));
-                fileWriter = new BufferedOutputStream(new FileOutputStream(newFile));
+            try (BufferedInputStream fileReader = new BufferedInputStream(new FileInputStream(sourceFile));
+                BufferedOutputStream fileWriter = new BufferedOutputStream(new FileOutputStream(newFile))) {
                 int c;
                 while ((c = fileReader.read()) != -1) {
                     byteQueue.add(c);
@@ -259,44 +261,39 @@ public class FindAndReplace {
                 while (!byteQueue.isEmpty()) {
                     fileWriter.write((Integer)byteQueue.poll());
                 }
-            } finally {
-                if (fileReader != null) {
-                    fileReader.close();
-                }
-                if (fileWriter != null) {
-                    fileWriter.flush();
-                    fileWriter.close();
-                }
             }
             
-            sourceFile.delete();
-            sourceFile.createNewFile();
-            copyFile(newFile, sourceFile);
-            newFile.delete();
+            if (!sourceFile.delete()) {
+                LOG.error("Could not delete file: " + sourceFile.getAbsolutePath());
+                continue;
+            }
             
-            progressMonitor.setProgress(++count);
+            if (!sourceFile.createNewFile()) {
+                LOG.error("Could not create new file: " + sourceFile.getAbsolutePath());
+                continue;
+            }
+            
+            copyFile(newFile, sourceFile);
+            if (!newFile.delete()) {
+                LOG.error("Could not delete file: " + newFile.getAbsolutePath());
+            }
         }
     }
     
     private void copyFile(File sourceFile, File destFile) throws IOException { 
         if(!destFile.exists()) {  
-            destFile.createNewFile(); 
+            if (!destFile.createNewFile()) {
+                LOG.error("Could not create new file: " + destFile.getAbsolutePath());
+                return;
+            }
         } 
         
-        FileChannel source = null; 
-        FileChannel destination = null; 
-        try {  
-            source = new FileInputStream(sourceFile).getChannel();  
-            destination = new FileOutputStream(destFile).getChannel();  
+        try (FileInputStream sourceInStream = new FileInputStream(sourceFile);
+                FileOutputStream destOutStream = new FileOutputStream(destFile);
+                FileChannel source = sourceInStream.getChannel();  
+                FileChannel destination = destOutStream.getChannel()) {  
+              
             destination.transferFrom(source, 0, source.size()); 
-        } finally {  
-            if(source != null) {   
-                source.close();  
-            }  
-            
-            if(destination != null) {   
-                destination.close();  
-            }
         }
     }
     

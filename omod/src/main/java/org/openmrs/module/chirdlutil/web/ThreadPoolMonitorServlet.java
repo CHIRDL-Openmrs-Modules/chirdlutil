@@ -23,48 +23,48 @@ import org.openmrs.module.chirdlutil.util.ChirdlUtilConstants;
  */
 public class ThreadPoolMonitorServlet extends HttpServlet {
     private static final String PARAM_POOL_TYPE = "poolType";
-	private static final long serialVersionUID = 1L;
-	private Log log = LogFactory.getLog(this.getClass());
-	
-	@Override
-	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		genGraph(req, resp);
-	}
-	
-	@Override
-	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		genGraph(req, resp);
-	}
-	
-	/**
-	 * Generates a graph with the thread pool usage.
-	 * 
-	 * @param req The http request information.
-	 * @param resp The http response information.
-	 */
-	public void genGraph(HttpServletRequest req, HttpServletResponse resp) {
-		resp.setHeader(ChirdlUtilConstants.HTTP_HEADER_CACHE_CONTROL, ChirdlUtilConstants.HTTP_HEADER_CACHE_CONTROL_NO_CACHE);
-		resp.setDateHeader(ChirdlUtilConstants.HTTP_HEADER_EXPIRES, 0);
-		int width = 625;
-		String poolType = req.getParameter(PARAM_POOL_TYPE);
-		if (ThreadPoolChartGenerator.POOL_TYPE_PRINTER.equals(poolType)) {
-			width = 900;
-		}
-		
-		try {
-			OutputStream out = resp.getOutputStream();
-			ThreadPoolChartGenerator barChart = new ThreadPoolChartGenerator();
-			JFreeChart chart = barChart.getChart(poolType);
-			if (chart != null) {
-				resp.setContentType(ChirdlUtilConstants.HTTP_CONTENT_TYPE_IMAGE_PNG);
-			    ChartUtilities.writeChartAsPNG(out, chart, width, 500);
-			} else {
-				resp.setContentType(ChirdlUtilConstants.HTTP_CONTENT_TYPE_TEXT_HTML);
-				PrintWriter pw = resp.getWriter();
-				pw.write("<p>The server wasn't able to produce a chart with poolType " + poolType + "</p>");
-			}
-		} catch (IOException e) {
-			log.error("Error creating thread pool manager chart", e);
-		}
-	}
+    private static final long serialVersionUID = 1L;
+    private static final Log LOG = LogFactory.getLog(ThreadPoolMonitorServlet.class);
+    
+    @Override
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        genGraph(req, resp);
+    }
+    
+    @Override
+    public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        genGraph(req, resp);
+    }
+    
+    /**
+     * Generates a graph with the thread pool usage.
+     * 
+     * @param req The http request information.
+     * @param resp The http response information.
+     */
+    public void genGraph(HttpServletRequest req, HttpServletResponse resp) {
+        resp.setHeader(ChirdlUtilConstants.HTTP_HEADER_CACHE_CONTROL, ChirdlUtilConstants.HTTP_HEADER_CACHE_CONTROL_NO_CACHE);
+        resp.setDateHeader(ChirdlUtilConstants.HTTP_HEADER_EXPIRES, 0);
+        int width = 625;
+        String poolType = req.getParameter(PARAM_POOL_TYPE);
+        if (ThreadPoolChartGenerator.POOL_TYPE_PRINTER.equals(poolType)) {
+            width = 900;
+        }
+        
+        try {
+            OutputStream out = resp.getOutputStream();
+            ThreadPoolChartGenerator barChart = new ThreadPoolChartGenerator();
+            JFreeChart chart = barChart.getChart(poolType);
+            if (chart != null) {
+                resp.setContentType(ChirdlUtilConstants.HTTP_CONTENT_TYPE_IMAGE_PNG);
+                ChartUtilities.writeChartAsPNG(out, chart, width, 500);
+            } else {
+                resp.setContentType(ChirdlUtilConstants.HTTP_CONTENT_TYPE_TEXT_HTML);
+                PrintWriter pw = resp.getWriter();
+                pw.write("<p>The server wasn't able to produce a chart with poolType " + poolType + "</p>");
+            }
+        } catch (IOException e) {
+            LOG.error("Error creating thread pool manager chart", e);
+        }
+    }
 }

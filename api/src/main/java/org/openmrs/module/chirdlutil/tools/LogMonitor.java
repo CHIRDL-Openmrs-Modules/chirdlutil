@@ -18,7 +18,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.DateFormat;
@@ -39,22 +38,22 @@ public class LogMonitor {
     
     private static final Log LOG = LogFactory.getLog(AddPSFStoreNotes.class);
     
-    private final String LATEST_DATE = "latestDate";
-    private final String LAST_FILE_SIZE = "lastFileSize";
-    private final String FILE_TO_MONITOR = "fileToMonitor";
-    private final String SEARCH_STRING = "searchString";
-    private final String PATH_TO_PV = "pathToPV";
-    private final String PROCESS_TO_KILL = "processToKill";
-    private final String APP_TO_START = "appToStart";
+    private static final String LATEST_DATE = "latestDate";
+    private static final String LAST_FILE_SIZE = "lastFileSize";
+    private static final String FILE_TO_MONITOR = "fileToMonitor";
+    private static final String SEARCH_STRING = "searchString";
+    private static final String PATH_TO_PV = "pathToPV";
+    private static final String PROCESS_TO_KILL = "processToKill";
+    private static final String APP_TO_START = "appToStart";
     
     public boolean searchLog(File propFile) {
         
         File logFile = new File("logMonitor.log");
-        FileWriter logWriter = null;
-        try {
-            logWriter = new FileWriter(logFile, true);
+        try (FileWriter logWriter = new FileWriter(logFile, true);
+                FileInputStream propsFileInStream = new FileInputStream(propFile)) {
+            
             Properties props = new Properties();
-            props.load(new FileInputStream(propFile));
+            props.load(propsFileInStream);
             
             // Get the file to search.
             String searchFileStr = props.getProperty(FILE_TO_MONITOR);
@@ -95,9 +94,7 @@ public class LogMonitor {
                 
             // Get the saved latest error found
             String latestDateStr = props.getProperty(LATEST_DATE);
-            BufferedReader fileReader = null;
-            try {
-                fileReader = new BufferedReader(new FileReader(searchFile));
+            try (BufferedReader fileReader = new BufferedReader(new FileReader(searchFile))) {
                 String line;
                 boolean error = false;
                 String dateStr = null;
@@ -125,9 +122,7 @@ public class LogMonitor {
                     }
                 }
                 
-                FileWriter writer = null;
-                try {
-                    writer = new FileWriter(propFile);
+                try (FileWriter writer = new FileWriter(propFile);) {
                     if (error) {
                         // We've found a new error.  Get the process to kill.
                         logWriter.write("New " + searchString + " encountered on " + dateStr + ".\n");
@@ -177,6 +172,7 @@ public class LogMonitor {
                         catch (InterruptedException e) {
                             String errorStr = exceptionToString(e);
                             logWriter.write(errorStr + "\n");
+                            Thread.currentThread().interrupt();
                         }
                         
                         logWriter.write("Starting application: " + appToStartStr + "...");
@@ -189,35 +185,11 @@ public class LogMonitor {
                     
                     // Save the file size for comparison the next time around.
                     props.setProperty(LAST_FILE_SIZE, String.valueOf(fileSize));
-                } finally {
-                    if (writer != null) {
-                        props.store(writer, null);
-                        writer.close();
-                    }
+                    props.store(writer, null);
                 }
-            } finally {
-                if (fileReader != null) {
-                    fileReader.close();
-                }
-            } 
+            }
         } catch (Exception e) {
-            String errorStr = exceptionToString(e);
-            try {
-                logWriter.write(errorStr + "\n");
-            }
-            catch (IOException e1) {
-                LOG.error(e1);
-            }
-        } finally {
-            if (logWriter != null) {
-                try {
-                    logWriter.flush();
-                    logWriter.close();
-                }
-                catch (IOException e) {
-                    LOG.error(e);
-                }
-            }
+            LOG.error(e);
         }
         
         return true;

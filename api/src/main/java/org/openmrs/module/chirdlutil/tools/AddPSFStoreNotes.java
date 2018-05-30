@@ -128,9 +128,9 @@ public class AddPSFStoreNotes {
                 String mlmOldFileName = result.getPath();
                 String mlmNewFileName = mlmOldFileName + "new";
                 //write the storeNote in the proper place
-                try {
-                    BufferedReader reader = new BufferedReader(new FileReader(mlmOldFileName));
-                    BufferedWriter writer = new BufferedWriter(new FileWriter(mlmNewFileName));
+                try (BufferedReader reader = new BufferedReader(new FileReader(mlmOldFileName));
+                        BufferedWriter writer = new BufferedWriter(new FileWriter(mlmNewFileName))) {
+                    
                     String line = null;
                     
                     while ((line = reader.readLine()) != null) {
@@ -161,9 +161,6 @@ public class AddPSFStoreNotes {
                         
                         writer.flush();    
                     }
-                    
-                    writer.close();
-                    reader.close();
                 }
                 catch (Exception e) {
                     LOG.error(e);

@@ -114,9 +114,8 @@ public class UpdateMLMPriorities {
                 String mlmOldFileName = result.getPath();
                 String mlmNewFileName = mlmOldFileName + "new";
                 //rewrite the priority line with the new priority
-                try {
-                    BufferedReader reader = new BufferedReader(new FileReader(mlmOldFileName));
-                    BufferedWriter writer = new BufferedWriter(new FileWriter(mlmNewFileName));
+                try (BufferedReader reader = new BufferedReader(new FileReader(mlmOldFileName));
+                        BufferedWriter writer = new BufferedWriter(new FileWriter(mlmNewFileName))) {
                     String line = null;
                     
                     while ((line = reader.readLine()) != null) {
@@ -177,13 +176,11 @@ public class UpdateMLMPriorities {
     }
     
     //parse the csv file to get a list of PriorityDescriptor objects for each of the rows
-    private static List<PriorityDescriptor> getPriorityInfo(InputStream inputStream) throws FileNotFoundException,
-                                                                                    IOException {
+    private static List<PriorityDescriptor> getPriorityInfo(InputStream inputStream) {
         
         List<PriorityDescriptor> list = null;
-        try {
-            InputStreamReader inStreamReader = new InputStreamReader(inputStream);
-            CSVReader reader = new CSVReader(inStreamReader, ',');
+        try (InputStreamReader inStreamReader = new InputStreamReader(inputStream);
+                CSVReader reader = new CSVReader(inStreamReader, ',');) {
             HeaderColumnNameTranslateMappingStrategy<PriorityDescriptor> strat = 
                     new HeaderColumnNameTranslateMappingStrategy<>();
             
@@ -204,9 +201,6 @@ public class UpdateMLMPriorities {
         }
         catch (Exception e) {
             LOG.error(e);
-        }
-        finally {
-            inputStream.close();
         }
         return list;
     }
