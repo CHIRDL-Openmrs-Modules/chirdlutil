@@ -22,51 +22,78 @@ import java.util.ArrayList;
  * @author Steve McKee
  */
 public class PDFImageMerge {
-	
-	private ArrayList<ImageForm> imageForms;
+    
+    private ArrayList<ImageForm> imageForms;
 
     /**
      * @return the imageForms
      */
     public ArrayList<ImageForm> getImageForms() {
-    	return imageForms;
+        return this.imageForms;
     }
 
-	
+    
     /**
      * @param imageForms the imageForms to set
      */
     public void setImageForms(ArrayList<ImageForm> imageForms) {
-    	this.imageForms = imageForms;
+        this.imageForms = imageForms;
     }
     
     /**
      * @see java.lang.Object#toString()
      */
+    @Override
     public String toString() {
-    	StringBuffer buffer = new StringBuffer("PDFImageMerge:\n");
-    	if (imageForms != null && imageForms.size() > 0) {
-    		for (ImageForm imageForm : imageForms) {
-    			buffer.append(imageForm.toString());
-    		}
-    	} else {
-    		buffer.append("\tNo image forms exist.");
-    	}
-    	
-    	return buffer.toString();
+        StringBuffer buffer = new StringBuffer("PDFImageMerge:\n");
+        if (this.imageForms != null && this.imageForms.size() > 0) {
+            for (ImageForm imageForm : this.imageForms) {
+                buffer.append(imageForm.toString());
+            }
+        } else {
+            buffer.append("\tNo image forms exist.");
+        }
+        
+        return buffer.toString();
     }
-    
+
     /**
      * @see java.lang.Object#hashCode()
      */
+    @Override
     public int hashCode() {
         int hash = 1;
-        if (imageForms != null) {
-	        for (ImageForm imageForm : imageForms) {
-	        	hash = hash * 13 + (imageForm == null ? 0 : imageForm.hashCode());
-	        }
+        if (this.imageForms != null) {
+            for (ImageForm imageForm : this.imageForms) {
+                hash = hash * 13 + (imageForm == null ? 0 : imageForm.hashCode());
+            }
         }
         
         return hash;
+    }
+
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        PDFImageMerge other = (PDFImageMerge) obj;
+        if (this.imageForms == null) {
+            if (other.imageForms != null) {
+                return false;
+            }
+        } else if (!this.imageForms.equals(other.imageForms)) {
+            return false;
+        }
+        return true;
     }
 }

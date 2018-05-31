@@ -25,202 +25,184 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.openmrs.module.chirdlutil.util.Util;
+
 import au.com.bytecode.opencsv.CSVWriter;
 
 /**
  * This class parses mlm files and creates a csv file with all concepts stored via storeObs in the mlm.
  */
 public class CreateConceptCsv {
+    
+    private static final Log LOG = LogFactory.getLog(CreateConceptCsv.class);
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
+    /**
+     * @param args
+     */
+    public static void main(String[] args) {
 
-		try {
-			if (args == null || args.length < 2) {
-				System.err.println(
-						"A minimum number of two arguments (a rule directory and an output filename) are required.");
-				return;
-			}
+        try {
+            if (args == null || args.length < 2) {
+                LOG.error(
+                        "A minimum number of two arguments (a rule directory and an output filename) are required.");
+                return;
+            }
 
-			// The last argument is the csv file
-			// The preceeding arguments are the directories to search for mlms
-			String outputFileName = args[args.length - 1];
-			ArrayList<File> parentDirectories = new ArrayList<File>();
-			for (int i = 0; i < args.length - 1; i++) {
-				try {
-					parentDirectories.add(new File(args[i]));
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-			processFile(parentDirectories, new File(outputFileName));
+            // The last argument is the csv file
+            // The preceeding arguments are the directories to search for mlms
+            String outputFileName = args[args.length - 1];
+            ArrayList<File> parentDirectories = new ArrayList<>();
+            for (int i = 0; i < args.length - 1; i++) {
+                try {
+                    parentDirectories.add(new File(args[i]));
+                } catch (Exception e) {
+                    LOG.error(Util.getStackTrace(e));
+                }
+            }
+            processFile(parentDirectories, new File(outputFileName));
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+        } catch (Exception e) {
+            LOG.error(Util.getStackTrace(e));
+        }
+    }
 
-	/**
-	 * create the list of concepts and write to a csv file
-	 * 
-	 * @param parentDirectories
-	 * @param outputFile
-	 * @throws FileNotFoundException
-	 * @throws IOException
-	 */
-	public static void processFile(ArrayList<File> parentDirectories, File outputFile)
-			throws FileNotFoundException, IOException {
+    /**
+     * create the list of concepts and write to a csv file
+     * 
+     * @param parentDirectories
+     * @param outputFile
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
+    public static void processFile(ArrayList<File> parentDirectories, File outputFile)
+            throws IOException {
 
-		if (outputFile.getName().endsWith(".csv")) {
-			File[] directories = new File[parentDirectories.size()];
-			directories = parentDirectories.toArray(directories);
+        if (outputFile.getName().endsWith(".csv")) {
+            File[] directories = new File[parentDirectories.size()];
+            directories = parentDirectories.toArray(directories);
 
-			TreeSet<ConceptPair> set = new TreeSet<ConceptPair>();
-			createConceptFile(directories, set);
-			exportConcepts(outputFile, set);
-		} else {
-			System.err.println("Error writing to " + outputFile);
-		}
-	}
+            TreeSet<ConceptPair> set = new TreeSet<>();
+            createConceptFile(directories, set);
+            exportConcepts(outputFile, set);
+        } else {
+            LOG.error("Error writing to " + outputFile);
+        }
+    }
 
-	/**
-	 * Create ConceptPair objects containing storeObs values
-	 * @param files
-	 * @param set
-	 * @throws FileNotFoundException
-	 * @throws IOException
-	 */
-	public static void createConceptFile(File[] files, TreeSet<ConceptPair> set)
-			throws FileNotFoundException, IOException {
-		Pattern storeObsPattern = Pattern.compile("CALL\\s*storeObs\\s*With\\s*\"(.+)\"\\s*,\\s*\"(.+)\"\\s*;",
-				Pattern.CASE_INSENSITIVE);
+    /**
+     * Create ConceptPair objects containing storeObs values
+     * @param files
+     * @param set
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
+    public static void createConceptFile(File[] files, TreeSet<ConceptPair> set)
+            throws IOException {
+        Pattern storeObsPattern = Pattern.compile("CALL\\s*storeObs\\s*With\\s*\"(.+)\"\\s*,\\s*\"(.+)\"\\s*;",
+                Pattern.CASE_INSENSITIVE);
 
-		// loop through the mlms
-		for (File file : files) {
+        // loop through the mlms
+        for (File file : files) {
 
-			String currFilename = file.getName();
+            String currFilename = file.getName();
 
-			// skip the retired folder
-			if (currFilename.contains("retired")) {
-				continue;
-			}
+            // skip the retired folder
+            if (currFilename.contains("retired")) {
+                continue;
+            }
 
-			if (file.isDirectory()) {
+            if (file.isDirectory()) {
 
-				createConceptFile(file.listFiles(), set);
-				continue;
-			}
+                createConceptFile(file.listFiles(), set);
+                continue;
+            }
 
-			String mlmFilename = file.getPath();
-			if (!mlmFilename.endsWith("mlm")) {
-				continue;
-			}
-			BufferedReader reader = new BufferedReader(new FileReader(mlmFilename));
+            String mlmFilename = file.getPath();
+            if (!mlmFilename.endsWith("mlm")) {
+                continue;
+            }
 
-			// process each line of the mlm looking for storeObs
-			try {
-				String line = null;
-				while ((line = reader.readLine()) != null) {
+            // process each line of the mlm looking for storeObs
+            try (BufferedReader reader = new BufferedReader(new FileReader(mlmFilename))) {
+                String line = null;
+                while ((line = reader.readLine()) != null) {
 
-					if (line.trim().length() == 0) {
-						continue;
-					}
+                    if (line.trim().length() == 0) {
+                        continue;
+                    }
 
-					// create a set of storeObs
-					Matcher m = storeObsPattern.matcher(line);
-					boolean matches = m.find();
+                    // create a set of storeObs
+                    Matcher m = storeObsPattern.matcher(line);
+                    boolean matches = m.find();
 
-					if (matches) {
-						ConceptPair conceptPair = new ConceptPair(m.group(1), m.group(2));
-						set.add(conceptPair);
+                    if (matches) {
+                        ConceptPair conceptPair = new ConceptPair(m.group(1), m.group(2));
+                        set.add(conceptPair);
+                    }
+                }
+            } catch (Exception e) {
+                LOG.error(Util.getStackTrace(e));
+            }
+        }
+    }
 
-					}
+    /**
+     *  Write the concepts to a csv file
+     * @param outputFile
+     * @param set
+     * @throws IOException
+     */
+    public static void exportConcepts(File outputFile, TreeSet<ConceptPair> set) throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
+                CSVWriter csvWriter = new CSVWriter(writer);) {
+            String[] columnNames = new String[6];
 
-				}
+            columnNames[0] = "name";
+            columnNames[1] = "concept class";
+            columnNames[2] = "datatype";
+            columnNames[3] = "description";
+            columnNames[4] = "units";
+            columnNames[5] = "parent concept";
+            csvWriter.writeNext(columnNames);
+            TreeSet<String> questionNames = new TreeSet<>();
+            
+            //write the question answer pairs
+            for (ConceptPair conceptPair : set) {
 
-				
+                String question = conceptPair.getQuestionConceptName();
+                String answer = conceptPair.getAnswerConceptName();
 
-			} catch (Exception e) {
-				e.printStackTrace();
-			}finally{
-				try {
-					reader.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
+                questionNames.add(question);
 
-		}
-	}
+                String[] item = new String[6];
+                item[0] = answer;
+                item[1] = "CHICA";
+                item[2] = "Coded";
+                item[3] = answer;
+                item[4] = null;
+                item[5] = question;
+                csvWriter.writeNext(item);
+                csvWriter.flush();
+            }
 
-	/**
-	 *  Write the concepts to a csv file
-	 * @param outputFile
-	 * @param set
-	 * @throws IOException
-	 */
-	public static void exportConcepts(File outputFile, TreeSet<ConceptPair> set) throws IOException {
-		BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
-		CSVWriter csvWriter = null;
-		try {
-			csvWriter = new CSVWriter(writer);
-			String[] columnNames = new String[6];
+            //write all the question concepts
+            for (String question : questionNames) {
 
-			columnNames[0] = "name";
-			columnNames[1] = "concept class";
-			columnNames[2] = "datatype";
-			columnNames[3] = "description";
-			columnNames[4] = "units";
-			columnNames[5] = "parent concept";
-			csvWriter.writeNext(columnNames);
-			TreeSet<String> questionNames = new TreeSet<String>();
-			
-			//write the question answer pairs
-			for (ConceptPair conceptPair : set) {
-
-				String question = conceptPair.getQuestionConceptName();
-				String answer = conceptPair.getAnswerConceptName();
-
-				questionNames.add(question);
-
-				String[] item = new String[6];
-				item[0] = answer;
-				item[1] = "CHICA";
-				item[2] = "Coded";
-				item[3] = answer;
-				item[4] = null;
-				item[5] = question;
-				csvWriter.writeNext(item);
-				csvWriter.flush();
-			}
-
-			//write all the question concepts
-			for (String question : questionNames) {
-
-				String[] item = new String[6];
-				item[0] = question;
-				item[1] = "CHICA";
-				item[2] = "Coded";
-				item[3] = null;
-				item[4] = null;
-				item[5] = null;
-				csvWriter.writeNext(item);
-				csvWriter.flush();
-			}
-			
-
-		} catch (IOException e) {
-			e.printStackTrace();
-			throw e;
-		}finally{
-			try {
-				csvWriter.close();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-
-	}
+                String[] item = new String[6];
+                item[0] = question;
+                item[1] = "CHICA";
+                item[2] = "Coded";
+                item[3] = null;
+                item[4] = null;
+                item[5] = null;
+                csvWriter.writeNext(item);
+                csvWriter.flush();
+            }
+        } catch (IOException e) {
+            LOG.error(Util.getStackTrace(e));
+            throw e;
+        }
+    }
 }

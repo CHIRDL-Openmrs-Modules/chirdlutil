@@ -118,14 +118,14 @@ public class SpringUtilities {
             if (i % cols == 0) { //start of new row
                 lastRowCons = lastCons;
                 cons.setX(initialXSpring);
-            } else { //x position depends on previous component
+            } else if (lastCons != null) { //x position depends on previous component
                 cons.setX(Spring.sum(lastCons.getConstraint(SpringLayout.EAST),
                                      xPadSpring));
             }
 
             if (i / cols == 0) { //first row
                 cons.setY(initialYSpring);
-            } else { //y position depends on previous row
+            } else if (lastRowCons != null) { //y position depends on previous row
                 cons.setY(Spring.sum(lastRowCons.getConstraint(SpringLayout.SOUTH),
                                      yPadSpring));
             }
@@ -133,15 +133,17 @@ public class SpringUtilities {
         }
 
         //Set the parent's size.
-        SpringLayout.Constraints pCons = layout.getConstraints(parent);
-        pCons.setConstraint(SpringLayout.SOUTH,
-                            Spring.sum(
-                                Spring.constant(yPad),
-                                lastCons.getConstraint(SpringLayout.SOUTH)));
-        pCons.setConstraint(SpringLayout.EAST,
-                            Spring.sum(
-                                Spring.constant(xPad),
-                                lastCons.getConstraint(SpringLayout.EAST)));
+        if (lastCons != null) {
+            SpringLayout.Constraints pCons = layout.getConstraints(parent);
+            pCons.setConstraint(SpringLayout.SOUTH,
+                                Spring.sum(
+                                    Spring.constant(yPad),
+                                    lastCons.getConstraint(SpringLayout.SOUTH)));
+            pCons.setConstraint(SpringLayout.EAST,
+                                Spring.sum(
+                                    Spring.constant(xPad),
+                                    lastCons.getConstraint(SpringLayout.EAST)));
+        }
     }
 
     /* Used by makeCompactGrid. */
