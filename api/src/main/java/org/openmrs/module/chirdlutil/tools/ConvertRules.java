@@ -107,9 +107,9 @@ public class ConvertRules {
         try (BufferedReader reader = new BufferedReader(new FileReader(oldFileName));
                 BufferedWriter writer = new BufferedWriter(new FileWriter(newFileName))) {
             String line = null;
-            Boolean inLogicSection = Boolean.FALSE;
-            Boolean inDataSection = Boolean.FALSE;
-            Boolean inActionSection = Boolean.FALSE;
+            boolean inLogicSection = false;
+            boolean inDataSection = false;
+            boolean inActionSection = false;
             String result = "";
             String extraVariables = "";
             String logicExtraVariables = "";
@@ -231,7 +231,7 @@ public class ConvertRules {
                     inLogicSection = Boolean.FALSE;
                 }
                 
-                if (inLogicSection.booleanValue()) {
+                if (inLogicSection) {
                     //look for calls in the logic section
                     if(line.trim().toLowerCase().startsWith("call")){
                         line = "temp:="+line.trim();
@@ -319,7 +319,7 @@ public class ConvertRules {
                 m = p.matcher(line);
                 matches = m.find();
                 
-                if (matches&&(inDataSection.booleanValue()||inLogicSection.booleanValue()||inActionSection.booleanValue())) {
+                if (matches&&(inDataSection||inLogicSection||inActionSection)) {
                     openIf++;
                 }
                 if (line.contains("endif")) {
