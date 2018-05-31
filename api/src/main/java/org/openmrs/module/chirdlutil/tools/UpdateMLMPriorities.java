@@ -31,6 +31,7 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.module.chirdlutil.util.IOUtil;
+import org.openmrs.module.chirdlutil.util.Util;
 
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.bean.CsvToBean;
@@ -64,14 +65,14 @@ public class UpdateMLMPriorities {
                     parentDirectories.add(new File(args[i]));
                 }
                 catch (Exception e) {
-                    LOG.error(e);
+                    LOG.error(Util.getStackTrace(e));
                 }
             }
             processFile(parentDirectories, new File(newPrioritiesFile));
             
         }
         catch (Exception e) {
-            LOG.error(e);
+            LOG.error(Util.getStackTrace(e));
         }
     }
     
@@ -133,7 +134,7 @@ public class UpdateMLMPriorities {
                     reader.close();
                 }
                 catch (Exception e) {
-                    LOG.error(e);
+                    LOG.error(Util.getStackTrace(e));
                 }
                 try {
                     //update the old file and remove the temp file
@@ -141,7 +142,7 @@ public class UpdateMLMPriorities {
                     IOUtil.deleteFile(mlmNewFileName);
                 }
                 catch (Exception e) {
-                    LOG.error(e);
+                    LOG.error(Util.getStackTrace(e));
                 }
             }
         }
@@ -200,7 +201,7 @@ public class UpdateMLMPriorities {
             }
         }
         catch (Exception e) {
-            LOG.error(e);
+            LOG.error(Util.getStackTrace(e));
         }
         return list;
     }

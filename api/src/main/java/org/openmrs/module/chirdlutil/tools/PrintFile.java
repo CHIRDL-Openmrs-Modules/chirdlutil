@@ -20,6 +20,7 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.module.chirdlutil.util.ChirdlUtilConstants;
 import org.openmrs.module.chirdlutil.util.IOUtil;
 import org.openmrs.module.chirdlutil.util.PrintServices;
+import org.openmrs.module.chirdlutil.util.Util;
 
 
 /**
@@ -89,7 +90,7 @@ public class PrintFile {
             }
         }
         catch (Exception e) {
-            LOG.error(e);
+            LOG.error(Util.getStackTrace(e));
             System.exit(1);
         }
         
@@ -126,7 +127,7 @@ public class PrintFile {
                 System.exit(1);
             }
         } catch (Exception e) {
-            LOG.error(e);
+            LOG.error(Util.getStackTrace(e));
             System.exit(1);
         }
     }

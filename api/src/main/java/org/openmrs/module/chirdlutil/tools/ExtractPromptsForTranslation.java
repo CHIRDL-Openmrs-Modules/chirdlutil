@@ -22,6 +22,7 @@ import java.util.ArrayList;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.module.chirdlutil.util.Util;
 
 /**
  * This class creates a csv file with mlm filename, English prompts, and Spanish prompt
@@ -54,7 +55,7 @@ public class ExtractPromptsForTranslation {
             }
         }
         catch (Exception e) {
-            LOG.error(e);
+            LOG.error(Util.getStackTrace(e));
         }
     }
     
@@ -105,7 +106,7 @@ public class ExtractPromptsForTranslation {
             }
         }
         catch (Exception e) {
-            LOG.error(e);
+            LOG.error(Util.getStackTrace(e));
         }
         
     }

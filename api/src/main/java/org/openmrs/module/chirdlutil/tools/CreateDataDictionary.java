@@ -28,6 +28,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.module.chirdlutil.util.Util;
 
 import au.com.bytecode.opencsv.CSVWriter;
 
@@ -59,14 +60,14 @@ public class CreateDataDictionary {
                     parentDirectories.add(new File(args[i]));
                 }
                 catch (Exception e) {
-                    LOG.error(e);
+                    LOG.error(Util.getStackTrace(e));
                 }
             }
             processFile(parentDirectories, new File(outputFileName));
             
         }
         catch (Exception e) {
-            LOG.error(e);
+            LOG.error(Util.getStackTrace(e));
         }
     }
     
@@ -241,7 +242,7 @@ public class CreateDataDictionary {
                 }
             }
             catch (Exception e) {
-                LOG.error(e);
+                LOG.error(Util.getStackTrace(e));
             }
             
         }
@@ -276,7 +277,7 @@ public class CreateDataDictionary {
             }
         }
         catch (IOException e) {
-            LOG.error(e);
+            LOG.error(Util.getStackTrace(e));
             throw e;
         }
         

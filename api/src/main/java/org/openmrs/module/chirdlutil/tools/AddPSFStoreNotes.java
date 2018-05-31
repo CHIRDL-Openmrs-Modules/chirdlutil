@@ -33,6 +33,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.module.chirdlutil.util.IOUtil;
+import org.openmrs.module.chirdlutil.util.Util;
 
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.bean.CsvToBean;
@@ -66,14 +67,14 @@ public class AddPSFStoreNotes {
                     parentDirectories.add(new File(args[i]));
                 }
                 catch (Exception e) {
-                    LOG.error(e);
+                    LOG.error(Util.getStackTrace(e));
                 }
             }
             processFile(parentDirectories, new File(storeNotesFile));
             
         }
         catch (Exception e) {
-            LOG.error(e);
+            LOG.error(Util.getStackTrace(e));
         }
     }
     
@@ -163,7 +164,7 @@ public class AddPSFStoreNotes {
                     }
                 }
                 catch (Exception e) {
-                    LOG.error(e);
+                    LOG.error(Util.getStackTrace(e));
                 }
                 try {
                     //update the old file and remove the temp file
@@ -171,7 +172,7 @@ public class AddPSFStoreNotes {
                     IOUtil.deleteFile(mlmNewFileName);
                 }
                 catch (Exception e) {
-                    LOG.error(e);
+                    LOG.error(Util.getStackTrace(e));
                 }
             }
         }
@@ -235,7 +236,7 @@ public class AddPSFStoreNotes {
             }
         }
         catch (Exception e) {
-            LOG.error(e);
+            LOG.error(Util.getStackTrace(e));
         }
         finally {
             inputStream.close();

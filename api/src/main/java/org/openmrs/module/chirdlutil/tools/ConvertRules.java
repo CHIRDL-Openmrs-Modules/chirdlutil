@@ -25,6 +25,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.module.chirdlutil.util.Util;
 
 /**
  * This class reads a csv file and reassigns mlm priorities accordingly. It expects name and
@@ -49,7 +50,7 @@ public class ConvertRules {
                     parentDirectories[i] = new File(args[i]);
                 }
                 catch (Exception e) {
-                    LOG.error(e);
+                    LOG.error(Util.getStackTrace(e));
                 }
             }
             
@@ -57,7 +58,7 @@ public class ConvertRules {
             updateMLMs(parentDirectories, outputDirectory);
         }
         catch (Exception e) {
-            LOG.error(e);
+            LOG.error(Util.getStackTrace(e));
         }
     }
     
@@ -398,7 +399,7 @@ public class ConvertRules {
             writer.flush();
         }
         catch (Exception e) {
-            LOG.error(e);
+            LOG.error(Util.getStackTrace(e));
         }
     }
 }

@@ -32,6 +32,7 @@ import javax.swing.SpringLayout;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.module.chirdlutil.util.Util;
 
 /**
  * This class will take a given file, replace a given string in the file with another string.
@@ -336,7 +337,7 @@ public class FindAndReplace {
                 success = true;
             }
             catch (final Exception e) {
-                LOG.error(e);
+                LOG.error(Util.getStackTrace(e));
                 javax.swing.SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {

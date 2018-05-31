@@ -36,7 +36,7 @@ public class ChangeFileExtensions {
         LOG.info("Arg 3: The new file extension");
         LOG.info("");
         LOG.info("Usage:");
-        LOG.info("ChangeFileExtensions C:\temp 20 xml");
+        LOG.info("ChangeFileExtensions C:\\temp 20 xml");
         LOG.info("This will change the extension of files with the extension of 20 to xml in the " +
                 "C:\temp directory");
     }

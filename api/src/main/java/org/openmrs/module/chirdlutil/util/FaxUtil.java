@@ -257,10 +257,15 @@ public class FaxUtil {
             ResultMessage rm = port.loginAndSendNewFaxMessage("", userName, password, LOGON_THROUGH_USERACCOUNT, idTag, 
                     priority, sendTime, resolution, subject, coverPage,
                     memo, sender, recipients, attachments , tsi);
-            log.info("Fax sent for form: " + rm.getDetail());
             
-            return rm.getData();
+            if (rm != null) {
+                log.info("Fax sent for form: " + rm.getDetail());
+                
+                return rm.getData();
+            }
         
+            log.error("Fax failed for file: " + fileToFax.getAbsolutePath());
+            return null;
         } catch (Exception e) {
             log.error("Error faxing file: " + fileToFax, e);
             throw e;

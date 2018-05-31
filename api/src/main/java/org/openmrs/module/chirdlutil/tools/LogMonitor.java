@@ -28,6 +28,7 @@ import java.util.Properties;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.module.chirdlutil.util.Util;
 
 
 /**
@@ -189,7 +190,7 @@ public class LogMonitor {
                 }
             }
         } catch (Exception e) {
-            LOG.error(e);
+            LOG.error(Util.getStackTrace(e));
         }
         
         return true;
