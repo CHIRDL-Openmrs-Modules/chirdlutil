@@ -37,7 +37,7 @@ import org.openmrs.module.chirdlutil.util.Util;
  */
 public class LogMonitor {
     
-    private static final Log LOG = LogFactory.getLog(AddPSFStoreNotes.class);
+    private static final Log LOG = LogFactory.getLog(LogMonitor.class);
     
     private static final String LATEST_DATE = "latestDate";
     private static final String LAST_FILE_SIZE = "lastFileSize";
