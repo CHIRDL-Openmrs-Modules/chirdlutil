@@ -30,36 +30,43 @@ import javax.swing.JTextField;
 import javax.swing.ProgressMonitor;
 import javax.swing.SpringLayout;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.openmrs.module.chirdlutil.util.Util;
+
 /**
  * This class will take a given file, replace a given string in the file with another string.
  *
  * @author Steve McKee
  */
 public class FindAndReplace {
-	
-	private JTextField directoryField = new JTextField(30);
-    private JTextField findField = new JTextField(30);
-    private JTextField replaceField = new JTextField(30);
-    private JFrame frame;
-	
+    
+    private static final Log LOG = LogFactory.getLog(FindAndReplace.class);
+    
+    JTextField directoryField = new JTextField(30);
+    JTextField findField = new JTextField(30);
+    JTextField replaceField = new JTextField(30);
+    JFrame frame;
+    
     /**
      * Create the GUI and show it.  For thread safety,
      * this method should be invoked from the
      * event-dispatching thread.
      */
-    private void createAndShowGUI() {
+    void createAndShowGUI() {
         //Create and set up the window.
-        frame = new JFrame("Find and Replace");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.getGlassPane().addMouseListener(new MouseAdapter() {
-        	
-        	public void mouseClicked(MouseEvent e) {
-        		// Do nothing while the glass pane is visible.
-        	}
+        this.frame = new JFrame("Find and Replace");
+        this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.frame.getGlassPane().addMouseListener(new MouseAdapter() {
+            
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // Do nothing while the glass pane is visible.
+            }
         });
 
         //Set up the content pane.
-        Container contentPane = frame.getContentPane();
+        Container contentPane = this.frame.getContentPane();
         SpringLayout layout = new SpringLayout();
         contentPane.setLayout(layout);
 
@@ -77,20 +84,20 @@ public class FindAndReplace {
         goButton.setPreferredSize(closeButton.getPreferredSize());
         
         JPanel panel = new JPanel(layout);
-        label.setLabelFor(directoryField);
-        label2.setLabelFor(findField);
+        label.setLabelFor(this.directoryField);
+        label2.setLabelFor(this.findField);
         panel.add(label);
-        panel.add(directoryField);
+        panel.add(this.directoryField);
         panel.add(dirButton);
         panel.add(label2);
-        panel.add(findField);
+        panel.add(this.findField);
         panel.add(new JLabel());
         panel.add(label3);
-        panel.add(replaceField);
+        panel.add(this.replaceField);
         panel.add(new JLabel());
         
-        findField.setPreferredSize(directoryField.getPreferredSize());
-        replaceField.setPreferredSize(directoryField.getPreferredSize());
+        this.findField.setPreferredSize(this.directoryField.getPreferredSize());
+        this.replaceField.setPreferredSize(this.directoryField.getPreferredSize());
         
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(goButton);
@@ -107,249 +114,253 @@ public class FindAndReplace {
         
         //Set up the content pane.
         panel.setOpaque(true);  //content panes must be opaque
-        frame.setContentPane(panel);
+        this.frame.setContentPane(panel);
 
         //Display the window.
-        frame.pack();
-        frame.setVisible(true);
+        this.frame.pack();
+        this.frame.setVisible(true);
     }
     
     private void setDirectoryAction(JButton copyBrowseButton) {
-    	copyBrowseButton.addActionListener(new ActionListener() {
+        copyBrowseButton.addActionListener(new ActionListener() {
 
+            @Override
             public void actionPerformed(ActionEvent e) {
-				JFileChooser fileChooser = new JFileChooser(directoryField.getText());
-	            fileChooser.setDialogTitle("Choose a File or Directory");
-	            fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-	            fileChooser.setMultiSelectionEnabled(false);
-	            int returnVal = fileChooser.showOpenDialog(frame);
-	            if (returnVal == JFileChooser.APPROVE_OPTION) {
-//		            File[] selectedDirs = fileChooser.getSelectedFiles();
-//		            StringBuffer files = new StringBuffer();
-//		            for (int i = 0; i < selectedDirs.length; i++) {
-//		            	if (i != 0) {
-//		            		files.append(",");
-//		            	}
-//		            	
-//		            	files.append(selectedDirs[i].getAbsolutePath());
-//		            }
-	            	File selectedFile = fileChooser.getSelectedFile();
-		            directoryField.setText(selectedFile.getAbsolutePath());
-	            }
+                JFileChooser fileChooser = new JFileChooser(FindAndReplace.this.directoryField.getText());
+                fileChooser.setDialogTitle("Choose a File or Directory");
+                fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+                fileChooser.setMultiSelectionEnabled(false);
+                int returnVal = fileChooser.showOpenDialog(FindAndReplace.this.frame);
+                if (returnVal == JFileChooser.APPROVE_OPTION) {
+//                    File[] selectedDirs = fileChooser.getSelectedFiles();
+//                    StringBuffer files = new StringBuffer();
+//                    for (int i = 0; i < selectedDirs.length; i++) {
+//                        if (i != 0) {
+//                            files.append(",");
+//                        }
+//                        
+//                        files.append(selectedDirs[i].getAbsolutePath());
+//                    }
+                    File selectedFile = fileChooser.getSelectedFile();
+                    FindAndReplace.this.directoryField.setText(selectedFile.getAbsolutePath());
+                }
             }
-    		
-    	});
+            
+        });
     }
     
     private void setGoAction(JButton goButton) {
-    	goButton.addActionListener(new ActionListener() {
+        goButton.addActionListener(new ActionListener() {
 
+            @Override
             public void actionPerformed(ActionEvent e) {
-				String formDirStr = directoryField.getText();
-				String findStr = findField.getText();
-				String replaceStr = replaceField.getText();
-				File formSource = new File(formDirStr);
-				
-				if (!formSource.exists()) {
-					JOptionPane.showMessageDialog(frame, "The file/directory does not exist.", "Error", 
-						JOptionPane.ERROR_MESSAGE);
-					return;
-				}
-					
-				Thread copyThread = new FindAndReplaceThread(frame, formSource, findStr, replaceStr);
-				Component glassPane = frame.getGlassPane();
-				glassPane.setVisible(true);
-				glassPane.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-				copyThread.start();
+                String formDirStr = FindAndReplace.this.directoryField.getText();
+                String findStr = FindAndReplace.this.findField.getText();
+                String replaceStr = FindAndReplace.this.replaceField.getText();
+                File formSource = new File(formDirStr);
+                
+                if (!formSource.exists()) {
+                    JOptionPane.showMessageDialog(FindAndReplace.this.frame, "The file/directory does not exist.", "Error", 
+                        JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                    
+                Thread copyThread = new FindAndReplaceThread(FindAndReplace.this.frame, formSource, findStr, replaceStr);
+                Component glassPane = FindAndReplace.this.frame.getGlassPane();
+                glassPane.setVisible(true);
+                glassPane.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+                copyThread.start();
             }
-    		
-    	});
+            
+        });
     }
     
     private void setCloseButtonAction(JButton closeButton) {
-    	closeButton.addActionListener(new ActionListener() {
+        closeButton.addActionListener(new ActionListener() {
 
+            @Override
             public void actionPerformed(ActionEvent e) {
-	            System.exit(0);
+                System.exit(0);
             }
-    		
-    	});
+            
+        });
     }
-	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+    
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public void searchAndReplace(File source, String searchString, String replaceString) 
-	throws FileNotFoundException, IOException {
-		File[] sourceFiles = null;
-		if (source.isDirectory()) {
-			sourceFiles = source.listFiles();
-		} else {
-			sourceFiles = new File[] { source };
-		}
-		
-		ProgressMonitor progressMonitor = new ProgressMonitor(frame, "Processing Files...", "", 0, sourceFiles.length);
-		progressMonitor.setMillisToDecideToPopup(1);
-		progressMonitor.setMillisToPopup(1);
-		int count = 0;
-		for (File sourceFile : sourceFiles) {
-			if (progressMonitor.isCanceled()) {
-				break;
-			}
-			
-			progressMonitor.setNote("Processing: " + sourceFile.getAbsolutePath());
-			if (sourceFile.isDirectory()) {
-				List<File> childFiles = Arrays.asList(sourceFile.listFiles());
-				for (File childFile : childFiles) {
-					searchAndReplace(childFile, searchString, replaceString);
-				}
-			}
-			
-			String origFilename = sourceFile.getName();
-			File parentDirectory = sourceFile.getParentFile();
-			BufferedInputStream fileReader = null;
-			File newFile = new File(parentDirectory, origFilename + System.currentTimeMillis());
-			newFile.createNewFile();
-			BufferedOutputStream fileWriter = null;
-			byte[] searchBytes = searchString.getBytes();
-			byte[] replaceBytes = replaceString.getBytes();
-			int searchSize = searchBytes.length;
-			Queue byteQueue = new LinkedList();
-			try {
-				fileReader = new BufferedInputStream(new FileInputStream(sourceFile));
-				fileWriter = new BufferedOutputStream(new FileOutputStream(newFile));
-				int c;
-	            while ((c = fileReader.read()) != -1) {
-	            	byteQueue.add(c);
-	            	while (byteQueue.size() > searchSize) {
-	            		fileWriter.write((Integer)byteQueue.poll());
-	            	}
-	            	
-	            	if (byteQueue.size() < searchSize) {
-	            		continue;
-	            	}
-	            	
-	            	Integer[] byteArray = new Integer[byteQueue.size()];
-	            	byteQueue.toArray(byteArray);
-	            	boolean match = true;
-	            	for (int i = 0; i < byteArray.length; i++) {
-	            		int fileByte = byteArray[i];
-	            		int searchByte = searchBytes[i];
-	            		if (fileByte != searchByte) {
-	            			match = false;
-	            			break;
-	            		}
-	            	}
-	            	
-	            	if (match) {
-	            		byteQueue.clear();
-	            		for (int i = 0; i < replaceBytes.length; i++) {
-	            			byteQueue.add((int)replaceBytes[i]);
-	            		}
-	            	}
-	            }
-	            
-	            while (!byteQueue.isEmpty()) {
-	            	fileWriter.write((Integer)byteQueue.poll());
-	            }
-			} finally {
-				if (fileReader != null) {
-					fileReader.close();
-				}
-				if (fileWriter != null) {
-					fileWriter.flush();
-					fileWriter.close();
-				}
-			}
-			
-			sourceFile.delete();
-			sourceFile.createNewFile();
-			copyFile(newFile, sourceFile);
-			newFile.delete();
-			
-			progressMonitor.setProgress(++count);
-		}
-	}
-	
-	private void copyFile(File sourceFile, File destFile) throws IOException { 
-    	if(!destFile.exists()) {  
-    		destFile.createNewFile(); 
-    	} 
-    	
-    	FileChannel source = null; 
-    	FileChannel destination = null; 
-    	try {  
-    		source = new FileInputStream(sourceFile).getChannel();  
-    		destination = new FileOutputStream(destFile).getChannel();  
-    		destination.transferFrom(source, 0, source.size()); 
-    	} finally {  
-    		if(source != null) {   
-    			source.close();  
-    		}  
-    		
-    		if(destination != null) {   
-    			destination.close();  
-    		}
-    	}
+    throws FileNotFoundException, IOException {
+        File[] sourceFiles = null;
+        if (source.isDirectory()) {
+            sourceFiles = source.listFiles();
+        } else {
+            sourceFiles = new File[] { source };
+        }
+        
+        ProgressMonitor progressMonitor = new ProgressMonitor(this.frame, "Processing Files...", "", 0, sourceFiles.length);
+        progressMonitor.setMillisToDecideToPopup(1);
+        progressMonitor.setMillisToPopup(1);
+        int count = 0;
+        for (File sourceFile : sourceFiles) {
+            if (progressMonitor.isCanceled()) {
+                break;
+            }
+            
+            progressMonitor.setProgress(++count);
+            progressMonitor.setNote("Processing: " + sourceFile.getAbsolutePath());
+            if (sourceFile.isDirectory()) {
+                List<File> childFiles = Arrays.asList(sourceFile.listFiles());
+                for (File childFile : childFiles) {
+                    searchAndReplace(childFile, searchString, replaceString);
+                }
+            }
+            
+            String origFilename = sourceFile.getName();
+            File parentDirectory = sourceFile.getParentFile();
+            File newFile = new File(parentDirectory, origFilename + System.currentTimeMillis());
+            if (!newFile.createNewFile()) {
+                LOG.error("Could not create new file: " + newFile.getAbsolutePath());
+                continue;
+            }
+            
+            byte[] searchBytes = searchString.getBytes();
+            byte[] replaceBytes = replaceString.getBytes();
+            int searchSize = searchBytes.length;
+            Queue byteQueue = new LinkedList();
+            try (BufferedInputStream fileReader = new BufferedInputStream(new FileInputStream(sourceFile));
+                BufferedOutputStream fileWriter = new BufferedOutputStream(new FileOutputStream(newFile))) {
+                int c;
+                while ((c = fileReader.read()) != -1) {
+                    byteQueue.add(c);
+                    while (byteQueue.size() > searchSize) {
+                        fileWriter.write((Integer)byteQueue.poll());
+                    }
+                    
+                    if (byteQueue.size() < searchSize) {
+                        continue;
+                    }
+                    
+                    Integer[] byteArray = new Integer[byteQueue.size()];
+                    byteQueue.toArray(byteArray);
+                    boolean match = true;
+                    for (int i = 0; i < byteArray.length; i++) {
+                        int fileByte = byteArray[i];
+                        int searchByte = searchBytes[i];
+                        if (fileByte != searchByte) {
+                            match = false;
+                            break;
+                        }
+                    }
+                    
+                    if (match) {
+                        byteQueue.clear();
+                        for (int i = 0; i < replaceBytes.length; i++) {
+                            byteQueue.add((int)replaceBytes[i]);
+                        }
+                    }
+                }
+                
+                while (!byteQueue.isEmpty()) {
+                    fileWriter.write((Integer)byteQueue.poll());
+                }
+            }
+            
+            if (!sourceFile.delete()) {
+                LOG.error("Could not delete file: " + sourceFile.getAbsolutePath());
+                continue;
+            }
+            
+            if (!sourceFile.createNewFile()) {
+                LOG.error("Could not create new file: " + sourceFile.getAbsolutePath());
+                continue;
+            }
+            
+            copyFile(newFile, sourceFile);
+            if (!newFile.delete()) {
+                LOG.error("Could not delete file: " + newFile.getAbsolutePath());
+            }
+        }
     }
-	
-	/**
-	 * Auto generated method comment
-	 * 
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		//Schedule a job for the event-dispatching thread:
+    
+    private void copyFile(File sourceFile, File destFile) throws IOException { 
+        if(!destFile.exists()) {  
+            if (!destFile.createNewFile()) {
+                LOG.error("Could not create new file: " + destFile.getAbsolutePath());
+                return;
+            }
+        } 
+        
+        try (FileInputStream sourceInStream = new FileInputStream(sourceFile);
+                FileOutputStream destOutStream = new FileOutputStream(destFile);
+                FileChannel source = sourceInStream.getChannel();  
+                FileChannel destination = destOutStream.getChannel()) {  
+              
+            destination.transferFrom(source, 0, source.size()); 
+        }
+    }
+    
+    /**
+     * Auto generated method comment
+     * 
+     * @param args
+     */
+    public static void main(String[] args) {
+        //Schedule a job for the event-dispatching thread:
         //creating and showing this application's GUI.
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            @Override
             public void run() {
-            	FindAndReplace far = new FindAndReplace();
+                FindAndReplace far = new FindAndReplace();
                 far.createAndShowGUI();
             }
         });
-	}
-	
-	private class FindAndReplaceThread extends Thread {
-    	
-    	private JFrame frame;
-    	private File formSource;
-    	private String find;
-    	private String replace;
-    	
-    	public FindAndReplaceThread(JFrame frame, File formSource, String find, String replace) {
-    		this.frame = frame;
-    		this.formSource = formSource;
-    		this.find = find;
-    		this.replace = replace;
-    	}
-    	
-    	public void run() {
-    		boolean success = false;
-    		try {
-	            searchAndReplace(formSource, find, replace);
-	            success = true;
+    }
+    
+    private class FindAndReplaceThread extends Thread {
+        
+        JFrame jFrame;
+        private File formSource;
+        private String find;
+        private String replace;
+        
+        public FindAndReplaceThread(JFrame frame, File formSource, String find, String replace) {
+            this.jFrame = frame;
+            this.formSource = formSource;
+            this.find = find;
+            this.replace = replace;
+        }
+        
+        @Override
+        public void run() {
+            boolean success = false;
+            try {
+                searchAndReplace(this.formSource, this.find, this.replace);
+                success = true;
             }
             catch (final Exception e) {
-	            e.printStackTrace();
-	            javax.swing.SwingUtilities.invokeLater(new Runnable() {
-	                public void run() {
-	                	Component glassPane = frame.getGlassPane();
-	        			glassPane.setVisible(false);
-	            		glassPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-	            		JOptionPane.showMessageDialog(frame, "Error executing find and replace:\n" + e.getMessage(), 
-	            			"Error", JOptionPane.ERROR_MESSAGE);
-	                }
-	            });
+                LOG.error(Util.getStackTrace(e));
+                javax.swing.SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        Component glassPane = FindAndReplaceThread.this.jFrame.getGlassPane();
+                        glassPane.setVisible(false);
+                        glassPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                        JOptionPane.showMessageDialog(FindAndReplaceThread.this.jFrame, "Error executing find and replace:\n" + e.getMessage(), 
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                });
             }
             
             if (success) {
-	    		javax.swing.SwingUtilities.invokeLater(new Runnable() {
-	                public void run() {
-	                	Component glassPane = frame.getGlassPane();
-	        			glassPane.setVisible(false);
-	            		glassPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-	            		JOptionPane.showMessageDialog(frame, "Finished!", "Complete", JOptionPane.INFORMATION_MESSAGE);
-	                }
-	            });
+                javax.swing.SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        Component glassPane = FindAndReplaceThread.this.jFrame.getGlassPane();
+                        glassPane.setVisible(false);
+                        glassPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                        JOptionPane.showMessageDialog(FindAndReplaceThread.this.jFrame, "Finished!", "Complete", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                });
             }
-    	}
+        }
     }
 }

@@ -14,7 +14,6 @@
 package org.openmrs.module.chirdlutil.xmlBeans.serverconfig;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -22,50 +21,77 @@ import java.util.List;
  * @author Steve McKee
  */
 public class FormConfig {
-	
-	private ArrayList<MobileForm> forms;
+    
+    private ArrayList<MobileForm> forms;
 
-	/**
+    /**
      * @return the forms
      */
     public ArrayList<MobileForm> getForms() {
-	    return forms;
+        return this.forms;
     }
 
-	/**
+    /**
      * @param forms the forms to set
      */
     public void setForms(ArrayList<MobileForm> forms) {
-	    this.forms = forms;
+        this.forms = forms;
     }
     
     /**
      * @see java.lang.Object#toString()
      */
+    @Override
     public String toString() {
-    	StringBuffer buffer = new StringBuffer("FormConfig:\n");
-    	if (forms != null && forms.size() > 0) {
-    		for (MobileForm form : forms) {
-    			buffer.append(form.toString());
-    		}
-    	} else {
-    		buffer.append("\tNo forms exist.");
-    	}
-    	
-    	return buffer.toString();
+        StringBuffer buffer = new StringBuffer("FormConfig:\n");
+        if (this.forms != null && this.forms.size() > 0) {
+            for (MobileForm form : this.forms) {
+                buffer.append(form.toString());
+            }
+        } else {
+            buffer.append("\tNo forms exist.");
+        }
+        
+        return buffer.toString();
     }
-    
+
     /**
      * @see java.lang.Object#hashCode()
      */
+    @Override
     public int hashCode() {
         int hash = 1;
-        if (forms != null) {
-	        for (MobileForm form : forms) {
-	        	hash = hash * 13 + (form == null ? 0 : form.hashCode());
-	        }
+        if (this.forms != null) {
+            for (MobileForm form : this.forms) {
+                hash = hash * 13 + (form == null ? 0 : form.hashCode());
+            }
         }
         
         return hash;
+    }
+
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        FormConfig other = (FormConfig) obj;
+        if (this.forms == null) {
+            if (other.forms != null) {
+                return false;
+            }
+        } else if (!this.forms.equals(other.forms)) {
+            return false;
+        }
+        return true;
     }
 }
