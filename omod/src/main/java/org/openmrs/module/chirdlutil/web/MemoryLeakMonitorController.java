@@ -2,19 +2,22 @@ package org.openmrs.module.chirdlutil.web;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.web.servlet.mvc.SimpleFormController;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
-public class MemoryLeakMonitorController extends SimpleFormController {
+@Controller
+@RequestMapping(value = "module/chirdlutil/memoryLeakMonitor.form")
+public class MemoryLeakMonitorController{
 	
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.springframework.web.servlet.mvc.AbstractFormController#formBackingObject(javax.servlet.http.HttpServletRequest)
-	 */
-	@Override
-	protected Object formBackingObject(HttpServletRequest request)
-			throws Exception
-	{
-		return "testing";
-	}
+    /** Form view name */
+    private static final String FORM_VIEW = "/module/chirdlutil/memoryLeakMonitor";
+
+    @RequestMapping(method = RequestMethod.GET)
+    protected String initForm(ModelMap modelMap)
+    {
+        return FORM_VIEW;
+    }
+
 }

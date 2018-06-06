@@ -23,27 +23,15 @@
     <!-- Annotation based controllers -->
     <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"/>
     
-    <context:component-scan base-package="org.openmrs.module.chirdlutil.web.controller" />
+    <context:component-scan base-package="org.openmrs.module.chirdlutil.web" /> <!-- CHICA-1268 temporarily changing this to web folder until review is complete -->
     
     <bean id="chirdlutilUrlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
         <property name="mappings">
-            <props>
-                <prop key="/module/@MODULE_ID@/memoryLeakMonitor.form">memoryLeakMonitor</prop>
-                <prop key="/module/@MODULE_ID@/logViewer.form">logViewer</prop>
+            <props>              
                 <prop key="/module/@MODULE_ID@/threadPoolMonitor.form">threadPoolMonitor</prop>
                 <prop key="/module/@MODULE_ID@/printerThreadPoolMonitor.form">printerThreadPoolMonitor</prop>
             </props>
         </property>
-    </bean>
-    <bean id="memoryLeakMonitor" class="@MODULE_PACKAGE@.web.MemoryLeakMonitorController">
-        <property name="commandName"><value>memoryLeakMonitorObject</value></property>
-        <property name="formView"><value>/module/@MODULE_ID@/memoryLeakMonitor</value></property>
-        <property name="successView"><value>memoryLeakMonitor.form</value></property>
-    </bean>
-    <bean id="logViewer" class="@MODULE_PACKAGE@.web.LogViewerController">
-        <property name="commandName"><value>logViewerObject</value></property>
-        <property name="formView"><value>/module/@MODULE_ID@/logViewer</value></property>
-        <property name="successView"><value>logViewer.form</value></property>
     </bean>
     <bean id="threadPoolMonitor" class="@MODULE_PACKAGE@.web.ThreadPoolMonitorController">
         <property name="commandName"><value>threadPoolMonitorObject</value></property>

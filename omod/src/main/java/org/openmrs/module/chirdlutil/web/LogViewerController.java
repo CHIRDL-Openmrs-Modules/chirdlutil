@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,25 +16,20 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.chirdlutil.hibernateBeans.EventLog;
 import org.openmrs.module.chirdlutil.log.LoggingUtil;
 import org.openmrs.module.chirdlutil.service.ChirdlUtilService;
-import org.springframework.web.servlet.mvc.SimpleFormController;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
+@Controller
+@RequestMapping(value = "module/chirdlutil/logViewer.form")
+public class LogViewerController {
 
-public class LogViewerController extends SimpleFormController {
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.springframework.web.servlet.mvc.AbstractFormController#formBackingObject(javax.servlet.http.HttpServletRequest)
-	 */
-	@Override
-	protected Object formBackingObject(HttpServletRequest request)
-			throws Exception {
-		return "testing";
-	}
+    /** Form view name */
+    private static final String FORM_VIEW = "/module/chirdlutil/logViewer";
 	
-	@Override
-	protected Map referenceData(HttpServletRequest request) throws Exception {
-		Map<String, Object> map = new HashMap<String, Object>();
+	@RequestMapping(method = RequestMethod.GET)
+	protected String initForm(HttpServletRequest request, ModelMap map) throws Exception {
 		LocationService locService = Context.getLocationService();
 		map.put("locations", locService.getAllLocations(false));
 		FormService formService = Context.getFormService();
@@ -81,7 +75,7 @@ public class LogViewerController extends SimpleFormController {
 			map.put("initialEndDateYear", currentYear);
 		}
 		
-		return map;
+		return FORM_VIEW;
 	}
 	
 	private List<EventLog> getEventLogs(HttpServletRequest request, Map<String, Object> map) {
