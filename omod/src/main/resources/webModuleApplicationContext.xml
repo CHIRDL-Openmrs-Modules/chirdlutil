@@ -28,20 +28,7 @@
     <bean id="chirdlutilUrlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
         <property name="mappings">
             <props>              
-                <prop key="/module/@MODULE_ID@/threadPoolMonitor.form">threadPoolMonitor</prop>
-                <prop key="/module/@MODULE_ID@/printerThreadPoolMonitor.form">printerThreadPoolMonitor</prop>
             </props>
         </property>
     </bean>
-    <bean id="threadPoolMonitor" class="@MODULE_PACKAGE@.web.ThreadPoolMonitorController">
-        <property name="commandName"><value>threadPoolMonitorObject</value></property>
-        <property name="formView"><value>/module/@MODULE_ID@/threadPoolMonitor</value></property>
-        <property name="successView"><value>threadPoolMonitor.form</value></property>
-    </bean>
-    <bean id="printerThreadPoolMonitor" class="@MODULE_PACKAGE@.web.ThreadPoolMonitorController">
-        <property name="commandName"><value>printerThreadPoolMonitorObject</value></property>
-        <property name="formView"><value>/module/@MODULE_ID@/printerThreadPoolMonitor</value></property>
-        <property name="successView"><value>printerThreadPoolMonitor.form</value></property>
-    </bean>
- 
 </beans>

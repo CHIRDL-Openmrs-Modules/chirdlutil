@@ -284,6 +284,7 @@ public final class ChirdlUtilConstants {
     public static final String GLOBAL_PROP_PARSE_OBS_FROM_REGISTRATION = "chica.parseObsFromRegistration";
     public static final String GLOBAL_PROP_DATA_SOURCE_MEDICAL_RECORD = "chica.dataSourceMedicalRecord";
     public static final String GLOBAL_PROP_DATA_SOURCE_VITALS = "chica.dataSourceVitals";
+    public static final String GLOBAL_PROP_THREAD_POOL_MONITOR_REFRESH_RATE = "chirdlutil.threadMonitorRefreshRate";
     
     /*
      * 
