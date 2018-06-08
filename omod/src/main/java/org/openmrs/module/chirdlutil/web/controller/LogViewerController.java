@@ -1,4 +1,4 @@
-package org.openmrs.module.chirdlutil.web;
+package org.openmrs.module.chirdlutil.web.controller;
 
 import java.util.ArrayList;
 import java.util.Calendar;

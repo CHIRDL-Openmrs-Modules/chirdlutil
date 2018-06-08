@@ -23,7 +23,7 @@
     <!-- Annotation based controllers -->
     <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"/>
     
-    <context:component-scan base-package="org.openmrs.module.chirdlutil.web" /> <!-- CHICA-1268 temporarily changing this to web folder until review is complete -->
+    <context:component-scan base-package="org.openmrs.module.chirdlutil.web.controller" />
     
     <bean id="chirdlutilUrlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
         <property name="mappings">

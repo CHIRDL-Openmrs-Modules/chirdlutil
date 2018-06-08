@@ -1,4 +1,4 @@
-package org.openmrs.module.chirdlutil.web;
+package org.openmrs.module.chirdlutil.web.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.logging.Log;
