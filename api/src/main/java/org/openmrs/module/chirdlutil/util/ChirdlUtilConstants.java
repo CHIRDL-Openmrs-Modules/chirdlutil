@@ -701,6 +701,12 @@ public final class ChirdlUtilConstants {
      */
     public static final String EMAIL_SMTP_HOST_PROPERTY = "mail.smtp.host";
     
+    /*
+     * Sorting constants
+     */
+    public static final String SORT_ASC = "ASC";
+    public static final String SORT_DESC = "DESC";
+    
     public static final String ATTR_VALUE_VOID_REASON = "New Value: ";
 }
 
