@@ -222,6 +222,7 @@ public final class ChirdlUtilConstants {
     public static final String FILE_EXTENSION_HL7 = ".hl7";
     public static final String FILE_EXTENSION_TIF = ".tif";
     public static final String FILE_EXTENSION_TIFF = ".tiff";
+    public static final String FILE_EXTENSION_CSV = ".csv";
     public static final String FILE_PDF_TEMPLATE = "_template.pdf";
     /*
      * 
@@ -312,6 +313,7 @@ public final class ChirdlUtilConstants {
     public static final String GENERAL_INFO_SINGLE_SPACE = " ";
     public static final String GENERAL_INFO_OPEN_PAREN = "(";
     public static final String GENERAL_INFO_CLOSE_PAREN = ")";
+    public static final String GENERAL_INFO_PERIOD = ".";
     
     /*
      * 
@@ -412,8 +414,10 @@ public final class ChirdlUtilConstants {
     public static final String HTTP_CONTENT_TYPE_TEXT_HTML = "text/html";
     public static final String HTTP_CONTENT_TYPE_IMAGE_PNG = "image/png";
     public static final String HTTP_CONTENT_TYPE_APPLICATION_PDF = "application/pdf";
+    public static final String HTTP_CONTENT_TYPE_CSV = "text/csv";
     public static final String HTTP_CACHE_CONTROL_PUBLIC = "public";
     public static final String HTTP_CACHE_CONTROL_MAX_AGE = "max-age";
+    public static final String HTTP_HEADER_ATTACHMENT = "attachment; filename=\"%s\"";
     
     /*
      * 
@@ -696,6 +700,12 @@ public final class ChirdlUtilConstants {
      * Email constants
      */
     public static final String EMAIL_SMTP_HOST_PROPERTY = "mail.smtp.host";
+    
+    /*
+     * Sorting constants
+     */
+    public static final String SORT_ASC = "ASC";
+    public static final String SORT_DESC = "DESC";
     
     public static final String ATTR_VALUE_VOID_REASON = "New Value: ";
 }
