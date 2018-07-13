@@ -395,6 +395,8 @@ public final class ChirdlUtilConstants {
     public static final String PARAMETER_SENDING_FACILITY = "sendingFacility";
     public static final String PARAMETER_NEW_ENCOUNTER_CREATED = "newEncounterCreated";
     public static final String PARAMETER_HL7_EVENT_TYPE_CODE = "HL7EventTypeCode";
+    public static final String PARAMETER_LAST_MRN = "lastMRN";
+    public static final String PARAMETER_ERROR_MESSAGE = "errorMessage";
     
     /*
      * 
