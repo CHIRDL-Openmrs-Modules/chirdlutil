@@ -25,10 +25,4 @@
     
     <context:component-scan base-package="org.openmrs.module.chirdlutil.web.controller" />
     
-    <bean id="chirdlutilUrlMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
-        <property name="mappings">
-            <props>              
-            </props>
-        </property>
-    </bean>
 </beans>
