@@ -17,7 +17,7 @@ package org.openmrs.module.chirdlutil.tools;
 /**
  *
  */
-public class ConceptPair {
+public class ConceptPair implements Comparable {
 	
 	private String questionConceptName = null;
 	private String answerConceptName = null;
@@ -59,6 +59,58 @@ public class ConceptPair {
     public void setAnswerConceptName(String answerConceptName) {
     	this.answerConceptName = answerConceptName;
     }
+    
+	/**
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "ConceptPair [questionConceptName=" + questionConceptName + ", answerConceptName=" + answerConceptName
+				+ "]";
+	}
 	
-	
+    /**
+     * @see java.lang.Object#hashCode()
+     */
+    public int hashCode() {
+        int hash = 1;
+        hash = hash * 17 + (questionConceptName == null ? 0 : questionConceptName.hashCode());
+        hash = hash * 31 + (answerConceptName == null ? 0 : answerConceptName.hashCode());
+        
+        return hash;
+    }
+    
+    @Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ConceptPair other = (ConceptPair) obj;
+		if (questionConceptName == null) {
+			if (other.questionConceptName != null)
+				return false;
+		} else if (!questionConceptName.equals(other.questionConceptName))
+			return false;
+		if (answerConceptName == null) {
+			if (other.answerConceptName != null)
+				return false;
+		} else if (!answerConceptName.equals(other.answerConceptName))
+			return false;
+		return true;
+	}
+
+	@Override
+	public int compareTo(Object pair2) {
+
+		String question1 = this.getQuestionConceptName();
+		String question2 = ((ConceptPair) pair2).getQuestionConceptName();
+
+		String answer1 = this.getAnswerConceptName();
+		String answer2 = ((ConceptPair) pair2).getAnswerConceptName();
+
+		return (question1 + "_" + answer1).compareTo((question2 + "_" + answer2));
+	}
 }

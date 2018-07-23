@@ -285,7 +285,7 @@ public final class ChirdlUtilConstants {
 	public static final String GLOBAL_PROP_PARSE_OBS_FROM_REGISTRATION = "chica.parseObsFromRegistration";
 	public static final String GLOBAL_PROP_DATA_SOURCE_MEDICAL_RECORD = "chica.dataSourceMedicalRecord";
 	public static final String GLOBAL_PROP_DATA_SOURCE_VITALS = "chica.dataSourceVitals";
-
+	
 	/*
 	 * 
 	 */
@@ -392,6 +392,7 @@ public final class ChirdlUtilConstants {
 	public static final String PARAMETER_SENDING_APPLICATION = "sendingApplication";
 	public static final String PARAMETER_SENDING_FACILITY = "sendingFacility";
 	public static final String PARAMETER_NEW_ENCOUNTER_CREATED = "newEncounterCreated";
+	public static final String PARAMETER_HL7_EVENT_TYPE_CODE = "HL7EventTypeCode";
 	
 	/*
 	 * 
@@ -568,6 +569,7 @@ public final class ChirdlUtilConstants {
 	public static final String HL7_VERSION_2_5 = "2.5";
 	public static final String MSH_PROCESSING_ID = "P"; // Production;
 	public static final String PV1_PATIENT_CLASS = "Outpatient";
+	public static final String HL7_EVENT_CODE_A10 = "A10";
 	
 	/*
 	 * HL7 Acknowledgment Codes
@@ -627,6 +629,8 @@ public final class ChirdlUtilConstants {
 	public static final String DATE_FORMAT_HH_mm_ss = "HHmmss";
 	public static final String DATE_FORMAT_MM_dd_yyyy_hh_mm_ss = "MM/dd/yyyy hh:mm:ss";
 	public static final String DATE_FORMAT_MM_dd_YYYY = "MM/dd/yyyy";
+	public static final String DATE_FORMAT_HYPHEN_yyyy_MM_dd = "yyyy-MM-dd";
+	public static final String DATE_FORMAT_MMM_dd_comma_yyyy = "MMM dd, yyyy";
 	
 	/*
 	 * Fax service
@@ -693,6 +697,6 @@ public final class ChirdlUtilConstants {
 	 */
 	public static final String EMAIL_SMTP_HOST_PROPERTY = "mail.smtp.host";
 	
-	public static final String ENCOUNTER_ATTR_VALUE_VOID_REASON = "New Value: ";
+	public static final String ATTR_VALUE_VOID_REASON = "New Value: ";
 }
 

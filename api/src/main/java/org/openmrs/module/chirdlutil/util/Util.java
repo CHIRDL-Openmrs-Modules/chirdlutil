@@ -85,6 +85,7 @@ import org.openmrs.module.chirdlutil.xmlBeans.serverconfig.SecondaryForm;
 import org.openmrs.module.chirdlutil.xmlBeans.serverconfig.ServerConfig;
 import org.openmrs.module.chirdlutilbackports.hibernateBeans.EncounterAttribute;
 import org.openmrs.module.chirdlutilbackports.hibernateBeans.EncounterAttributeValue;
+import org.openmrs.module.chirdlutilbackports.hibernateBeans.FormAttributeValue;
 import org.openmrs.module.chirdlutilbackports.service.ChirdlUtilBackportsService;
 
 import com.google.zxing.BinaryBitmap;
@@ -1132,7 +1133,7 @@ public class Util
 				// Attribute already exists, void the old one, and create a new one
 				encounterAttributeValue.setVoided(true);
 				encounterAttributeValue.setVoidedBy(Context.getAuthenticatedUser());
-				encounterAttributeValue.setVoidReason(ChirdlUtilConstants.ENCOUNTER_ATTR_VALUE_VOID_REASON + valueText);
+				encounterAttributeValue.setVoidReason(ChirdlUtilConstants.ATTR_VALUE_VOID_REASON + valueText);
 				encounterAttributeValue.setDateVoided(new Date());
 				
 				chirdlutilbackportsService.saveEncounterAttributeValue(encounterAttributeValue);
@@ -1216,6 +1217,33 @@ public class Util
 		}
 		
 		return patient;
+	}
+	
+	/**
+	 * CHICA-1234 Moved code from chica module
+	 * Retrieves the form type for PrimaryPatientForm and PrimaryPhysicianForm
+	 * @param formId
+	 * @param locationTagId
+	 * @param locationId
+	 * @return Form Type
+	 */
+	public static String getFormType(Integer formId, Integer locationTagId, Integer locationId) {
+		
+		ChirdlUtilBackportsService chirdlutilbackportsService = Context.getService(ChirdlUtilBackportsService.class);
+		FormAttributeValue primaryPatientFormfav = null;
+		FormAttributeValue primaryPhysicianFormfav = null;
+		if (formId != null && locationId != null && locationTagId != null) {
+			primaryPatientFormfav = chirdlutilbackportsService.getFormAttributeValue(formId, ChirdlUtilConstants.FORM_ATTRIBUTE_IS_PRIMARY_PATIENT_FORM, locationTagId, locationId);
+			primaryPhysicianFormfav = chirdlutilbackportsService.getFormAttributeValue(formId, ChirdlUtilConstants.FORM_ATTRIBUTE_IS_PRIMARY_PHYSICIAN_FORM, locationTagId, locationId);
+		}
+		if (primaryPatientFormfav != null && StringUtils.isNotBlank(primaryPatientFormfav.getValue()) && 
+				ChirdlUtilConstants.FORM_ATTR_VAL_TRUE.equalsIgnoreCase(primaryPatientFormfav.getValue())) { 
+			return ChirdlUtilConstants.PATIENT_FORM_TYPE;
+		} else if (primaryPhysicianFormfav != null && StringUtils.isNotBlank(primaryPhysicianFormfav.getValue()) && 
+				ChirdlUtilConstants.FORM_ATTR_VAL_TRUE.equalsIgnoreCase(primaryPhysicianFormfav.getValue())) {
+			return ChirdlUtilConstants.PHYSICIAN_FORM_TYPE;
+		}
+		return null;
 	}
 
 }
