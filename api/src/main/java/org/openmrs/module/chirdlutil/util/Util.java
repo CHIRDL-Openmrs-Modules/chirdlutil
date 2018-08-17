@@ -1250,4 +1250,22 @@ public class Util
         return null;
     }
 
+    /**
+     * Get the patient's EHR MRN (MRN_EHR) identifier.  This will look at the MRN_EHR identifier first and default to the 
+     * preferred identifier if it does not exist.
+     * 
+     * @param patient The patient for identifier lookup
+     * @return patient identifier
+     */
+    public static String getPatientEHRMRNIdentifier(Patient patient) {
+        // We ideally want to return the EHR identifier because this will match the EHR identifier better
+        PatientIdentifier pi = patient.getPatientIdentifier(ChirdlUtilConstants.IDENTIFIER_TYPE_MRN_EHR);
+        if (pi != null && StringUtils.isNotBlank(pi.getIdentifier())) {
+            return pi.getIdentifier();
+        }
+        
+        // Return the preferred identifier
+        pi =  patient.getPatientIdentifier();
+        return pi == null ? ChirdlUtilConstants.GENERAL_INFO_EMPTY_STRING : pi.getIdentifier();
+    }
 }
