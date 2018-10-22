@@ -22,65 +22,99 @@ import java.util.ArrayList;
  * @author Steve McKee
  */
 public class ImageForm {
-	
-	private ArrayList<ImageMerge> imageMerges;
-	private String name;
-	
+    
+    private ArrayList<ImageMerge> imageMerges;
+    private String name;
+    
     /**
      * @return the imageMerges
      */
     public ArrayList<ImageMerge> getImageMerges() {
-    	return imageMerges;
+        return this.imageMerges;
     }
-	
+    
     /**
      * @param imageMerges the imageMerges to set
      */
     public void setImageMerges(ArrayList<ImageMerge> imageMerges) {
-    	this.imageMerges = imageMerges;
+        this.imageMerges = imageMerges;
     }
-	
+    
     /**
      * @return the name
      */
     public String getName() {
-    	return name;
+        return this.name;
     }
-	
+    
     /**
      * @param name the name to set
      */
     public void setName(String name) {
-    	this.name = name;
+        this.name = name;
     }
     
     /**
      * @see java.lang.Object#toString()
      */
+    @Override
     public String toString() {
-    	StringBuffer buffer = new StringBuffer("ImageForm: " + name + "\n");
-    	if (imageMerges != null && imageMerges.size() > 0) {
-    		for (ImageMerge imageMerge : imageMerges) {
-    			buffer.append(imageMerge.toString());
-    		}
-    	} else {
-    		buffer.append("\tNo image merges exist.");
-    	}
-    	
-    	return buffer.toString();
+        StringBuffer buffer = new StringBuffer("ImageForm: " + this.name + "\n");
+        if (this.imageMerges != null && this.imageMerges.size() > 0) {
+            for (ImageMerge imageMerge : this.imageMerges) {
+                buffer.append(imageMerge.toString());
+            }
+        } else {
+            buffer.append("\tNo image merges exist.");
+        }
+        
+        return buffer.toString();
     }
-    
+
     /**
      * @see java.lang.Object#hashCode()
      */
+    @Override
     public int hashCode() {
         int hash = 1;
-        if (imageMerges != null) {
-	        for (ImageMerge imageMerge : imageMerges) {
-	        	hash = hash * 13 + (imageMerge == null ? 0 : imageMerge.hashCode());
-	        }
+        if (this.imageMerges != null) {
+            for (ImageMerge imageMerge : this.imageMerges) {
+                hash = hash * 13 + (imageMerge == null ? 0 : imageMerge.hashCode());
+            }
         }
         
         return hash;
+    }
+
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        ImageForm other = (ImageForm) obj;
+        if (this.imageMerges == null) {
+            if (other.imageMerges != null) {
+                return false;
+            }
+        } else if (!this.imageMerges.equals(other.imageMerges)) {
+            return false;
+        }
+        if (this.name == null) {
+            if (other.name != null) {
+                return false;
+            }
+        } else if (!this.name.equals(other.name)) {
+            return false;
+        }
+        return true;
     }
 }
