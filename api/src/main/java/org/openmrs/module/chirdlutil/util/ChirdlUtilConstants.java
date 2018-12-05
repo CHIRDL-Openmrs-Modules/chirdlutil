@@ -282,6 +282,8 @@ public final class ChirdlUtilConstants {
     public static final String GLOBAL_PROP_DATA_SOURCE_MEDICAL_RECORD = "chica.dataSourceMedicalRecord";
     public static final String GLOBAL_PROP_DATA_SOURCE_VITALS = "chica.dataSourceVitals";
     public static final String GLOBAL_PROP_THREAD_POOL_MONITOR_REFRESH_RATE = "chirdlutil.threadMonitorRefreshRate";
+    public static final String GLOBAL_PROP_EXPORT_REGENSTRIEF_OBS_HOST = "chica.exportRegenstriefObsHost";
+    public static final String GLOBAL_PROP_EXPORT_REGENSTRIEF_OBS_PORT = "chica.exportRegenstriefObsPort";
     
     /*
      * 
@@ -469,9 +471,13 @@ public final class ChirdlUtilConstants {
     public static final String CONCEPT_DATATYPE_NUMERIC = "Numeric";
     public static final String CONCEPT_DATATYPE_DATETIME = "Datetime";
     public static final String CONCEPT_CLASS_CHICA = "CHICA";
+    
     /*
-     * 
+     * Concept Source Information
      */
+    public static final String CONCEPT_SOURCE_OUTBOUND_OBS = "Outbound Obs";
+    public static final String CONCEPT_SOURCE_OUTBOUND_PHYSICIAN_OBS = "Outbound Physician Obs";
+    public static final String CONCEPT_SOURCE_OUTBOUND_REGENSTRIEF_OBS = "Outbound Regenstrief Obs";
     
     /*
      * Data sources
