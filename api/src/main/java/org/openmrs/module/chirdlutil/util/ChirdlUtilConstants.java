@@ -35,7 +35,6 @@ public final class ChirdlUtilConstants {
      */
     public static final String IDENTIFIER_TYPE_MRN = "MRN_OTHER";
     public static final String IDENTIFIER_TYPE_SSN = "SSN";
-    public static final String IDENTIFIER_TYPE_IMMUNIZATION_REGISTRY = "Immunization Registry";
     public static final String IDENTIFIER_TYPE_MRN_EHR = "MRN_EHR";
 
     /*
@@ -77,7 +76,6 @@ public final class ChirdlUtilConstants {
     public static final String ERROR_HL7_EXPORT = "Hl7 Export";
     public static final String ERROR_SUPPORT_PAGE = "Support Page";
     public static final String ERROR_BAD_SCANS = "Bad Scans";
-    public static final String ERROR_QUERY_IMMUNIZATION_CONNECTION = "Query Immunization List Connection";
     public static final String ERROR_GIS_CLINIC_ADDRESS_USED = "GIS Clinic Address Used";
     public static final String ERROR_MEDICAL_LEGAL_PAGE = "Medical Legal Page";
     public static final String ERROR_DIABETES_PAGE = "Diabetes Page";
@@ -242,8 +240,6 @@ public final class ChirdlUtilConstants {
     public static final String GLOBAL_PROP_G3_ENCRYPTION_KEY = "chica.g3EncryptionKey";
     public static final String GLOBAL_PROP_IU_HEALTH_CERNER_ENCRYPTION_KEY = "chica.iuHealthCernerEncryptionKey";
     public static final String GLOBAL_PROP_QUERY_MEDS = "chica.queryMeds";
-    public static final String GLOBAL_PROP_IMMUNIZATION_QUERY_ACTIVATED = "chica.ImmunizationQueryActivated";
-    public static final String GLOBAL_PROP_IMMUNIZATION_LIST_TIMEOUT = "chica.immunizationListTimeout";
     public static final String GLOBAL_PROP_MRF_ARCHIVE_DIRECTORY = "chica.mrfArchiveDirectory";
     public static final String GLOBAL_PROP_MRF_QUERY_CONFIG_FILE = "chica.mrfQueryConfigFile";
     public static final String GLOBAL_PROP_MRF_QUERY_TIMEOUT = "chica.kiteTimeout";
@@ -286,6 +282,8 @@ public final class ChirdlUtilConstants {
     public static final String GLOBAL_PROP_DATA_SOURCE_MEDICAL_RECORD = "chica.dataSourceMedicalRecord";
     public static final String GLOBAL_PROP_DATA_SOURCE_VITALS = "chica.dataSourceVitals";
     public static final String GLOBAL_PROP_THREAD_POOL_MONITOR_REFRESH_RATE = "chirdlutil.threadMonitorRefreshRate";
+    public static final String GLOBAL_PROP_EXPORT_REGENSTRIEF_OBS_HOST = "chica.exportRegenstriefObsHost";
+    public static final String GLOBAL_PROP_EXPORT_REGENSTRIEF_OBS_PORT = "chica.exportRegenstriefObsPort";
     
     /*
      * 
@@ -473,9 +471,13 @@ public final class ChirdlUtilConstants {
     public static final String CONCEPT_DATATYPE_NUMERIC = "Numeric";
     public static final String CONCEPT_DATATYPE_DATETIME = "Datetime";
     public static final String CONCEPT_CLASS_CHICA = "CHICA";
+    
     /*
-     * 
+     * Concept Source Information
      */
+    public static final String CONCEPT_SOURCE_OUTBOUND_OBS = "Outbound Obs";
+    public static final String CONCEPT_SOURCE_OUTBOUND_PHYSICIAN_OBS = "Outbound Physician Obs";
+    public static final String CONCEPT_SOURCE_OUTBOUND_REGENSTRIEF_OBS = "Outbound Regenstrief Obs";
     
     /*
      * Data sources
