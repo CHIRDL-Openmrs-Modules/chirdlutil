@@ -523,6 +523,7 @@ public final class ChirdlUtilConstants {
      * Location strings
      */
     public static final String LOCATION_RIIUMG = "RIIUMG";
+    public static final String LOCATION_PHEDMSR = "PHEDMSR";
     /*
      * 
      */
