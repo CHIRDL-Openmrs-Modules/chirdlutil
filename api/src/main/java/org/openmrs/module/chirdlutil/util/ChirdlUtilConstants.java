@@ -200,6 +200,7 @@ public final class ChirdlUtilConstants {
     public static final String LOCATION_ATTR_CLINIC_FAX_NUMBER_DISPLAY = "clinicFaxNumberDisplay";
     public static final String LOCATION_ATTR_CLINIC_DISPLAY_NAME = "clinicDisplayName";
     public static final String LOCATION_ATTR_DISPLAY_CONFIDENTIALITY_NOTICE = "displayConfidentialityNoticeMobileGreaseBoard";
+    public static final String LOCATION_ATTR_FILTER_HL7_BY_APPOINTMENT = "filterHL7ByAppointment";
     /*
      * 
      */
@@ -523,6 +524,7 @@ public final class ChirdlUtilConstants {
      * Location strings
      */
     public static final String LOCATION_RIIUMG = "RIIUMG";
+    public static final String LOCATION_PHEDMSR = "PHEDMSR";
     /*
      * 
      */
