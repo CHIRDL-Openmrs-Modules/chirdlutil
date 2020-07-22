@@ -1268,4 +1268,46 @@ public class Util
         pi =  patient.getPatientIdentifier();
         return pi == null ? ChirdlUtilConstants.GENERAL_INFO_EMPTY_STRING : pi.getIdentifier();
     }
+    
+    /**
+     * Convenience method to lookup form attribute values.
+     * 
+     * @param locationId The location identifier.
+     * @param locationTagId The location tag identifier.
+     * @param attributeName The name of the attribute.
+     * @param formName The name of the form being accessed.
+     * @return The form attribute value or null.
+     */
+    public static String getFormAttributeValue(
+            Integer locationId, Integer locationTagId, String attributeName, String formName) {
+        if (StringUtils.isNotBlank(formName)) {
+            Form form = Context.getFormService().getForm(formName);
+            if (form != null) {
+                ChirdlUtilBackportsService chirdlutilbackportsService = 
+                		Context.getService(ChirdlUtilBackportsService.class);
+                FormAttributeValue formAttributeValue = chirdlutilbackportsService.getFormAttributeValue(
+                    form.getFormId(), attributeName, locationTagId, locationId);
+                if (formAttributeValue != null) { 
+                    return formAttributeValue.getValue();
+                }
+            }
+        }
+        
+        return null;
+    }
+    
+    /**
+     * Retrieves the last encounter for a patient or null if one does not exist.
+     * 
+     * @param patient The patient used to find the encounter.
+     * @return Encounter object or null if one does not exist.
+     */
+    public static Encounter getLastEncounter(Patient patient) {
+        List<Encounter> encounters = Context.getEncounterService().getEncountersByPatient(patient);
+        if (encounters == null || encounters.size() == 0) {
+            return null;
+        }
+        
+        return encounters.get(encounters.size() - 1);
+    }
 }
