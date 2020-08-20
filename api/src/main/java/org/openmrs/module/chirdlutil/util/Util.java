@@ -1310,4 +1310,23 @@ public class Util
         
         return encounters.get(encounters.size() - 1);
     }
+    
+    /**
+     * Compares the equality of two objects.
+     * @param firstObject The first object to compare.
+     * @param secondObject The second object to compare.
+     * 
+     * @return True if the objects are equal, false otherwise.
+     */
+    public static boolean compareObjectEquality(Object firstObject, Object secondObject) {
+        if (firstObject == null) {
+            if (secondObject != null) {
+                return false;
+            }
+        } else if (!firstObject.equals(secondObject)) {
+            return false;
+        }
+        
+        return true;
+    }
 }
