@@ -11,11 +11,10 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
 import org.openmrs.notification.MessageException;
 
-
-
 public class NotificationUtil
 {
-    protected static final Log log = LogFactory.getLog(NotificationUtil.class);
+    
+	protected static final Log log = LogFactory.getLog(NotificationUtil.class);
 
     public static void sendEmail(String body, String recipients, String subject) {
 
@@ -24,7 +23,6 @@ public class NotificationUtil
 
 		} catch (Exception e) {
 			log.error("Error sending support email. ", e);
-			return;
 		}
 	}
 	
@@ -32,36 +30,39 @@ public class NotificationUtil
 
 		try {
 			  
-			String subject = Context.getAdministrationService().getGlobalProperty(ChirdlUtilConstants.GLOBAL_PROP_SUPPORT_EMAIL_SUBJECT);
 			String recipients = Context.getAdministrationService().getGlobalProperty(
 					 ChirdlUtilConstants.GLOBAL_PROP_SUPPORT_EMAIL);
-						
-			StringBuilder body = new StringBuilder("Support");
+			
+			StringBuilder body = new StringBuilder(ChirdlUtilConstants.NOTIFICATION_EMAIL_SALUTATION);
 			body.append(ChirdlUtilConstants.GENERAL_INFO_COMMA);
 			body.append(ChirdlUtilConstants.GENERAL_INFO_CARRIAGE_RETURN_LINE_FEED);
 			body.append(ChirdlUtilConstants.GENERAL_INFO_CARRIAGE_RETURN_LINE_FEED);
-			body.append("The following issue occurred at " + new Date() + ":");
+			body.append(ChirdlUtilConstants.NOTIFICATION_EMAIL_LEADING_TEXT + new Date() );
+			body.append(ChirdlUtilConstants.GENERAL_INFO_PERIOD);
+			body.append(ChirdlUtilConstants.GENERAL_INFO_SINGLE_SPACE);
+			body.append(ChirdlUtilConstants.GENERAL_INFO_SINGLE_SPACE);
+			body.append(ChirdlUtilConstants.NOTIFICATION_EMAIL_SUPPORT_INSTRUCTIONS);
 			body.append(ChirdlUtilConstants.GENERAL_INFO_CARRIAGE_RETURN_LINE_FEED);
 			body.append(ChirdlUtilConstants.GENERAL_INFO_CARRIAGE_RETURN_LINE_FEED);
+			body.append(ChirdlUtilConstants.GENERAL_INFO_SINGLE_SPACE);
+			body.append(ChirdlUtilConstants.GENERAL_INFO_SINGLE_SPACE);
 			body.append(ChirdlUtilConstants.GENERAL_INFO_SINGLE_SPACE);
 			body.append(ChirdlUtilConstants.GENERAL_INFO_SINGLE_SPACE);
 			body.append(ChirdlUtilConstants.GENERAL_INFO_SINGLE_SPACE);
 			body.append(ChirdlUtilConstants.GENERAL_INFO_SINGLE_SPACE);
 			body.append(message);
 			body.append(ChirdlUtilConstants.GENERAL_INFO_CARRIAGE_RETURN_LINE_FEED);
-			body.append("Please check server logs for more information.");
 			body.append(ChirdlUtilConstants.GENERAL_INFO_CARRIAGE_RETURN_LINE_FEED);
-			body.append("Regards");
+			body.append(ChirdlUtilConstants.NOTIFICATION_EMAIL_CLOSING);
 			body.append(ChirdlUtilConstants.GENERAL_INFO_COMMA);
 			body.append(ChirdlUtilConstants.GENERAL_INFO_CARRIAGE_RETURN_LINE_FEED);
 			body.append(ChirdlUtilConstants.GENERAL_INFO_CARRIAGE_RETURN_LINE_FEED);
-			body.append("Support Notification");
+			body.append(ChirdlUtilConstants.NOTIFICATION_EMAIL_SUPPORT_SIGNATURE);
 			
-			send(body.toString(), recipients, subject, ChirdlUtilConstants.MESSAGE_CANNOT_SEND_EMAIL_TO_SUPPORT);
+			send(body.toString(), recipients, ChirdlUtilConstants.NOTIFICATION_EMAIL_SUBJECT, ChirdlUtilConstants.MESSAGE_CANNOT_SEND_EMAIL_TO_SUPPORT);
 
 		} catch (Exception e) {
-			log.error("Error sending support email. ", e);
-			return;
+			log.error("Error sending support email. ", e);		
 		}
 	}
     

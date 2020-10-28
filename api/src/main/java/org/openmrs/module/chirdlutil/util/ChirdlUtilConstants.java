@@ -272,6 +272,7 @@ public final class ChirdlUtilConstants {
     public static final String GLOBAL_PROP_FHIR_CONFIG_FILE = "chirdl_fhir.fhirConfigFile";
     public static final String GLOBAL_PROP_EXPORT_OBS_HOST = "chica.exportObsHost";
     public static final String GLOBAL_PROP_SUPPORT_EMAIL = "chica.supportEmail";
+    public static final String GLOBAL_PROP_SUPPORT_EMAIL_SUBJECT = "chica.supportEmailSubject";
     public static final String GLOBAL_PROP_EXPORT_OBS_PORT = "chica.exportObsPort";
     public static final String GLOBAL_PROP_EXPORT_PHYSICIAN_OBS_HOST = "chica.exportPhysicianObsHost";
     public static final String GLOBAL_PROP_EXPORT_PHYSICIAN_OBS_PORT = "chica.exportPhysicianObsPort";
@@ -315,6 +316,9 @@ public final class ChirdlUtilConstants {
     public static final String GENERAL_INFO_OPEN_PAREN = "(";
     public static final String GENERAL_INFO_CLOSE_PAREN = ")";
     public static final String GENERAL_INFO_PERIOD = ".";
+    public static final String GENERAL_INFO_COLON = ":";
+
+	
     
     /*
      * 
@@ -721,7 +725,12 @@ public final class ChirdlUtilConstants {
     public static final String EMAIL_SMTP_HOST_PROPERTY = "mail.smtp.host";
     public static final String EMAIL_SMTP_PORT_PROPERTY = "mail.smtp.port";
     public static final String EMAIL_SMTP_AUTH_PROPERTY = "mail.smtp.auth";
-    public static final String GLOBAL_PROP_SUPPORT_EMAIL_SUBJECT = "chica.supportEmailSubject";
-
+    public static final String NOTIFICATION_EMAIL_SUPPORT_INSTRUCTIONS = "Please check server logs for details.";
+    public static final String NOTIFICATION_EMAIL_SUPPORT_SIGNATURE = "Support Notification Service";
+    public static final String NOTIFICATION_EMAIL_CLOSING = "Thank you";
+    public static final String NOTIFICATION_EMAIL_SUBJECT = "Support Notification";
+    public static final String NOTIFICATION_EMAIL_SALUTATION = "DHS Support Team";
+    public static final String NOTIFICATION_EMAIL_LEADING_TEXT = "The following issue occured at ";
+    
 }
 
