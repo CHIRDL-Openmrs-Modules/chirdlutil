@@ -271,8 +271,9 @@ public final class ChirdlUtilConstants {
     public static final String GLOBAL_PROP_FORM_TIME_LIMIT = "chica.formTimeLimit";
     public static final String GLOBAL_PROP_FHIR_CONFIG_FILE = "chirdl_fhir.fhirConfigFile";
     public static final String GLOBAL_PROP_EXPORT_OBS_HOST = "chica.exportObsHost";
-    public static final String GLOBAL_PROP_SUPPORT_EMAIL = "chica.supportEmail";
-    public static final String GLOBAL_PROP_SUPPORT_EMAIL_SUBJECT = "chica.supportEmailSubject";
+    public static final String GLOBAL_PROP_SUPPORT_EMAIL = "chirdlutil.supportEmail";
+    public static final String GLOBAL_PROP_SUPPORT_EMAIL_SUBJECT = "chirdlutil.supportEmailSubject";
+    public static final String GLOBAL_PROP_SUPPORT_EMAIL_SALUTATION = "chirdlutil.supportEmailSalutation";
     public static final String GLOBAL_PROP_EXPORT_OBS_PORT = "chica.exportObsPort";
     public static final String GLOBAL_PROP_EXPORT_PHYSICIAN_OBS_HOST = "chica.exportPhysicianObsHost";
     public static final String GLOBAL_PROP_EXPORT_PHYSICIAN_OBS_PORT = "chica.exportPhysicianObsPort";
@@ -288,6 +289,7 @@ public final class ChirdlUtilConstants {
     public static final String GLOBAL_PROP_EXPORT_REGENSTRIEF_OBS_HOST = "chica.exportRegenstriefObsHost";
     public static final String GLOBAL_PROP_EXPORT_REGENSTRIEF_OBS_PORT = "chica.exportRegenstriefObsPort";
     public static final String GLOBAL_PROP_MAIL_FROM = "mail.from";
+    public static final String GLOBAL_PROP_MESSAGE_FREQUENCY_THRESHOLD = "chirdlutil.messageFrequencyThreshold";
     
     /*
      * 
@@ -728,9 +730,7 @@ public final class ChirdlUtilConstants {
     public static final String NOTIFICATION_EMAIL_SUPPORT_INSTRUCTIONS = "Please check server logs for details.";
     public static final String NOTIFICATION_EMAIL_SUPPORT_SIGNATURE = "Support Notification Service";
     public static final String NOTIFICATION_EMAIL_CLOSING = "Thank you";
-    public static final String NOTIFICATION_EMAIL_SUBJECT = "Support Notification";
-    public static final String NOTIFICATION_EMAIL_SALUTATION = "DHS Support Team";
-    public static final String NOTIFICATION_EMAIL_LEADING_TEXT = "The following issue occured at ";
+    public static final String NOTIFICATION_EMAIL_LEADING_TEXT = "The following issue occured ";
     
 }
 

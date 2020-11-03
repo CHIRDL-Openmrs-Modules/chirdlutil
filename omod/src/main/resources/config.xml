@@ -95,6 +95,31 @@
         <property>chirdlutil.SumatraPDFExecutable</property>
         <description>The location of the SumatraPDF executable for PDF printing.</description>
     </globalProperty>
+     <globalProperty>
+        <property>chirdlutil.supportEmail</property>
+        <defaultValue></defaultValue>
+        <description>Comma delimited email list of support recipients.
+        </description>
+    </globalProperty>
+    <globalProperty>
+        <property>chirdlutil.supportEmailSubject</property>
+        <defaultValue></defaultValue>
+        <description>Subject text for support email message.
+        </description>
+    </globalProperty>
+    <globalProperty>
+        <property>chirdlutil.supportEmailSalutation</property>
+        <defaultValue></defaultValue>
+        <description>Salutation line in support email message.
+        </description>
+    </globalProperty>
+    <globalProperty>
+        <property>chirdlutil.messageFrequencyThreshold</property>
+        <defaultValue></defaultValue>
+        <description>Frequency threshold for sending messages in minutes.
+        </description>
+    </globalProperty>
+    
     
     <!-- Servlets -->  
     <!-- Accessed through the url /pageContext()/moduleServlet/<moduleId>/<servlet-name> -->
