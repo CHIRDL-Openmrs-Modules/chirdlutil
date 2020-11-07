@@ -396,6 +396,7 @@ public final class ChirdlUtilConstants {
     public static final String PARAMETER_HL7_EVENT_TYPE_CODE = "HL7EventTypeCode";
     public static final String PARAMETER_LAST_MRN = "lastMRN";
     public static final String PARAMETER_ERROR_MESSAGE = "errorMessage";
+    public static final String PARAMETER_INCORRECT_PATIENT = "incorrectPatient";
     
     /*
      * 
