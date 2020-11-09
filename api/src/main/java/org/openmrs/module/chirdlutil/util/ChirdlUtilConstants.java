@@ -723,14 +723,9 @@ public final class ChirdlUtilConstants {
     /*
      * Constants for sending notifications
      * */
-    public static final String MESSAGE_CANNOT_SEND_EMAIL_TO_SUPPORT = ".  Cannot send email to support: ";
     public static final String EMAIL_SMTP_HOST_PROPERTY = "mail.smtp.host";
     public static final String EMAIL_SMTP_PORT_PROPERTY = "mail.smtp.port";
     public static final String EMAIL_SMTP_AUTH_PROPERTY = "mail.smtp.auth";
-    public static final String NOTIFICATION_EMAIL_SUPPORT_INSTRUCTIONS = "Please check server logs for details.";
-    public static final String NOTIFICATION_EMAIL_SUPPORT_SIGNATURE = "Support Notification Service";
-    public static final String NOTIFICATION_EMAIL_CLOSING = "Thank you";
-    public static final String NOTIFICATION_EMAIL_LEADING_TEXT = "The following issue occured ";
     
 }
 

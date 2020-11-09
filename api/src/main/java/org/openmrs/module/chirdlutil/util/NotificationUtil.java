@@ -17,25 +17,46 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
 import org.openmrs.notification.MessageException;
 
+/**
+ * Utility to send notification messages.
+ * @author Meena Sheley
+ *
+ */
 public class NotificationUtil {
 
     protected static final Log log = LogFactory.getLog(NotificationUtil.class);
     private static Map<Integer, Long> messageToTimeMap = new ConcurrentHashMap<>();
     private static long thresholdTime = 3600000; // Default to 60 minutes.
+    public static final String NOTIFICATION_EMAIL_SUPPORT_INSTRUCTIONS = "Please check server logs for details.";
+    public static final String NOTIFICATION_EMAIL_SUPPORT_SIGNATURE = "Support Notification Service";
+    public static final String NOTIFICATION_EMAIL_CLOSING = "Thank you";
+    public static final String NOTIFICATION_EMAIL_LEADING_TEXT = "The following issue occured ";
+    public static final String MESSAGE_CANNOT_SEND_EMAIL_TO_SUPPORT = ".  Cannot send email to support: ";
+    public static final String GLOBAL_PROP_SUPPORT_EMAIL_SUBJECT = "Support Notification";
 
     private NotificationUtil() {
     }
 
+    /**
+     * Method to 
+     * @param body       - Body of the email.
+     * @param recipients - Comma delimited list of recipient email addresses
+     * @param subject    - Subject of the email.
+     */
     public static void sendEmail(String body, String recipients, String subject) {
 
         try {
-            send(body, recipients, subject, ChirdlUtilConstants.MESSAGE_CANNOT_SEND_EMAIL_TO_SUPPORT);
+            send(body, recipients, subject, MESSAGE_CANNOT_SEND_EMAIL_TO_SUPPORT);
 
         } catch (Exception e) {
             log.error("Error sending support email. ", e);
         }
     }
 
+    /**
+     * Sends a notification email for support messaging.
+     * @param message
+     */
     public static void sendSupportEmailNotification(String message) {
 
         try {
@@ -45,20 +66,14 @@ public class NotificationUtil {
                 String recipients = Context.getAdministrationService()
                         .getGlobalProperty(ChirdlUtilConstants.GLOBAL_PROP_SUPPORT_EMAIL);
 
-                String subject = Context.getAdministrationService()
-                        .getGlobalProperty(ChirdlUtilConstants.GLOBAL_PROP_SUPPORT_EMAIL_SUBJECT);
-                String salutation = Context.getAdministrationService()
-                        .getGlobalProperty(ChirdlUtilConstants.GLOBAL_PROP_SUPPORT_EMAIL_SALUTATION);
-
-                StringBuilder body = new StringBuilder(salutation);
-                body.append(ChirdlUtilConstants.GENERAL_INFO_COMMA);
+                String subject = GLOBAL_PROP_SUPPORT_EMAIL_SUBJECT;
+                StringBuilder body = new StringBuilder();
                 body.append(ChirdlUtilConstants.GENERAL_INFO_CARRIAGE_RETURN_LINE_FEED);
-                body.append(ChirdlUtilConstants.GENERAL_INFO_CARRIAGE_RETURN_LINE_FEED);
-                body.append(ChirdlUtilConstants.NOTIFICATION_EMAIL_LEADING_TEXT + new Date());
+                body.append(NOTIFICATION_EMAIL_LEADING_TEXT + new Date());
                 body.append(ChirdlUtilConstants.GENERAL_INFO_PERIOD);
                 body.append(ChirdlUtilConstants.GENERAL_INFO_SINGLE_SPACE);
                 body.append(ChirdlUtilConstants.GENERAL_INFO_SINGLE_SPACE);
-                body.append(ChirdlUtilConstants.NOTIFICATION_EMAIL_SUPPORT_INSTRUCTIONS);
+                body.append(NOTIFICATION_EMAIL_SUPPORT_INSTRUCTIONS);
                 body.append(ChirdlUtilConstants.GENERAL_INFO_CARRIAGE_RETURN_LINE_FEED);
                 body.append(ChirdlUtilConstants.GENERAL_INFO_CARRIAGE_RETURN_LINE_FEED);
                 body.append(ChirdlUtilConstants.GENERAL_INFO_SINGLE_SPACE);
@@ -68,13 +83,13 @@ public class NotificationUtil {
                 body.append(message);
                 body.append(ChirdlUtilConstants.GENERAL_INFO_CARRIAGE_RETURN_LINE_FEED);
                 body.append(ChirdlUtilConstants.GENERAL_INFO_CARRIAGE_RETURN_LINE_FEED);
-                body.append(ChirdlUtilConstants.NOTIFICATION_EMAIL_CLOSING);
+                body.append(NOTIFICATION_EMAIL_CLOSING);
                 body.append(ChirdlUtilConstants.GENERAL_INFO_COMMA);
                 body.append(ChirdlUtilConstants.GENERAL_INFO_CARRIAGE_RETURN_LINE_FEED);
                 body.append(ChirdlUtilConstants.GENERAL_INFO_CARRIAGE_RETURN_LINE_FEED);
-                body.append(ChirdlUtilConstants.NOTIFICATION_EMAIL_SUPPORT_SIGNATURE);
+                body.append(NOTIFICATION_EMAIL_SUPPORT_SIGNATURE);
 
-                send(body.toString(), recipients, subject, ChirdlUtilConstants.MESSAGE_CANNOT_SEND_EMAIL_TO_SUPPORT);
+                send(body.toString(), recipients, subject, MESSAGE_CANNOT_SEND_EMAIL_TO_SUPPORT);
             }
 
             reconcileMessageMap();
@@ -87,10 +102,10 @@ public class NotificationUtil {
     /**
      * Sends the mail message.
      * 
-     * @param body       - The body of the email.
-     * @param recipients - comma delimited list of recipient email addresses
-     * @param subject    - The subject of the email.
-     * @param msg        - message to log error
+     * @param body       - Body of the email.
+     * @param recipients - Comma delimited list of recipient email addresses.
+     * @param subject    - Subject of the email.
+     * @param msg        - Message to log error.
      */
     public static boolean send(String body, String recipients, String subject, String msg) {
         if (StringUtils.isBlank(recipients)) {

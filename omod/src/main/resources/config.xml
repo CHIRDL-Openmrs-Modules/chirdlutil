@@ -102,20 +102,8 @@
         </description>
     </globalProperty>
     <globalProperty>
-        <property>chirdlutil.supportEmailSubject</property>
-        <defaultValue></defaultValue>
-        <description>Subject text for support email message.
-        </description>
-    </globalProperty>
-    <globalProperty>
-        <property>chirdlutil.supportEmailSalutation</property>
-        <defaultValue></defaultValue>
-        <description>Salutation line in support email message.
-        </description>
-    </globalProperty>
-    <globalProperty>
         <property>chirdlutil.messageFrequencyThreshold</property>
-        <defaultValue></defaultValue>
+        <defaultValue>60</defaultValue>
         <description>Frequency threshold for sending messages in minutes.
         </description>
     </globalProperty>
