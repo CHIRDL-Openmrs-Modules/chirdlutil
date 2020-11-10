@@ -271,6 +271,7 @@ public final class ChirdlUtilConstants {
     public static final String GLOBAL_PROP_FORM_TIME_LIMIT = "chica.formTimeLimit";
     public static final String GLOBAL_PROP_FHIR_CONFIG_FILE = "chirdl_fhir.fhirConfigFile";
     public static final String GLOBAL_PROP_EXPORT_OBS_HOST = "chica.exportObsHost";
+    public static final String GLOBAL_PROP_SUPPORT_EMAIL = "chirdlutil.supportEmail";
     public static final String GLOBAL_PROP_EXPORT_OBS_PORT = "chica.exportObsPort";
     public static final String GLOBAL_PROP_EXPORT_PHYSICIAN_OBS_HOST = "chica.exportPhysicianObsHost";
     public static final String GLOBAL_PROP_EXPORT_PHYSICIAN_OBS_PORT = "chica.exportPhysicianObsPort";
@@ -285,6 +286,8 @@ public final class ChirdlUtilConstants {
     public static final String GLOBAL_PROP_THREAD_POOL_MONITOR_REFRESH_RATE = "chirdlutil.threadMonitorRefreshRate";
     public static final String GLOBAL_PROP_EXPORT_REGENSTRIEF_OBS_HOST = "chica.exportRegenstriefObsHost";
     public static final String GLOBAL_PROP_EXPORT_REGENSTRIEF_OBS_PORT = "chica.exportRegenstriefObsPort";
+    public static final String GLOBAL_PROP_MAIL_FROM = "mail.from";
+    public static final String GLOBAL_PROP_MESSAGE_FREQUENCY_THRESHOLD = "chirdlutil.messageFrequencyThreshold";
     
     /*
      * 
@@ -313,6 +316,9 @@ public final class ChirdlUtilConstants {
     public static final String GENERAL_INFO_OPEN_PAREN = "(";
     public static final String GENERAL_INFO_CLOSE_PAREN = ")";
     public static final String GENERAL_INFO_PERIOD = ".";
+    public static final String GENERAL_INFO_COLON = ":";
+
+	
     
     /*
      * 
@@ -464,6 +470,7 @@ public final class ChirdlUtilConstants {
      */
     public static final String GLOBAL_PROPERTY_SCHEDULER_USERNAME = "scheduler.username";
     public static final String GLOBAL_PROPERTY_SCHEDULER_PASSPHRASE = "scheduler.password";
+    public static final String GLOBAL_PROPERTY_MAIL_SMTP_HOST = "mail.smtp_host";
     
     /*
      * Concept information
@@ -703,11 +710,7 @@ public final class ChirdlUtilConstants {
     public static final String OPTION_PRINT_PATIENT_FORM = "Print Pre-Screener";
     public static final String OPTION_PRINT_PHYSICIAN_FORM = "Print Physician Worksheet";
     
-    /*
-     * Email constants
-     */
-    public static final String EMAIL_SMTP_HOST_PROPERTY = "mail.smtp.host";
-    
+
     /*
      * Sorting constants
      */
@@ -715,5 +718,13 @@ public final class ChirdlUtilConstants {
     public static final String SORT_DESC = "DESC";
     
     public static final String ATTR_VALUE_VOID_REASON = "New Value: ";
+    
+    /*
+     * Constants for sending notifications
+     * */
+    public static final String EMAIL_SMTP_HOST_PROPERTY = "mail.smtp.host";
+    public static final String EMAIL_SMTP_PORT_PROPERTY = "mail.smtp.port";
+    public static final String EMAIL_SMTP_AUTH_PROPERTY = "mail.smtp.auth";
+    
 }
 
