@@ -33,12 +33,13 @@ public class NotificationUtil {
     public static final String NOTIFICATION_EMAIL_LEADING_TEXT = "The following issue occured ";
     public static final String MESSAGE_CANNOT_SEND_EMAIL_TO_SUPPORT = ".  Cannot send email to support: ";
     public static final String GLOBAL_PROP_SUPPORT_EMAIL_SUBJECT = "Support Notification";
+    public static final String UNABLE_TO_SEND_EMAIL = "Unable to send email.";
 
     private NotificationUtil() {
     }
 
     /**
-     * Method to 
+     * Sends a notification message through email. 
      * @param body       - Body of the email.
      * @param recipients - Comma delimited list of recipient email addresses
      * @param subject    - Subject of the email.
@@ -46,10 +47,10 @@ public class NotificationUtil {
     public static void sendEmail(String body, String recipients, String subject) {
 
         try {
-            send(body, recipients, subject, MESSAGE_CANNOT_SEND_EMAIL_TO_SUPPORT);
+            send(body, recipients, subject, UNABLE_TO_SEND_EMAIL);
 
         } catch (Exception e) {
-            log.error("Error sending support email. ", e);
+            log.error("Error sending email. ", e);
         }
     }
 
@@ -150,15 +151,15 @@ public class NotificationUtil {
         long currTime = System.currentTimeMillis();
         int messageHash = message.hashCode();
 
-        /*If the key does not exist, it is added with value of currTime, and the return
-         value will be currTime. If the key already exists, the return value will be the value for the existing
-         key. Send the message if the value was just added.*/
+        /* If the key does not exist, it is added with value of currTime, and the return
+         * value will be currTime. If the key already exists, the return value will be the value 
+         * for the existing key. Send the message if the value was just added. */
         if ((time = messageToTimeMap.computeIfAbsent(messageHash, k -> currTime)) == currTime) {
             return true;
         }
 
         /* If time has exceeded the wait threshold, assign current time
-         *  to that key and send the message.*/
+         * to that key and send the message.*/
         if ((currTime - time) > thresholdTime) {
             messageToTimeMap.put(messageHash, currTime);
             return true;
