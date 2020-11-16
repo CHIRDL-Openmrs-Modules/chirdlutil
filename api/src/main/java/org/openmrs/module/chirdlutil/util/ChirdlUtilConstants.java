@@ -726,5 +726,9 @@ public final class ChirdlUtilConstants {
     public static final String EMAIL_SMTP_PORT_PROPERTY = "mail.smtp.port";
     public static final String EMAIL_SMTP_AUTH_PROPERTY = "mail.smtp.auth";
     
+    /*
+     * Regular expressions
+     */
+    public static final String REGEX_MATCH_NON_ALPHNUMERIC_CHARACTERS = "[^a-zA-Z0-9]+";
 }
 
