@@ -729,6 +729,6 @@ public final class ChirdlUtilConstants {
     /*
      * Regular expressions
      */
-    public static final String REGEX_MATCH_NON_ALPHNUMERIC_CHARACTERS = "[^a-zA-Z0-9]+";
+    public static final String REGEX_MATCH_NON_ALPHANUMERIC_CHARACTERS = "[^a-zA-Z0-9]+";
 }
 
