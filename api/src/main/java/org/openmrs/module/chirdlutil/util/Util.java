@@ -1200,23 +1200,28 @@ public class Util
         Patient patient = null;
         
         if (StringUtils.isNotEmpty(mrn)) {
-            mrn = Util.removeLeadingZeros(mrn);
-            if (!mrn.contains(ChirdlUtilConstants.GENERAL_INFO_DASH) && mrn.length() > 1) {
-                mrn = mrn.substring(0, mrn.length() - 1) + ChirdlUtilConstants.GENERAL_INFO_DASH + mrn.substring(mrn.length()-1);
-            }
-
             PatientIdentifierType identifierType = patientService.getPatientIdentifierTypeByName(ChirdlUtilConstants.IDENTIFIER_TYPE_MRN);
-            List<PatientIdentifierType> identifierTypes = new ArrayList<PatientIdentifierType>();
+            List<PatientIdentifierType> identifierTypes = new ArrayList<>();
             identifierTypes.add(identifierType);
 
             List<Patient> patients = patientService.getPatientsByIdentifier(null, mrn, identifierTypes,true); // CHICA-977 Use getPatientsByIdentifier() as a temporary solution to openmrs TRUNK-5089
-            if (patients.size() == 0){
-                patients = patientService.getPatientsByIdentifier(null, "0" + mrn, identifierTypes,true); // CHICA-977 Use getPatientsByIdentifier() as a temporary solution to openmrs TRUNK-5089
-            }
-
-            if (patients.size() > 0)
-            {
+            if (!patients.isEmpty()) {
                 patient = patients.get(0);
+            } else {
+            	String updatedMrn = Util.removeLeadingZeros(mrn);
+                if (!updatedMrn.contains(ChirdlUtilConstants.GENERAL_INFO_DASH) && updatedMrn.length() > 1) {
+                	updatedMrn = updatedMrn.substring(0, updatedMrn.length() - 1) 
+                			+ ChirdlUtilConstants.GENERAL_INFO_DASH + updatedMrn.substring(updatedMrn.length()-1);
+                }
+                
+                patients = patientService.getPatientsByIdentifier(null, updatedMrn, identifierTypes,true); // CHICA-977 Use getPatientsByIdentifier() as a temporary solution to openmrs TRUNK-5089
+                if (patients.isEmpty()){
+                    patients = patientService.getPatientsByIdentifier(null, "0" + updatedMrn, identifierTypes,true); // CHICA-977 Use getPatientsByIdentifier() as a temporary solution to openmrs TRUNK-5089
+                }
+
+                if (!patients.isEmpty()) {
+                    patient = patients.get(0);
+                }
             }
         }
         
