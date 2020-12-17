@@ -322,11 +322,13 @@ public class ZipUtil {
              * @see java.lang.Runnable#run()
              */
             public void run() {
+                
                 Context.openSession();
-                try {
-                    AdministrationService adminService = Context.getAdministrationService();
-                    Context.authenticate(adminService.getGlobalProperty("scheduler.username"), 
-                        adminService.getGlobalProperty("scheduler.password"));
+                try{
+                    Context.authenticate(
+                        org.openmrs.module.chirdlutilbackports.util.Util.decryptGlobalProperty(ChirdlUtilConstants.GLOBAL_PROPERTY_SCHEDULER_USERNAME),
+                        org.openmrs.module.chirdlutilbackports.util.Util.decryptGlobalProperty(ChirdlUtilConstants.GLOBAL_PROPERTY_SCHEDULER_PASSPHRASE));
+                    
                     int maxTime = -1;
                     ArrayList<File> filesToZip = new ArrayList<File>();
                     for (File file : files) {
