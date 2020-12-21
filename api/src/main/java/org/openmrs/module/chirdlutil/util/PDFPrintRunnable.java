@@ -51,10 +51,10 @@ public class PDFPrintRunnable implements ChirdlPrintJobRunnable {
     public void run() {
         Context.openSession();
         try {
-            AdministrationService adminService = Context.getAdministrationService();
-            Context.authenticate(adminService
-                    .getGlobalProperty(ChirdlUtilConstants.GLOBAL_PROPERTY_SCHEDULER_USERNAME), adminService
-                    .getGlobalProperty(ChirdlUtilConstants.GLOBAL_PROPERTY_SCHEDULER_PASSPHRASE));
+            Context.authenticate(
+                    org.openmrs.module.chirdlutilbackports.util.Util.decryptGlobalProperty(ChirdlUtilConstants.GLOBAL_PROPERTY_SCHEDULER_USERNAME),
+                    org.openmrs.module.chirdlutilbackports.util.Util.decryptGlobalProperty(ChirdlUtilConstants.GLOBAL_PROPERTY_SCHEDULER_PASSPHRASE));
+            
             File pdfFile = new File(this.pdfLocation);
             PrintServices.printPDFFileSynchronous(this.printerName, pdfFile);
         }
