@@ -404,6 +404,10 @@ public final class ChirdlUtilConstants {
     public static final String PARAMETER_LAST_MRN = "lastMRN";
     public static final String PARAMETER_ERROR_MESSAGE = "errorMessage";
     public static final String PARAMETER_INCORRECT_PATIENT = "incorrectPatient";
+    public static final String PARAMETER_PATIENT_AGE = "age";
+    public static final String PARAMETER_COMPLETED_BY = "completedby";
+    public static final String PARAMETER_CAREGIVER = "caregiver";
+    public static final String PARAMETER_SCREENER_COMPLETED_BY = "screener_completed_by";
     
     /*
      * 
