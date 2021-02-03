@@ -17,8 +17,6 @@ import java.io.File;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openmrs.api.AdministrationService;
-import org.openmrs.api.context.Context;
 import org.openmrs.module.chirdlutil.threadmgmt.ChirdlPrintJobRunnable;
 
 /**
@@ -49,12 +47,7 @@ public class PDFPrintRunnable implements ChirdlPrintJobRunnable {
      */
     @Override
     public void run() {
-        Context.openSession();
         try {
-            Context.authenticate(
-                    org.openmrs.module.chirdlutilbackports.util.Util.decryptGlobalProperty(ChirdlUtilConstants.GLOBAL_PROPERTY_SCHEDULER_USERNAME),
-                    org.openmrs.module.chirdlutilbackports.util.Util.decryptGlobalProperty(ChirdlUtilConstants.GLOBAL_PROPERTY_SCHEDULER_PASSPHRASE));
-            
             File pdfFile = new File(this.pdfLocation);
             PrintServices.printPDFFileSynchronous(this.printerName, pdfFile);
         }
@@ -63,9 +56,6 @@ public class PDFPrintRunnable implements ChirdlPrintJobRunnable {
         }
         catch (Exception e) {
             log.error("Unknown error occurred printing PDF file " + this.pdfLocation + " to printer " + this.printerName, e);
-        }
-        finally {
-            Context.closeSession();
         }
     }
     

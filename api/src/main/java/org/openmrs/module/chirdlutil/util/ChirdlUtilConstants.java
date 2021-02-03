@@ -473,8 +473,6 @@ public final class ChirdlUtilConstants {
     /*
      * Global property constants
      */
-    public static final String GLOBAL_PROPERTY_SCHEDULER_USERNAME = "scheduler.username";
-    public static final String GLOBAL_PROPERTY_SCHEDULER_PASSPHRASE = "scheduler.password";
     public static final String GLOBAL_PROPERTY_MAIL_SMTP_HOST = "mail.smtp_host";
     
     /*
