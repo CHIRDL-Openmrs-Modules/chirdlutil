@@ -79,6 +79,7 @@ import org.openmrs.api.EncounterService;
 import org.openmrs.api.ObsService;
 import org.openmrs.api.PatientService;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.DaemonToken;
 import org.openmrs.module.chirdlutil.xmlBeans.serverconfig.MobileClient;
 import org.openmrs.module.chirdlutil.xmlBeans.serverconfig.MobileForm;
 import org.openmrs.module.chirdlutil.xmlBeans.serverconfig.SecondaryForm;
@@ -130,6 +131,7 @@ public class Util
     private static ServerConfig serverConfig = null;
     private static long lastUpdatedServerConfig = System.currentTimeMillis();
     private static final long SERVER_CONFIG_UPDATE_CYCLE = 900000; // fifteen minutes
+    private static DaemonToken daemonToken;
     
     /**
      * Converts specific measurements in English units to metric
@@ -1334,4 +1336,18 @@ public class Util
         
         return true;
     }
+    
+    /**
+	 * @return the daemonToken
+	 */
+	public static DaemonToken getDaemonToken() {
+		return daemonToken;
+	}
+	
+	/**
+	 * @param daemonToken the daemonToken to set
+	 */
+	public static void setDaemonToken(DaemonToken daemonToken) {
+		Util.daemonToken = daemonToken;
+	}
 }

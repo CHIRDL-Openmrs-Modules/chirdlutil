@@ -22,14 +22,14 @@ import java.util.Properties;
 import java.util.UUID;
 import java.util.zip.ZipException;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.openmrs.api.context.Context;
+import org.openmrs.api.context.Daemon;
+
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.model.ZipParameters;
 import net.lingala.zip4j.util.Zip4jConstants;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.openmrs.api.AdministrationService;
-import org.openmrs.api.context.Context;
 
 /**
  * Utility class for handling zip files.
@@ -38,7 +38,7 @@ import org.openmrs.api.context.Context;
  */
 public class ZipUtil {
     
-    private static Log log = LogFactory.getLog(ZipUtil.class);
+    protected static Log log = LogFactory.getLog(ZipUtil.class);
     
     public static final String NOTIFICATION_MAIL_SENDER = "chica.notification@iu.edu";
     
@@ -316,96 +316,78 @@ public class ZipUtil {
     public static void zipAndEmailFiles(final File[] files, final String[] emailAddresses, final String subject,
                                         final String body, final String zipPassword, final String zipFilename,
                                         final int fileSearchTime) {
-        Runnable emailRunnable = new Runnable() {
-            
-            /**
-             * @see java.lang.Runnable#run()
-             */
-            public void run() {
-                
-                Context.openSession();
-                try{
-                    Context.authenticate(
-                        org.openmrs.module.chirdlutilbackports.util.Util.decryptGlobalProperty(ChirdlUtilConstants.GLOBAL_PROPERTY_SCHEDULER_USERNAME),
-                        org.openmrs.module.chirdlutilbackports.util.Util.decryptGlobalProperty(ChirdlUtilConstants.GLOBAL_PROPERTY_SCHEDULER_PASSPHRASE));
-                    
-                    int maxTime = -1;
-                    ArrayList<File> filesToZip = new ArrayList<File>();
-                    for (File file : files) {
-                        while (!file.exists() && maxTime < fileSearchTime) {
-                            maxTime++;
-                            try {
-                                Thread.sleep(1000);
-                            }
-                            catch (InterruptedException e) {
-                                log.error("Interrupted thread error", e);
-                                Thread.currentThread().interrupt();
-                            }
+        Runnable emailRunnable = () -> {
+            try{
+                int maxTime = -1;
+                ArrayList<File> filesToZip = new ArrayList<>();
+                for (File file : files) {
+                    while (!file.exists() && maxTime < fileSearchTime) {
+                        maxTime++;
+                        try {
+                            Thread.sleep(1000);
                         }
-                        if (!file.exists()) {
-                            log.error("Cannot find the following file to zip and email: " + file.getAbsolutePath());
-                            return;
+                        catch (InterruptedException e) {
+                            log.error("Interrupted thread error", e);
+                            Thread.currentThread().interrupt();
                         }
-                        
-                        filesToZip.add(file);
                     }
-                    
-                    File targetZipFile = null;
-                    try {
-                        // The zip utility does not work when creating a file using File.createTempFile(name, extension).  A file with 
-                        // the specified name cannot already exist or it will fail.
-                        File baseDir = new File(System.getProperty("java.io.tmpdir"));
-                        String extension = ".zip";
-                        targetZipFile = new File(baseDir, zipFilename + "_" + UUID.randomUUID() + extension);
-                        while (targetZipFile.exists()) {
-                            targetZipFile = new File(baseDir, zipFilename + "_" + UUID.randomUUID() + extension);
-                        }
-                        
-                        if (zipPassword != null && zipPassword.trim().length() > 0) {
-                            zipFilesWithPassword(targetZipFile, filesToZip, zipPassword);
-                        } else {
-                            zipFiles(targetZipFile, filesToZip);
-                        }
-                        
-                        File[] attachments = new File[] { targetZipFile };
-                        
-                        String smtpMailHost = Context.getAdministrationService()
-                                .getGlobalProperty("chirdlutil.smtpMailHost");
-                        if (smtpMailHost == null) {
-                            log.error("Please specify global property chirdlutil.smtpMailHost for correct email operability.");
-                            return;
-                        }
-                        
-                        Properties mailProps = new Properties();
-                        mailProps.put("mail.smtp.host", smtpMailHost);
-                        MailSender mailSender = new MailSender(mailProps);
-                        mailSender.sendMail(NOTIFICATION_MAIL_SENDER, emailAddresses, subject, body, attachments);
-                    }
-                    catch (Exception e) {
-                        log.error("Error zipping and sending email", e);
+                    if (!file.exists()) {
+                        log.error("Cannot find the following file to zip and email: " + file.getAbsolutePath());
                         return;
                     }
-                    finally {
-                        if (targetZipFile != null && targetZipFile.exists()) {
-                            if (!targetZipFile.delete()) {
-                                log.error("Unable to delete file: " + targetZipFile.getAbsolutePath());
-                            }
+                    
+                    filesToZip.add(file);
+                }
+                
+                File targetZipFile = null;
+                try {
+                    // The zip utility does not work when creating a file using File.createTempFile(name, extension).  A file with 
+                    // the specified name cannot already exist or it will fail.
+                    File baseDir = new File(System.getProperty("java.io.tmpdir"));
+                    String extension = ".zip";
+                    targetZipFile = new File(baseDir, zipFilename + "_" + UUID.randomUUID() + extension);
+                    while (targetZipFile.exists()) {
+                        targetZipFile = new File(baseDir, zipFilename + "_" + UUID.randomUUID() + extension);
+                    }
+                    
+                    if (zipPassword != null && zipPassword.trim().length() > 0) {
+                        zipFilesWithPassword(targetZipFile, filesToZip, zipPassword);
+                    } else {
+                        zipFiles(targetZipFile, filesToZip);
+                    }
+                    
+                    File[] attachments = new File[] { targetZipFile };
+                    
+                    String smtpMailHost = Context.getAdministrationService()
+                            .getGlobalProperty("chirdlutil.smtpMailHost");
+                    if (smtpMailHost == null) {
+                        log.error("Please specify global property chirdlutil.smtpMailHost for correct email operability.");
+                        return;
+                    }
+                    
+                    Properties mailProps = new Properties();
+                    mailProps.put("mail.smtp.host", smtpMailHost);
+                    MailSender mailSender = new MailSender(mailProps);
+                    mailSender.sendMail(NOTIFICATION_MAIL_SENDER, emailAddresses, subject, body, attachments);
+                }
+                catch (Exception e) {
+                    log.error("Error zipping and sending email", e);
+                }
+                finally {
+                    if (targetZipFile != null && targetZipFile.exists()) {
+                        if (!targetZipFile.delete()) {
+                            log.error("Unable to delete file: " + targetZipFile.getAbsolutePath());
                         }
                     }
                 }
-                catch (Exception e) {
-                    log.error(e.getMessage());
-                    log.error(org.openmrs.module.chirdlutil.util.Util.getStackTrace(e));
-                }
-                finally {
-                    Context.flushSession();
-                    Context.closeSession();
-                }
+            }
+            catch (Exception e) {
+                log.error(e.getMessage());
+                log.error(org.openmrs.module.chirdlutil.util.Util.getStackTrace(e));
             }
             
         };
         
-        Thread emailThread = new Thread(emailRunnable);
-        emailThread.start();
+        Daemon.runInDaemonThread(emailRunnable, Util.getDaemonToken());
     }
 }

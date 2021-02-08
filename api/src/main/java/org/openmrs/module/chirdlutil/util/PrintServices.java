@@ -31,8 +31,8 @@ import javax.print.attribute.standard.PrinterName;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
+import org.openmrs.api.context.Daemon;
 import org.openmrs.module.chirdlutil.threadmgmt.ChirdlPrintJobRunnable;
-import org.openmrs.module.chirdlutil.threadmgmt.PrinterThreadManager;
 
 /**
  * Utility class for printing needs.
@@ -88,8 +88,7 @@ public class PrintServices {
      */
     public static void printPDFFileAsynchronous(String printerName, File pdfFile) {
     	ChirdlPrintJobRunnable printRunnable = new PDFPrintRunnable(printerName, pdfFile.getAbsolutePath());
-    	PrinterThreadManager threadManager = PrinterThreadManager.getInstance();
-    	threadManager.execute(printRunnable);
+    	Daemon.runInDaemonThread(printRunnable, Util.getDaemonToken());
     }
     
     /**
