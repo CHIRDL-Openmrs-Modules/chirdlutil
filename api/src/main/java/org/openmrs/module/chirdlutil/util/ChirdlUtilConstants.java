@@ -201,6 +201,8 @@ public final class ChirdlUtilConstants {
     public static final String LOCATION_ATTR_CLINIC_DISPLAY_NAME = "clinicDisplayName";
     public static final String LOCATION_ATTR_DISPLAY_CONFIDENTIALITY_NOTICE = "displayConfidentialityNoticeMobileGreaseBoard";
     public static final String LOCATION_ATTR_FILTER_HL7_BY_APPOINTMENT = "filterHL7ByAppointment";
+    public static final String LOCATION_ATTRIBUTE_PDF_VIEWER = "pdfViewer";
+    
     /*
      * 
      */
@@ -408,6 +410,7 @@ public final class ChirdlUtilConstants {
     public static final String PARAMETER_COMPLETED_BY = "completedby";
     public static final String PARAMETER_CAREGIVER = "caregiver";
     public static final String PARAMETER_SCREENER_COMPLETED_BY = "screener_completed_by";
+    public static final String PARAMETER_PDF_VIEWER = "pdfViewer";
     
     /*
      * 
