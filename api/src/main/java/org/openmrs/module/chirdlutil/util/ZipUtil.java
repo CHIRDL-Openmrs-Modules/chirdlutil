@@ -18,7 +18,6 @@ package org.openmrs.module.chirdlutil.util;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Properties;
 import java.util.UUID;
 import java.util.zip.ZipException;
 
@@ -26,6 +25,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.context.Daemon;
+import org.openmrs.notification.Message;
+import org.openmrs.notification.MessageService;
 
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.model.ZipParameters;
@@ -39,8 +40,6 @@ import net.lingala.zip4j.util.Zip4jConstants;
 public class ZipUtil {
     
     protected static Log log = LogFactory.getLog(ZipUtil.class);
-    
-    public static final String NOTIFICATION_MAIL_SENDER = "chica.notification@iu.edu";
     
     /**
      * Creates a zip file containing all the provided files.
@@ -345,9 +344,11 @@ public class ZipUtil {
                     // the specified name cannot already exist or it will fail.
                     File baseDir = new File(System.getProperty("java.io.tmpdir"));
                     String extension = ".zip";
-                    targetZipFile = new File(baseDir, zipFilename + "_" + UUID.randomUUID() + extension);
+                    String newzipFilename = zipFilename + "_" + UUID.randomUUID();
+                    targetZipFile = new File(baseDir, newzipFilename + extension);
                     while (targetZipFile.exists()) {
-                        targetZipFile = new File(baseDir, zipFilename + "_" + UUID.randomUUID() + extension);
+                    	newzipFilename = zipFilename + "_" + UUID.randomUUID();
+                        targetZipFile = new File(baseDir, newzipFilename + extension);
                     }
                     
                     if (zipPassword != null && zipPassword.trim().length() > 0) {
@@ -356,19 +357,15 @@ public class ZipUtil {
                         zipFiles(targetZipFile, filesToZip);
                     }
                     
-                    File[] attachments = new File[] { targetZipFile };
+                    String addresses = String.join(ChirdlUtilConstants.GENERAL_INFO_COMMA, emailAddresses);
+                    String emailFrom = Context.getAdministrationService().getGlobalProperty(
+                    	ChirdlUtilConstants.GLOBAL_PROP_MAIL_FROM);
                     
-                    String smtpMailHost = Context.getAdministrationService()
-                            .getGlobalProperty("chirdlutil.smtpMailHost");
-                    if (smtpMailHost == null) {
-                        log.error("Please specify global property chirdlutil.smtpMailHost for correct email operability.");
-                        return;
-                    }
-                    
-                    Properties mailProps = new Properties();
-                    mailProps.put("mail.smtp.host", smtpMailHost);
-                    MailSender mailSender = new MailSender(mailProps);
-                    mailSender.sendMail(NOTIFICATION_MAIL_SENDER, emailAddresses, subject, body, attachments);
+                    MessageService messageService = Context.getMessageService();
+                    Message message = messageService.createMessage(
+                    	addresses, emailFrom, subject, body, newzipFilename, 
+                    	ChirdlUtilConstants.MIME_TYPE_ZIP, targetZipFile.getAbsolutePath());
+                    messageService.sendMessage(message);
                 }
                 catch (Exception e) {
                     log.error("Error zipping and sending email", e);

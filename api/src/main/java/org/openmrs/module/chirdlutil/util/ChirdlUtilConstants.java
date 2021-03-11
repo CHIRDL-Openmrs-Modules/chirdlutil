@@ -277,7 +277,6 @@ public final class ChirdlUtilConstants {
     public static final String GLOBAL_PROP_EXPORT_OBS_PORT = "chica.exportObsPort";
     public static final String GLOBAL_PROP_EXPORT_PHYSICIAN_OBS_HOST = "chica.exportPhysicianObsHost";
     public static final String GLOBAL_PROP_EXPORT_PHYSICIAN_OBS_PORT = "chica.exportPhysicianObsPort";
-    public static final String GLOBAL_PROP_EMAIL_SMTP_HOST = "chirdlutil.smtpMailHost";
     public static final String GLOBAL_PROP_GREASEBOARD_CHECKOUT_STATE = "chica.greaseboardCheckoutState";
     public static final String GLOBAL_PROP_PARSE_INSURANCE_CODE_FROM_IN1_35= "chica.parseInsurancePlanCodeFrom_IN1-35";
     public static final String GLOBAL_PROP_PARSE_CARRIER_CODE = "chica.parseCarrierCode";
@@ -736,5 +735,10 @@ public final class ChirdlUtilConstants {
      * Regular expressions
      */
     public static final String REGEX_MATCH_NON_ALPHANUMERIC_CHARACTERS = "[^a-zA-Z0-9]+";
+    
+    /*
+     * MIME types
+     */
+    public static final String MIME_TYPE_ZIP = "application/zip";
 }
 
