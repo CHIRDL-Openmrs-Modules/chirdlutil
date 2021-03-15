@@ -72,11 +72,6 @@
         </description>
     </globalProperty>
     <globalProperty>
-        <property>chirdlutil.smtpMailHost</property>
-        <description>SMTP email host used to send outgoing messages.
-        </description>
-    </globalProperty>
-    <globalProperty>
         <property>chirdlutil.zipEncryptionPassword</property>
         <description>Password used when zipping files.
         </description>
