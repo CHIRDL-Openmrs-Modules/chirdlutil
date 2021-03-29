@@ -5,7 +5,7 @@ import java.util.Comparator;
 import org.openmrs.Encounter;
 
 /**
- * Comparator to order Encounters by date.
+ * Comparator to order Encounters by date.  The oldest will be on the front of the list.
  *
  * @author Steve McKee
  */
