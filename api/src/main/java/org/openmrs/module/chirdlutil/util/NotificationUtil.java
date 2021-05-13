@@ -30,7 +30,7 @@ public class NotificationUtil {
     public static final String NOTIFICATION_EMAIL_SUPPORT_INSTRUCTIONS = "Please check server logs for details.";
     public static final String NOTIFICATION_EMAIL_SUPPORT_SIGNATURE = "Support Notification Service";
     public static final String NOTIFICATION_EMAIL_CLOSING = "Thank you";
-    public static final String NOTIFICATION_EMAIL_LEADING_TEXT = "The following issue occured ";
+    public static final String NOTIFICATION_EMAIL_LEADING_TEXT = "The following issue occurred ";
     public static final String MESSAGE_CANNOT_SEND_EMAIL_TO_SUPPORT = ".  Cannot send email to support: ";
     public static final String GLOBAL_PROP_SUPPORT_EMAIL_SUBJECT = "Support Notification";
     public static final String UNABLE_TO_SEND_EMAIL = "Unable to send email.";
