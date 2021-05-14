@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -1349,5 +1350,54 @@ public class Util
 	 */
 	public static void setDaemonToken(DaemonToken daemonToken) {
 		Util.daemonToken = daemonToken;
+	}
+	
+	/**
+	 * Returns the newest numeric value from an observation from the list of results.
+	 * 
+	 * @param resultList The list of results containing observations
+	 * @return Double object or null if one is not found
+	 */
+	public static Double getLatestNumericValue(List<org.openmrs.logic.result.Result> resultList) {
+		Obs obs = getLatestObs(resultList);
+		Double value = null;
+		if (obs != null) {
+			value = obs.getValueNumeric();
+		}
+		
+		return value;
+	}
+	
+	/**
+	 * Returns the newest  observation from the list of results.
+	 * 
+	 * @param resultList The list of results containing observations
+	 * @return Obs object or null if one is not found
+	 */
+	public static Obs getLatestObs(List<org.openmrs.logic.result.Result> resultList) {
+		List<Obs> obsList = new ArrayList<>();
+		for (org.openmrs.logic.result.Result result : resultList) {
+			Object resultObj = result.getResultObject();
+			if (resultObj instanceof Obs) {
+				Obs obs = (Obs)resultObj;
+				if (obs.getValueNumeric() != null) {
+					obsList.add((Obs)resultObj);
+				}
+			}
+		}
+		
+		if (obsList.isEmpty()) {
+			return null;
+		}
+		
+		if (obsList.size() == 1) {
+			return obsList.get(0);
+		}
+		
+		// Sort the weights so the latest is first
+		Collections.sort(obsList, new ObsDateComparator());
+		Collections.reverse(obsList);
+		
+		return obsList.get(0);
 	}
 }
