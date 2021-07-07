@@ -8,3 +8,4 @@ updates:
         time: "15:15"
         timezone: "America/Indiana/Indianapolis"
      target-branch: "Prod_Release_18.0"
+     open-pull-requests-limit: 0
