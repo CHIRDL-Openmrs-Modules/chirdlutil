@@ -25,17 +25,11 @@ import java.util.Date;
 public class ConceptDescriptor {
 	
 	private String name = null;
-	
 	private String conceptClass = null;
-	
 	private String datatype = null;
-	
 	private String description = null;
-	
 	private String parentConcept = null;
-	
 	private String units = null;
-		
 	private int conceptId;
 	
 	// DWE CHICA-330 4/30/15 Added parentConceptId for use with data table selected rows, conceptId was not unique enough
@@ -227,6 +221,9 @@ public class ConceptDescriptor {
 		return format.format(date);
 	}
 
+	/**
+	 * @see java.lang.Object#hashCode()
+	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -242,6 +239,9 @@ public class ConceptDescriptor {
 		return result;
 	}
 
+	/**
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -286,9 +286,15 @@ public class ConceptDescriptor {
 		return true;
 	}
 
+	/**
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
-		return "ConceptDescriptor [name=" + this.name + ", conceptClass=" + this.conceptClass + ", datatype=" + this.datatype + ", description=" + this.description + ", parentConcept=" + this.parentConcept + ", units=" + this.units + ", conceptId=" + this.conceptId + ", parentConceptId=" + this.parentConceptId + ", dateCreatedStamp=" + this.dateCreatedStamp +"]";
+		return "ConceptDescriptor [name=" + this.name + ", conceptClass=" + this.conceptClass + ", datatype=" 
+				+ this.datatype + ", description=" + this.description + ", parentConcept=" + this.parentConcept 
+				+ ", units=" + this.units + ", conceptId=" + this.conceptId + ", parentConceptId=" 
+				+ this.parentConceptId + ", dateCreatedStamp=" + this.dateCreatedStamp +"]";
 	}
 	
 }
