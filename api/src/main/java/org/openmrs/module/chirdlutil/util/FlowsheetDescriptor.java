@@ -15,13 +15,11 @@ public class FlowsheetDescriptor {
 	
 	/**
 	 * Constructor Method
-	 * Create a ConceptDescriptor with name, concept class, data type, description, parent concept, units, concept Id
+	 * 
 	 * @param conceptName concept name
 	 * @param conceptValueType the concept value type
 	 * @param conceptDescription concept description
-	 * @param description description of this concept
 	 * @param code The flowsheet code
-	 * @param units measurement unit
 	 * @param display the flowsheet display value
 	 */
 	public FlowsheetDescriptor(

@@ -75,7 +75,7 @@ public class CreateFlowsheetReport {
          csvWriter.writeNext(item);
          csvWriter.flush();
          
-         item[0] = "";
+         item[0] = ChirdlUtilConstants.GENERAL_INFO_EMPTY_STRING;
          csvWriter.writeNext(item);
          csvWriter.flush();
          

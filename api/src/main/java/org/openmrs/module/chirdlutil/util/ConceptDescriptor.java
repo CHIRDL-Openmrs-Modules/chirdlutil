@@ -48,7 +48,8 @@ public class ConceptDescriptor {
 	 * @param units measurement unit
 	 * @param conceptId the id of concept
 	 */
-	public ConceptDescriptor(String name, String conceptClass, String datatype, String description, String parentConcept, String units, int conceptId) {
+	public ConceptDescriptor(String name, String conceptClass, String datatype, String description, 
+			String parentConcept, String units, int conceptId) {
 		super();
 		this.name = name;
 		this.conceptClass = conceptClass;
@@ -71,7 +72,8 @@ public class ConceptDescriptor {
 	 * @param conceptId the id of concept
 	 * @param dateCreated the date the concept was created
 	 */
-	public ConceptDescriptor(String name, String conceptClass, String datatype, String description, String parentConcept, String units, int conceptId, int parentConceptId, Timestamp dateCreatedStamp) {
+	public ConceptDescriptor(String name, String conceptClass, String datatype, String description, 
+			String parentConcept, String units, int conceptId, int parentConceptId, Timestamp dateCreatedStamp) {
 		super();
 		this.name = name;
 		this.conceptClass = conceptClass;
