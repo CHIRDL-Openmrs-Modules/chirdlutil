@@ -37,7 +37,7 @@ public class CreateFlowsheetReport {
 	private static final String INPUT_ARG = "-input";
 	private static final String OUTPUT_ARG = "-output";
 	private static final String EXAMPLE_MESSAGE = "CreateFlowsheetReport -output C:\\test\\report.csv -input "
-			+ "C:\\test\\module\\concpets.csv C:\\test\\module2\\concepts.csv";
+			+ "C:\\test\\module\\concepts.csv C:\\test\\module2\\concepts.csv";
 	private static final String DATATYPE_CODED = "Coded";
 	private static final String DATATYPE_NUMERIC = "Numeric";
 	private static final String DATATYPE_STRING = "String";
@@ -234,6 +234,7 @@ public class CreateFlowsheetReport {
 			
 			CreateFlowsheetReport flowsheetCreator = new CreateFlowsheetReport();
 			flowsheetCreator.createFlowsheetReport(outputFile, inputFiles);
+			LOG.info("Successfully created flowsheet report file: " + outputFile.getAbsolutePath());
 		} catch (Exception e) {
 			LOG.error("Error creating flowsheet report.", e);
 			System.exit(1);
