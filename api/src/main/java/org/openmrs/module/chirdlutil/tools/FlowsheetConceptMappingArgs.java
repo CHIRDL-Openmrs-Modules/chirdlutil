@@ -11,8 +11,6 @@ public class FlowsheetConceptMappingArgs {
 	private File input;
 	private File output;
 	private String location;
-	private String displayConceptSource;
-	private String codeConceptSource;
 	
 	/**
 	 * @return the input
@@ -57,42 +55,12 @@ public class FlowsheetConceptMappingArgs {
 	}
 	
 	/**
-	 * @return the displayConceptSource
-	 */
-	public String getDisplayConceptSource() {
-		return this.displayConceptSource;
-	}
-	
-	/**
-	 * @param displayConceptSource the displayConceptSource to set
-	 */
-	public void setDisplayConceptSource(String displayConceptSource) {
-		this.displayConceptSource = displayConceptSource;
-	}
-	
-	/**
-	 * @return the codeConceptSource
-	 */
-	public String getCodeConceptSource() {
-		return this.codeConceptSource;
-	}
-	
-	/**
-	 * @param codeConceptSource the codeConceptSource to set
-	 */
-	public void setCodeConceptSource(String codeConceptSource) {
-		this.codeConceptSource = codeConceptSource;
-	}
-
-	/**
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((this.codeConceptSource == null) ? 0 : this.codeConceptSource.hashCode());
-		result = prime * result + ((this.displayConceptSource == null) ? 0 : this.displayConceptSource.hashCode());
 		result = prime * result + ((this.input == null) ? 0 : this.input.hashCode());
 		result = prime * result + ((this.location == null) ? 0 : this.location.hashCode());
 		result = prime * result + ((this.output == null) ? 0 : this.output.hashCode());
@@ -111,16 +79,6 @@ public class FlowsheetConceptMappingArgs {
 		if (getClass() != obj.getClass())
 			return false;
 		FlowsheetConceptMappingArgs other = (FlowsheetConceptMappingArgs) obj;
-		if (this.codeConceptSource == null) {
-			if (other.codeConceptSource != null)
-				return false;
-		} else if (!this.codeConceptSource.equals(other.codeConceptSource))
-			return false;
-		if (this.displayConceptSource == null) {
-			if (other.displayConceptSource != null)
-				return false;
-		} else if (!this.displayConceptSource.equals(other.displayConceptSource))
-			return false;
 		if (this.input == null) {
 			if (other.input != null)
 				return false;
@@ -145,7 +103,6 @@ public class FlowsheetConceptMappingArgs {
 	@Override
 	public String toString() {
 		return "FlowsheetConceptMappingArgs [input=" + this.input + ", output=" + this.output + ", location=" 
-				+ this.location + ", displayConceptSource=" + this.displayConceptSource + ", codeConceptSource=" 
-				+ this.codeConceptSource + "]";
+				+ this.location + ", displayConceptSource=" + "]";
 	}
 }
