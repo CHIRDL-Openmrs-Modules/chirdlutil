@@ -14,8 +14,9 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.openmrs.module.chirdlutil.util.ChirdlUtilConstants;
 import org.openmrs.module.chirdlutil.util.ConceptDescriptor;
 import org.openmrs.module.chirdlutil.util.FlowsheetDescriptor;
@@ -33,7 +34,7 @@ import au.com.bytecode.opencsv.bean.HeaderColumnNameTranslateMappingStrategy;
  */
 public class CreateFlowsheetReport {
 	
-	private static final Log LOG = LogFactory.getLog(CreateFlowsheetReport.class);
+	private static final Logger LOG = Logger.getLogger(CreateFlowsheetReport.class);
 	private static final String INPUT_ARG = "-input";
 	private static final String OUTPUT_ARG = "-output";
 	private static final String EXAMPLE_MESSAGE = "CreateFlowsheetReport -output C:\\test\\report.csv -input "
@@ -50,6 +51,8 @@ public class CreateFlowsheetReport {
 	 * @throws IOException
 	 */
 	public void createFlowsheetReport(File outputFile, List<File> inputFiles) throws IOException {
+		BasicConfigurator.configure();
+		LOG.setLevel(Level.INFO);
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
                 CSVWriter csvWriter = new CSVWriter(writer);) {
 			createHeaders(csvWriter);

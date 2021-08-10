@@ -12,8 +12,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.openmrs.module.chirdlutil.util.FlowsheetDescriptor;
 
 import au.com.bytecode.opencsv.CSVReader;
@@ -29,7 +30,7 @@ public class CreateFlowsheetConceptMapping {
 	private static final String FLOWSHEET_CONCEPT_SOURCE_CODE = "flowsheetCodeConceptSource";
 	private static final String SOURCE_TYPE_DISPLAY = "Display";
 	private static final String SOURCE_TYPE_CODE = "Code";
-	private static final Log LOG = LogFactory.getLog(CreateFlowsheetConceptMapping.class);
+	private static final Logger LOG = Logger.getLogger(CreateFlowsheetConceptMapping.class);
 	private static final String INPUT_ARG = "-input";
 	private static final String OUTPUT_ARG = "-output";
 	private static final String LOCATION_ARG = "-location";
@@ -45,6 +46,8 @@ public class CreateFlowsheetConceptMapping {
 	 * @throws IOException
 	 */
 	public void createFlowsheetConceptMappingFile(FlowsheetConceptMappingArgs mappingArgs) throws IOException {
+		BasicConfigurator.configure();
+		LOG.setLevel(Level.INFO);
 		try (InputStreamReader inStreamReader = new InputStreamReader(new FileInputStream(mappingArgs.getInput()));
 				CSVReader reader = new CSVReader(inStreamReader, ','); 
 				PrintWriter writer = new PrintWriter(new FileWriter(mappingArgs.getOutput()));) {
@@ -215,7 +218,7 @@ public class CreateFlowsheetConceptMapping {
 		for (FlowsheetDescriptor mapping : mappings) {
 			if (StringUtils.isBlank(mapping.getCode()) || StringUtils.isBlank(mapping.getConceptName()) 
 					|| StringUtils.isBlank(mapping.getDisplay())) {
-				LOG.error("Invalid mapping found.  Please ensure the Concept Name, Epic Code, and Epic "
+				LOG.warn("Invalid mapping found.  Please ensure the Concept Name, Epic Code, and Epic "
 						+ "Display values exist: " + mapping);
 				continue;
 			}
