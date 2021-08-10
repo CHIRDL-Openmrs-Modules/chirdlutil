@@ -30,7 +30,6 @@ import au.com.bytecode.opencsv.bean.HeaderColumnNameTranslateMappingStrategy;
  * Creates a master document of all numeric and parent coded concepts based upon existing concept files.
  * 
  * @author Steve McKee
- *
  */
 public class CreateFlowsheetReport {
 	

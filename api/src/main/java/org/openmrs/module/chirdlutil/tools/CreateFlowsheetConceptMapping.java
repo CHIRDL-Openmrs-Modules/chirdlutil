@@ -21,6 +21,11 @@ import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.bean.CsvToBean;
 import au.com.bytecode.opencsv.bean.HeaderColumnNameTranslateMappingStrategy;
 
+/**
+ * Creates a master document of SQL statements needed to map flowsheet rows provided by a hospital system.
+ * 
+ * @author Steve McKee
+ */
 public class CreateFlowsheetConceptMapping {
 	
 	private static final String SQL_ADD_THE = "/* Add the ";
@@ -35,12 +40,11 @@ public class CreateFlowsheetConceptMapping {
 	private static final String OUTPUT_ARG = "-output";
 	private static final String LOCATION_ARG = "-location";
 	private static final String EXAMPLE_MESSAGE = "CreateFlowsheetConceptMapping -output C:\\test\\mappings.csv -input "
-			+ "C:\\test\\flowsheetMapping.csv.csv -location ABCD -displayConceptSource \"ABCD Flowsheet Display\" "
-			+ "-codeConceptSource \"ABCD Flowsheet Code\"";
+			+ "C:\\test\\flowsheetMapping.csv -location ABCD";
 	
 	/**
 	 * Creates a file containing the SQl statements for the concept sources and mappings required to map from the 
-	 * internal concepts to the codes and display provided by the EHR.
+	 * internal concepts to the code and display provided by the EHR.
 	 *  
 	 * @param mappingArgs The program arguments
 	 * @throws IOException
@@ -134,6 +138,7 @@ public class CreateFlowsheetConceptMapping {
 	private void writeConceptSourcesSql(PrintWriter writer, FlowsheetConceptMappingArgs mappingArgs) {
 		writeConceptSourceSql(writer, mappingArgs, SOURCE_TYPE_CODE);
 		writeConceptSourceSql(writer, mappingArgs, SOURCE_TYPE_DISPLAY);
+		writer.flush();
 	}
 	
 	/**
@@ -170,6 +175,7 @@ public class CreateFlowsheetConceptMapping {
 	private void writeFlowsheetLocationAttributesSql(PrintWriter writer, FlowsheetConceptMappingArgs mappingArgs) {
 		writeFlowsheetLocationAttributeSql(writer, mappingArgs, SOURCE_TYPE_CODE, FLOWSHEET_CONCEPT_SOURCE_CODE);
 		writeFlowsheetLocationAttributeSql(writer, mappingArgs, SOURCE_TYPE_DISPLAY, FLOWSHEET_CONCEPT_SOURCE_DISPLAY);
+		writer.flush();
 	}
 	
 	/**
