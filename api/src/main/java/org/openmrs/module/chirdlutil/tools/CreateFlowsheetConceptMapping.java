@@ -381,6 +381,7 @@ public class CreateFlowsheetConceptMapping {
 		
 		try {
 			new CreateFlowsheetConceptMapping().createFlowsheetConceptMappingFile(mappingArgs);
+			LOG.info("Successfully created flowsheet report file: " + mappingArgs.getOutput().getAbsolutePath());
 		}
 		catch (Exception e) {
 			LOG.error("Error creating flowsheet mappings", e);
