@@ -22,6 +22,9 @@ import au.com.bytecode.opencsv.bean.HeaderColumnNameTranslateMappingStrategy;
 
 public class CreateFlowsheetConceptMapping {
 	
+	private static final String SQL_ADD_THE = "/* Add the ";
+	private static final String SQL_FLOWSHEET = " Flowsheet ";
+	private static final String SQL_WHERE_NAME = "\t\t\twhere name = '";
 	private static final String FLOWSHEET_CONCEPT_SOURCE_DISPLAY = "flowsheetDisplayConceptSource";
 	private static final String FLOWSHEET_CONCEPT_SOURCE_CODE = "flowsheetCodeConceptSource";
 	private static final String SOURCE_TYPE_DISPLAY = "Display";
@@ -77,7 +80,7 @@ public class CreateFlowsheetConceptMapping {
 				list = new ArrayList<>();
 			}
 			
-			writeConceptMappingsSql(writer, list);
+			writeConceptMappingsSql(writer, list, mappingArgs);
 		}
 	}
 	
@@ -105,8 +108,8 @@ public class CreateFlowsheetConceptMapping {
 		writer.println(
 			"insert into chirdlutilbackports_location_attribute_value (location_id, value, location_attribute_id)");
 		writer.println("values ((select location_id");
-		writer.println("\\t\t\tfrom location");
-		writer.print("\t\t\twhere name = '");
+		writer.println("\t\t\tfrom location");
+		writer.print(SQL_WHERE_NAME);
 		writer.print(mappingArgs.getLocation());
 		writer.println("'), ");
 		writer.print("\t\t'");
@@ -145,7 +148,7 @@ public class CreateFlowsheetConceptMapping {
 		writer.println("insert into concept_reference_source(name, description, creator, date_created, uuid) ");
 		writer.print("VALUES('");
 		writer.print(mappingArgs.getLocation());
-		writer.print(" Flowsheet ");
+		writer.print(SQL_FLOWSHEET);
 		writer.print(sourceType);
 		writer.print("', 'Flowsheet ");
 		writer.print(sourceType.toLowerCase());
@@ -184,17 +187,17 @@ public class CreateFlowsheetConceptMapping {
 			"insert into chirdlutilbackports_location_attribute_value (location_id, value, location_attribute_id)");
 		writer.println("values ((select location_id");
 		writer.println("\t\t\tfrom location");
-		writer.print("\t\t\twhere name = '");
+		writer.print(SQL_WHERE_NAME);
 		writer.print(mappingArgs.getLocation());
 		writer.println("'),");
 		writer.print("\t\t'");
 		writer.print(mappingArgs.getLocation());
-		writer.print(" Flowsheet ");
+		writer.print(SQL_FLOWSHEET);
 		writer.print(sourceType);
 		writer.println("',");
 		writer.println("\t\t(select location_attribute_id");
 		writer.println("\t\t\tfrom chirdlutilbackports_location_attribute");
-		writer.print("\t\t\twhere name = '");
+		writer.print(SQL_WHERE_NAME);
 		writer.print(attrName);
 		writer.println("'));");
 		writer.println();
@@ -203,37 +206,93 @@ public class CreateFlowsheetConceptMapping {
 	/**
 	 * Writes the concept mapping SQL for all concepts in the provided mapping list.
 	 * 
-	 * @param writer The print writer to write the output file.
+	 * @param writer The print writer to write the output file
 	 * @param mappings The concept mappings used to create the SQL statements
+	 * @param mappingArgs The program arguments
 	 */
-	private void writeConceptMappingsSql(PrintWriter writer, List<FlowsheetDescriptor> mappings) {
+	private void writeConceptMappingsSql(
+			PrintWriter writer, List<FlowsheetDescriptor> mappings, FlowsheetConceptMappingArgs mappingArgs) {
 		for (FlowsheetDescriptor mapping : mappings) {
 			if (StringUtils.isBlank(mapping.getCode()) || StringUtils.isBlank(mapping.getConceptName()) 
 					|| StringUtils.isBlank(mapping.getDisplay())) {
-				System.err.println("Invalid mapping found.  Please ensure the Concept Name, Epic Code, and Epic "
+				LOG.error("Invalid mapping found.  Please ensure the Concept Name, Epic Code, and Epic "
 						+ "Display values exist: " + mapping);
 				continue;
 			}
 			
-			writeConceptMappingSql(writer, mapping);
+			writeConceptMappingSql(writer, mapping, mappingArgs);
 		}
 	}
 	
-	private void writeConceptMappingSql(PrintWriter writer, FlowsheetDescriptor mapping) {
-		// Write the insert statements for the concept reference term
-		writeConceptRefTermSql(writer, FLOWSHEET_CONCEPT_SOURCE_CODE, mapping.getCode());
-		writeConceptRefTermSql(writer, FLOWSHEET_CONCEPT_SOURCE_DISPLAY, mapping.getDisplay());
+	/**
+	 * Writes the concept reference term and mapping SQL statements for the provided mapping.
+	 * 
+	 * @param writer The print writer to write the output file
+	 * @param mapping The concept mapping
+	 * @param mappingArgs The program arguments
+	 */
+	private void writeConceptMappingSql
+	(PrintWriter writer, FlowsheetDescriptor mapping, FlowsheetConceptMappingArgs mappingArgs) {
+		// Write the insert statements for the code concept reference term
+		writer.print(SQL_ADD_THE);
+		writer.write(mapping.getConceptName());
+		writer.println(" code concept reference term for the flowsheet code concept source */");
+		writeConceptRefTermSql(writer, SOURCE_TYPE_CODE, mapping.getCode(), mappingArgs);
 		
-		// Write the insert statement for the concept reference map
+		// Write the concept term mapping for the code concept reference term
+		writer.print(SQL_ADD_THE);
+		writer.write(mapping.getConceptName());
+		writer.println(" code concept reference term mapping for the flowsheet code concept source */");
+		writeConceptRefTermMapping(writer, mapping);
+		
+		// Write the insert statements for the display concept reference term
+		writer.print(SQL_ADD_THE);
+		writer.write(mapping.getConceptName());
+		writer.println(" display concept reference term for the flowsheet display concept source */");
+		writeConceptRefTermSql(writer, SOURCE_TYPE_DISPLAY, mapping.getDisplay(), mappingArgs);
+		
+		// Write the concept term mapping for the display concept reference term
+		writer.print(SQL_ADD_THE);
+		writer.write(mapping.getConceptName());
+		writer.println(" display concept reference term mapping for the flowsheet display concept source */");
+		writeConceptRefTermMapping(writer, mapping);
 	}
 	
-	private void writeConceptRefTermSql(PrintWriter writer, String conceptSource, String code) {
+	/**
+	 * Writes the concept reference term SQL for the provided concept source and code.
+	 * 
+	 * @param writer The print writer to write the output file
+	 * @param sourceType The source type, either "Code" or "Display"
+	 * @param code The concept reference term code (value)
+	 */
+	private void writeConceptRefTermSql(
+			PrintWriter writer, String sourceType, String code, FlowsheetConceptMappingArgs mappingArgs) {
 		writer.println("insert into concept_reference_term (concept_source_id, code, creator, date_created, uuid)");
 		writer.print("values((select concept_source_id \n\t\t\tfrom concept_reference_source \n\t\t\twhere name = '");
-		writer.print(conceptSource);
+		writer.print(mappingArgs.getLocation());
+		writer.print(SQL_FLOWSHEET);
+		writer.print(sourceType);
 		writer.print("'), \n\t\t'");
 		writer.print(code);
 		writer.println("', 1, NOW(), UUID());");
+		writer.println();
+	}
+	
+	/**
+	 * Writes the concept reference term mapping SQL for the provided mapping.
+	 * 
+	 * @param writer The print writer to write the output file
+	 * @param mapping The concept mapping
+	 */
+	private void writeConceptRefTermMapping(PrintWriter writer, FlowsheetDescriptor mapping) {
+		writer.print("insert into concept_reference_map (concept_reference_term_id, concept_map_type_id, creator, ");
+		writer.println("date_created, concept_id, uuid)");
+		writer.println("values((select MAX(concept_reference_term_id) \n\t\t\tfrom concept_reference_term),");
+		writer.print("\t\t(select concept_map_type_id \n\t\t\tfrom concept_map_type \n\t\t\twhere name = ");
+		writer.println("'NARROWER-THAN'), 1, NOW(),");
+		writer.print("\t\t(select concept_id \n\t\t\tfrom concept_name \n\t\t\twhere name = '");
+		writer.print(mapping.getConceptName());
+		writer.println("'), UUID());");
 		writer.println();
 	}
 	
@@ -245,9 +304,6 @@ public class CreateFlowsheetConceptMapping {
 	 */
 	private static FlowsheetConceptMappingArgs createFlowsheetConceptMappingArgs(String[] args) {
 		FlowsheetConceptMappingArgs mappingArgs = new FlowsheetConceptMappingArgs();
-		File outputFile = null;
-		File inputFile = null;
-		String location = null;
 		boolean isInput = false;
 		boolean isOutput = false;
 		boolean isLocation = false;
@@ -265,43 +321,38 @@ public class CreateFlowsheetConceptMapping {
 				isOutput = false;
 				isLocation = true;
 			} else {
-				if (isInput) {
-					inputFile = new File(arg);
-					if (!inputFile.exists() || !inputFile.canRead() || inputFile.isDirectory()) {
-						System.err.println("Cannot locate or read input file " + arg);
-						return null;
-					}
-					
-					mappingArgs.setInput(inputFile);
-				} else if (isOutput) {
-					outputFile = new File(arg);
-					mappingArgs.setOutput(outputFile);
-				} else if (isLocation) {
-					location = arg;
-					mappingArgs.setLocation(location);
-				}
+				setArgument(mappingArgs, isInput, isOutput, isLocation, arg);
 			}
 		}
 		
-		if (outputFile == null) {
-			System.err.println("No output file specified.");
-			System.err.println(EXAMPLE_MESSAGE);
-			return null;
-		}
-			
-		if (inputFile == null) {
-			System.err.println("No input files specified.");
-			System.err.println(EXAMPLE_MESSAGE);
-			return null;
-		}
-		
-		if (StringUtils.isBlank(location)) {
-			System.err.println("No location specified.");
-			System.err.println(EXAMPLE_MESSAGE);
-			return null;
-		}
-		
 		return mappingArgs;
+	}
+	
+	/**
+	 * Sets the mapping argument.
+	 * 
+	 * @param mappingArgs The program arguments
+	 * @param isInput True if the argument is the input file, false otherwise
+	 * @param isOutput True if the argument is the output file, false otherwise
+	 * @param isLocation True if the argument is the location, false otherwise
+	 * @param arg The argument
+	 */
+	private static void setArgument(FlowsheetConceptMappingArgs mappingArgs, boolean isInput, boolean isOutput, 
+			boolean isLocation, String arg) {
+		if (isInput) {
+			File inputFile = new File(arg);
+			if (!inputFile.exists() || !inputFile.canRead() || inputFile.isDirectory()) {
+				LOG.error("Cannot locate or read input file " + arg);
+				return;
+			}
+			
+			mappingArgs.setInput(inputFile);
+		} else if (isOutput) {
+			File outputFile = new File(arg);
+			mappingArgs.setOutput(outputFile);
+		} else if (isLocation) {
+			mappingArgs.setLocation(arg);
+		}
 	}
 	
 	/**
@@ -311,21 +362,29 @@ public class CreateFlowsheetConceptMapping {
 	 */
 	public static void main(String[] args) {
 		if (args == null || args.length == 0) {
-            System.err.println("Please specify the correct parameters.");
-            System.err.println(EXAMPLE_MESSAGE);
+            LOG.error("Please specify the correct parameters.");
+            LOG.error(EXAMPLE_MESSAGE);
             System.exit(1);
         }
 		
 		FlowsheetConceptMappingArgs mappingArgs = createFlowsheetConceptMappingArgs(args);
-		if (mappingArgs == null) {
-			System.exit(1);
+		if (mappingArgs.getOutput() == null) {
+			LOG.error("No output file specified.");
+			LOG.error(EXAMPLE_MESSAGE);
+		} else if (mappingArgs.getInput() == null) {
+			LOG.error("No input files specified.");
+			LOG.error(EXAMPLE_MESSAGE);
+		} else if (StringUtils.isBlank(mappingArgs.getLocation())) {
+			LOG.error("No location specified.");
+			LOG.error(EXAMPLE_MESSAGE);
 		}
 		
 		try {
 			new CreateFlowsheetConceptMapping().createFlowsheetConceptMappingFile(mappingArgs);
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			LOG.error("Error creating flowsheet mappings", e);
+			System.exit(1);
 		}
 		
 		System.exit(0);
