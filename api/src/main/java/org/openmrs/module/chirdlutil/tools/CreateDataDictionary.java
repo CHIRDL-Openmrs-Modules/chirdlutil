@@ -26,8 +26,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.openmrs.module.chirdlutil.util.Util;
 
 import au.com.bytecode.opencsv.CSVWriter;
@@ -38,13 +39,14 @@ import au.com.bytecode.opencsv.CSVWriter;
  */
 public class CreateDataDictionary {
     
-    private static final Log LOG = LogFactory.getLog(CreateDataDictionary.class);
+	private static final Logger LOG = Logger.getLogger(CreateDataDictionary.class);
     
     /**
      * @param args
      */
     public static void main(String[] args) {
-        
+    	BasicConfigurator.configure();
+		LOG.setLevel(Level.INFO);
         try {
             if (args == null || args.length < 2) {
                 LOG.error("A minimum number of two arguments (a rule directory and an output filename) are required.");
@@ -109,6 +111,8 @@ public class CreateDataDictionary {
         Pattern storeObsPattern = Pattern.compile("CALL\\s*storeObs\\s*With\\s*\"(.+)\"\\s*,\\s*\"(.+)\"\\s*;",Pattern.CASE_INSENSITIVE);
         Pattern ifBoxPattern = Pattern.compile("if.*Box.*then",Pattern.CASE_INSENSITIVE);
         Pattern writePattern = Pattern.compile("write\\s*\\(\\s*\"(.*)\"\\s*\\)\\s*;",Pattern.CASE_INSENSITIVE);
+        Pattern ageMinPattern = Pattern.compile("age_min:\\s*(.*)\\s*\\s*;;",Pattern.CASE_INSENSITIVE);
+        Pattern ageMaxPattern = Pattern.compile("age_max:\\s*(.*)\\s*\\s*;;",Pattern.CASE_INSENSITIVE);
         
         //loop through the mlms
         for (File file : files) {
@@ -139,6 +143,10 @@ public class CreateDataDictionary {
                 HashMap<String, String> writeMap = new HashMap<>();
                 String line = null;
                 ArrayList<String> currentBoxes = new ArrayList<>();
+                String ageMin = null;
+                String ageMinUnits = null;
+                String ageMax = null;
+                String ageMaxUnits = null;
                 while ((line = reader.readLine()) != null) {
                     
                     if (line.trim().length() == 0) {
@@ -207,6 +215,34 @@ public class CreateDataDictionary {
                         writeBoxNum++;
                     }
                     
+                    //check for age min
+                    m = ageMinPattern.matcher(line);
+                    matches = m.find();
+                    if (matches) {
+                    	String ageMinMatch = m.group(1).trim();
+                    	if (ageMinMatch.length() > 0) {
+                    		String[] ageMinItems = ageMinMatch.split("\\s+");
+                    		if (ageMinItems.length > 1) {
+                    			ageMin = ageMinItems[0];
+                    			ageMinUnits = ageMinItems[1];
+                    		}
+                    	}
+                    }
+                    
+                  //check for age max
+                    m = ageMaxPattern.matcher(line);
+                    matches = m.find();
+                    if (matches) {
+                    	String ageMaxMatch = m.group(1).trim();
+                    	if (ageMaxMatch.length() > 0) {
+                    		String[] ageMaxItems = ageMaxMatch.split("\\s+");
+                    		if (ageMaxItems.length > 1) {
+                    			ageMax = ageMaxItems[0];
+                    			ageMaxUnits = ageMaxItems[1];
+                    		}
+                    	}
+                    }
+                    
                 }
                 
                 String promptText = writeMap.get("prompt");
@@ -235,6 +271,10 @@ public class CreateDataDictionary {
                             ddDescriptor.setLeafText(leafText.trim());
                             ddDescriptor.setPromptText(promptText.trim());
                             ddDescriptor.setQuestion(question);
+                            ddDescriptor.setAgeMin(ageMin);
+                            ddDescriptor.setAgeMinUnits(ageMinUnits);
+                            ddDescriptor.setAgeMax(ageMax);
+                            ddDescriptor.setAgeMaxUnits(ageMaxUnits);
                             list.add(ddDescriptor);
                         }
                     }
@@ -258,20 +298,28 @@ public class CreateDataDictionary {
     public static void exportDataDictionary(File outputFile, List<DataDictionaryDescriptor> list) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
                 CSVWriter csvWriter = new CSVWriter(writer)) {
-            String[] columnNames = new String[5];
-            columnNames[0] = "rule filename";
-            columnNames[1] = "question";
-            columnNames[2] = "answer";
-            columnNames[3] = "leaf";
-            columnNames[4] = "prompt";
+            String[] columnNames = new String[9];
+            columnNames[0] = "Rule Filename";
+            columnNames[1] = "Coded Question";
+            columnNames[2] = "Coded Answer";
+            columnNames[3] = "Answer Text";
+            columnNames[4] = "Question Text";
+            columnNames[5] = "Age Minimum";
+            columnNames[6] = "Age Minimum Units";
+            columnNames[7] = "Age Maximum";
+            columnNames[8] = "Age Maximum Units";
             csvWriter.writeNext(columnNames);
             for (DataDictionaryDescriptor dataDictionaryDescriptor : list) {
-                String[] item = new String[5];
+                String[] item = new String[9];
                 item[0] = dataDictionaryDescriptor.getFilename();
                 item[1] = dataDictionaryDescriptor.getQuestion();
                 item[2] = dataDictionaryDescriptor.getAnswer();
                 item[3] = dataDictionaryDescriptor.getLeafText();
                 item[4] = dataDictionaryDescriptor.getPromptText();
+                item[5] = dataDictionaryDescriptor.getAgeMin();
+                item[6] = dataDictionaryDescriptor.getAgeMinUnits();
+                item[7] = dataDictionaryDescriptor.getAgeMax();
+                item[8] = dataDictionaryDescriptor.getAgeMaxUnits();
                 csvWriter.writeNext(item);
                 csvWriter.flush();
             }
