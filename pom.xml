@@ -25,6 +25,12 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
+			    <groupId>xml-apis</groupId>
+			    <artifactId>xml-apis</artifactId>
+			    <version>1.4.01</version>
+			    <scope>test</scope>
+			</dependency>
+			<dependency>
 				<groupId>org.openmrs.module</groupId>
 				<artifactId>logic-api</artifactId>
 				<version>0.5.5</version>
