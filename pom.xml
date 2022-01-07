@@ -25,12 +25,6 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-			    <groupId>xml-apis</groupId>
-			    <artifactId>xml-apis</artifactId>
-			    <version>1.4.01</version>
-			    <scope>test</scope>
-			</dependency>
-			<dependency>
 				<groupId>org.openmrs.module</groupId>
 				<artifactId>logic-api</artifactId>
 				<version>0.5.5</version>
@@ -270,6 +264,12 @@
 				<artifactId>javax.servlet-api</artifactId>
 				<version>3.0.1</version>
 				<scope>provided</scope>
+			</dependency>
+			<dependency>
+			    <groupId>xml-apis</groupId>
+			    <artifactId>xml-apis</artifactId>
+			    <version>1.4.01</version>
+			    <scope>test</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
