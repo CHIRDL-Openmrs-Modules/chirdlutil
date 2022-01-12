@@ -118,9 +118,9 @@ public class ThreadManager {
 			pool.execute(runnable);
 			log.info(String.format("Added the following to the Thread Manager's execution queue - name: %1$s - priority: %2$d - clinic: %3$d", name, priority, locationId));
 		} catch (RejectedExecutionException ree) {
-		    log.error(String.format("Thread Manager no longer accepting new threads. This thread has been rejected - name: %1$s - priority: %2$d - clinic: %3$d, %4$s", name, priority, locationId, ree));
+		    log.error(String.format("Thread Manager no longer accepting new threads. This thread has been rejected - name: %1$s - priority: %2$d - clinic: %3$d", name, priority, locationId), ree);
 		} catch (Exception e) {
-		    log.error(String.format("Error executing thread - name: %1$s - priority: %2$d - clinic: %3$d, %4$s", name, priority, locationId, e));
+		    log.error(String.format("Error executing thread - name: %1$s - priority: %2$d - clinic: %3$d", name, priority, locationId), e);
 		}
 	}
 	
@@ -210,9 +210,9 @@ public class ThreadManager {
 						pool.execute(runnable);
 						log.info(String.format("Added the following to the Thread Manager's execution queue - name: %1$s - priority: %2$d - clinic: %3$d", name, priority, locationId));
 					} catch (RejectedExecutionException ree) {
-					    log.error(String.format("Thread Manager no longer accepting new threads.  This thread has been rejected - name: %1$s - priority: %2$d - clinic: %3$d, %4$s", name, priority, locationId, ree));
+					    log.error(String.format("Thread Manager no longer accepting new threads.  This thread has been rejected - name: %1$s - priority: %2$d - clinic: %3$d", name, priority, locationId), ree);
 					} catch (Exception e) {
-					    log.error(String.format("Error executing thread - name: %1$s - priority: %2$d - clinic: %3$d, %4$s", name, priority, locationId, e));
+					    log.error(String.format("Error executing thread - name: %1$s - priority: %2$d - clinic: %3$d", name, priority, locationId), e);
 					}
 				}
 			}

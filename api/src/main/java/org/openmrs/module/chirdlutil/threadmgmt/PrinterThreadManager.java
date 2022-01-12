@@ -93,9 +93,9 @@ public class PrinterThreadManager {
 			printerJobExecutor.execute(runnable);
 			log.info(String.format("Added the following to the Printer Thread Manager's execution queue - printer: %1$s - file: %2$s", printerName, pdfLocation));
 		} catch (RejectedExecutionException ree) {
-		    log.error(String.format("Printer Thread Manager no longer accepting new threads.  This thread has been rejected - printer: %1$s - file: %2$s, %3$s", printerName, pdfLocation, ree));
+		    log.error(String.format("Printer Thread Manager no longer accepting new threads.  This thread has been rejected - printer: %1$s - file: %2$s", printerName, pdfLocation), ree);
 		} catch (Exception e) {
-		    log.error(String.format("Error executing Printer Thread Manager thread - printer: %1$s - file: %2$s, %3$s", printerName, pdfLocation, e));
+		    log.error(String.format("Error executing Printer Thread Manager thread - printer: %1$s - file: %2$s", printerName, pdfLocation), e);
 		}
 	}
 	

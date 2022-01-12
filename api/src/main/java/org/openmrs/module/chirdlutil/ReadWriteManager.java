@@ -38,7 +38,7 @@ public class ReadWriteManager
                 wait();
             } catch (InterruptedException ie)
             {
-                LOG.error(ie.getMessage());
+                LOG.error("Error generated", ie);
                 Thread.currentThread().interrupt();
             }
         }
@@ -48,7 +48,7 @@ public class ReadWriteManager
     public synchronized void releaseReadLock()
     {
         this.readers--;
-        if ((this.readers == 0) && (this.writersWaiting > 0))
+        if ((this.readers == 0) & (this.writersWaiting > 0))
         {
             notifyAll();
         }
@@ -57,14 +57,14 @@ public class ReadWriteManager
     public synchronized void getWriteLock()
     {
         this.writersWaiting++;
-        while ((this.readers > 0) || this.writingInProgress)
+        while ((this.readers > 0) | this.writingInProgress)
         {
             try
             {
                 wait();
             } catch (InterruptedException ie)
             {
-                LOG.error(ie.getMessage());
+                LOG.error("Error generated", ie);
                 Thread.currentThread().interrupt();
             }
         }

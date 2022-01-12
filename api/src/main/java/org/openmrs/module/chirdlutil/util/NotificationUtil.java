@@ -96,7 +96,7 @@ public class NotificationUtil {
             reconcileMessageMap();
 
         } catch (Exception e) {
-            log.error(String.format("Error sending support email. %s", e));
+            log.error("Error sending support email. ", e);
         }
     }
 
@@ -123,7 +123,7 @@ public class NotificationUtil {
         try {
             Context.getMessageService().sendMessage(recipients, sender, subject, body);
         } catch (MessageException e) {
-            log.error(String.format("Error creating email message %1$s, %2$s", msg, e.getMessage()));
+            log.error(String.format("Error creating email message %s", msg), e);
             return false;
         }
 

@@ -52,10 +52,10 @@ public class PDFPrintRunnable implements ChirdlPrintJobRunnable {
             PrintServices.printPDFFileSynchronous(this.printerName, pdfFile);
         }
         catch (IllegalArgumentException e) {
-            log.error(String.format("Invalid parameter print PDF file %1$s to printer %2$s, %3$s", this.pdfLocation, this.printerName, e.getMessage()));
+            log.error(String.format("Invalid parameter print PDF file %1$s to printer %2$s", this.pdfLocation, this.printerName), e);
         }
         catch (Exception e) {
-            log.error(String.format("Unknown error occurred printing PDF file %1$s to printer %2$s, %3$s", this.pdfLocation, this.printerName, e.getMessage()));
+            log.error(String.format("Unknown error occurred printing PDF file %1$s to printer %2$s", this.pdfLocation, this.printerName), e);
         }
     }
     

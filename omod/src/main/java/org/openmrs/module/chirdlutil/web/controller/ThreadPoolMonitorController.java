@@ -43,8 +43,8 @@ public class ThreadPoolMonitorController {
 			try {
 				refreshRate = Integer.parseInt(refreshRateStr);
 			} catch (NumberFormatException e) {
-			    LOG.error(String.format("Error parsing the data in the %1$s global property. The refresh rate is being defaulted to 10 seconds. %2$s", 
-			            ChirdlUtilConstants.GLOBAL_PROP_THREAD_POOL_MONITOR_REFRESH_RATE, e));
+			    LOG.error(String.format("Error parsing the data in the %s global property. The refresh rate is being defaulted to 10 seconds.", 
+			            ChirdlUtilConstants.GLOBAL_PROP_THREAD_POOL_MONITOR_REFRESH_RATE), e);
 				refreshRate = 10;
 			}
 		} else {

@@ -100,7 +100,7 @@ public class ConvertRules {
         
         String newFileName = outputDirectory + "\\" + file.getName();
         
-        LOG.info(String.format("Converting %s", oldFileName));
+        LOG.info(String.format("Converting %s...", oldFileName));
         Pattern p = null;
         Matcher m = null;
         boolean matches = false;

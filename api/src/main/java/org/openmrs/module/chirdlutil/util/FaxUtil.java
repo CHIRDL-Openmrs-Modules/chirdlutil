@@ -134,7 +134,7 @@ public class FaxUtil {
             }
         }
         catch (Exception e) {
-            log.error(String.format("Error faxing file: %1$s, %2$s", fileToFax, e));
+            log.error(String.format("Error faxing file: %s", fileToFax), e);
             throw e;
         }
     }
@@ -232,7 +232,7 @@ public class FaxUtil {
                 fin.close();
                 attachment.setFileContent(fileContents);
             } catch (IOException e) {
-                log.error(String.format("Exception reading contents of fax file: %1$s, %2$s", fileToFax.getName(), e));
+                log.error(String.format("Exception reading contents of fax file: %s", fileToFax.getName()), e);
                 return null;
             }
             ArrayOfAttachment attachments = new ArrayOfAttachment();
@@ -267,7 +267,7 @@ public class FaxUtil {
             log.error(String.format("Fax failed for file: %s", fileToFax.getAbsolutePath()));
             return null;
         } catch (Exception e) {
-            log.error(String.format("Error faxing file: %1$s, %2$s", fileToFax, e));
+            log.error(String.format("Error faxing file: %s", fileToFax), e);
             throw e;
         }
     

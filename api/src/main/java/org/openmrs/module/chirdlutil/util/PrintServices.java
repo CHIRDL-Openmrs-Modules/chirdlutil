@@ -127,7 +127,7 @@ public class PrintServices {
 		    	}
 	    	}
     	} catch (Exception e) {
-    		log.error(String.format("Error running SumatraPDF for printing file %1$s to printer %2$s, %3$s", pdfFile.getAbsolutePath(), printerName, e));
+    		log.error(String.format("Error running SumatraPDF for printing file %1$s to printer %2$s", pdfFile.getAbsolutePath(), printerName), e);
     	}
     }
 }
