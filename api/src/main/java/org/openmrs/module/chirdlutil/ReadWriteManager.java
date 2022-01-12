@@ -3,8 +3,8 @@
  */
 package org.openmrs.module.chirdlutil;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author tmdugan
@@ -12,23 +12,23 @@ import org.apache.commons.logging.LogFactory;
  */
 public class ReadWriteManager
 {
-    private static final Log LOG = LogFactory.getLog(ReadWriteManager.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ReadWriteManager.class);
 
     private boolean writingInProgress = false;
     private int writersWaiting = 0;
     private int readers = 0;
 
     public void logReadWriteInfo(){
-        LOG.info("Writing in progress: "+this.writingInProgress);
-        LOG.info("# of writers waiting: "+this.writersWaiting);
-        LOG.info("# of readers: "+this.readers);
+        LOG.info(String.format("Writing in progress: %s", this.writingInProgress));
+        LOG.info(String.format("# of writers waiting: %d", this.writersWaiting));
+        LOG.info(String.format("# of readers: %d", this.readers));
     }
     
     /**
      * Read-Write locking code attributed to Nasir Khan
      * http://www.developer.com/java/article.php/951051
      */
-    synchronized public void getReadLock()
+    public synchronized void getReadLock()
     {
         // writing is more important so always wait on writer
         while (this.writingInProgress)
@@ -38,33 +38,33 @@ public class ReadWriteManager
                 wait();
             } catch (InterruptedException ie)
             {
-                LOG.error(ie);
+                LOG.error(ie.getMessage());
                 Thread.currentThread().interrupt();
             }
         }
         this.readers++;
     }
 
-    synchronized public void releaseReadLock()
+    public synchronized void releaseReadLock()
     {
         this.readers--;
-        if ((this.readers == 0) & (this.writersWaiting > 0))
+        if ((this.readers == 0) && (this.writersWaiting > 0))
         {
             notifyAll();
         }
     }
 
-    synchronized public void getWriteLock()
+    public synchronized void getWriteLock()
     {
         this.writersWaiting++;
-        while ((this.readers > 0) | this.writingInProgress)
+        while ((this.readers > 0) || this.writingInProgress)
         {
             try
             {
                 wait();
             } catch (InterruptedException ie)
             {
-                LOG.error(ie);
+                LOG.error(ie.getMessage());
                 Thread.currentThread().interrupt();
             }
         }
@@ -72,7 +72,7 @@ public class ReadWriteManager
         this.writingInProgress = true;
     }
 
-    synchronized public void releaseWriteLock()
+    public synchronized void releaseWriteLock()
     {
         this.writingInProgress = false;
         notifyAll();

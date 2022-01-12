@@ -28,8 +28,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openmrs.module.chirdlutil.util.IOUtil;
 import org.openmrs.module.chirdlutil.util.Util;
 
@@ -42,7 +42,7 @@ import au.com.bytecode.opencsv.bean.HeaderColumnNameTranslateMappingStrategy;
  */
 public class UpdateMLMPriorities {
     
-    private static final Log LOG = LogFactory.getLog(UpdateMLMPriorities.class);
+    private static final Logger LOG = LoggerFactory.getLogger(UpdateMLMPriorities.class);
     
     /**
      *
@@ -110,7 +110,7 @@ public class UpdateMLMPriorities {
             }
             
             if (result == null) {
-                LOG.error("Could not find file " + ruleName);
+                LOG.error(String.format("Could not find file %s", ruleName));
             } else {
                 String mlmOldFileName = result.getPath();
                 String mlmNewFileName = mlmOldFileName + "new";

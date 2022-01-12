@@ -30,8 +30,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openmrs.module.chirdlutil.util.IOUtil;
 import org.openmrs.module.chirdlutil.util.Util;
 
@@ -45,7 +45,7 @@ import au.com.bytecode.opencsv.bean.HeaderColumnNameTranslateMappingStrategy;
  */
 public class AddPSFStoreNotes {
     
-    private static final Log LOG = LogFactory.getLog(AddPSFStoreNotes.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AddPSFStoreNotes.class);
     
     /**
      * @param args
@@ -81,7 +81,7 @@ public class AddPSFStoreNotes {
     //Make sure the new storeNotes file exists and is in the correct format
     public static void processFile(ArrayList<File> parentDirectories, File storeNotesFile) throws IOException {
         if (!storeNotesFile.exists()) {
-            LOG.error("File: "+storeNotesFile.getPath()+" does not exist.");
+            LOG.error(String.format("File: %s does not exist.", storeNotesFile.getPath()));
             return;
         }
         
@@ -107,7 +107,7 @@ public class AddPSFStoreNotes {
             
             if (ruleName == null || ruleName.length() == 0 || ((noHeading == null || noHeading.length() == 0)&&
                     (yesHeading == null || yesHeading.length() == 0))) {
-                LOG.error("Line "+ lineNum+" was skipped because the rule name or headings were invalid.");
+                LOG.error(String.format("Line %d was skipped because the rule name or headings were invalid.", lineNum));
                 continue;//skip because there is not enough content for a storeNote
             }
             
@@ -124,7 +124,7 @@ public class AddPSFStoreNotes {
             }
             
             if (result == null) {
-                LOG.error("Could not find file " + ruleName);
+                LOG.error(String.format("Could not find file %s", ruleName));
             } else {
                 String mlmOldFileName = result.getPath();
                 String mlmNewFileName = mlmOldFileName + "new";

@@ -12,8 +12,8 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openmrs.api.context.Context;
 import org.openmrs.notification.MessageException;
 
@@ -24,7 +24,7 @@ import org.openmrs.notification.MessageException;
  */
 public class NotificationUtil {
 
-    protected static final Log log = LogFactory.getLog(NotificationUtil.class);
+    private static final Logger log = LoggerFactory.getLogger(NotificationUtil.class);
     private static Map<Integer, Long> messageToTimeMap = new ConcurrentHashMap<>();
     private static long thresholdTime = 3600000; // Default to 60 minutes.
     public static final String NOTIFICATION_EMAIL_SUPPORT_INSTRUCTIONS = "Please check server logs for details.";
@@ -96,7 +96,7 @@ public class NotificationUtil {
             reconcileMessageMap();
 
         } catch (Exception e) {
-            log.error("Error sending support email. ", e);
+            log.error(String.format("Error sending support email. %s", e));
         }
     }
 
@@ -110,21 +110,20 @@ public class NotificationUtil {
      */
     public static boolean send(String body, String recipients, String subject, String msg) {
         if (StringUtils.isBlank(recipients)) {
-            log.error("Email recipients not specified" + msg);
+            log.error(String.format("Email recipients not specified %s", msg));
             return false;
         }
 
         String sender = Context.getAdministrationService().getGlobalProperty(ChirdlUtilConstants.GLOBAL_PROP_MAIL_FROM);
         if (StringUtils.isBlank(sender)) {
-            log.error("Global Property " + ChirdlUtilConstants.GLOBAL_PROP_SUPPORT_EMAIL
-                    + " does not contain a valid email address" + msg);
+            log.error(String.format("Global Property %1$s does not contain a valid email address %2$s", ChirdlUtilConstants.GLOBAL_PROP_SUPPORT_EMAIL, msg));
             return false;
         }
 
         try {
             Context.getMessageService().sendMessage(recipients, sender, subject, body);
         } catch (MessageException e) {
-            log.error("Error creating email message" + msg, e);
+            log.error(String.format("Error creating email message %1$s, %2$s", msg, e.getMessage()));
             return false;
         }
 

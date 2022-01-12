@@ -9,8 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.openmrs.module.chirdlutil.threadmgmt.ThreadPoolChartGenerator;
@@ -24,7 +24,7 @@ import org.openmrs.module.chirdlutil.util.ChirdlUtilConstants;
 public class ThreadPoolMonitorServlet extends HttpServlet {
     private static final String PARAM_POOL_TYPE = "poolType";
     private static final long serialVersionUID = 1L;
-    private static final Log LOG = LogFactory.getLog(ThreadPoolMonitorServlet.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ThreadPoolMonitorServlet.class);
     
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

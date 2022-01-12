@@ -24,8 +24,8 @@ import java.util.InvalidPropertiesFormatException;
 import java.util.List;
 import java.util.Properties;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openmrs.module.chirdlutilbackports.hibernateBeans.FormInstance;
 import org.openmrs.module.chirdlutilbackports.hibernateBeans.FormInstanceTag;
 import org.openmrs.util.OpenmrsUtil;
@@ -50,8 +50,7 @@ import com.itextpdf.text.pdf.codec.TiffImage;
  */
 public class IOUtil
 {
-    protected static final Log log = LogFactory
-            .getLog(IOUtil.class);
+    private static final Logger log = LoggerFactory.getLogger(IOUtil.class);
 
     private final static int BUFFER_SIZE = 4096;
 
@@ -269,13 +268,13 @@ public class IOUtil
 
         if (!file.exists())
         {
-            log.error("Delete failed. File "+filename+" does not exist.");
+            log.error(String.format("Delete failed. File %s does not exist.", filename));
             return;
         }
 
         if (!file.canWrite())
         {
-            log.error("Delete failed. File "+filename+" is not writable.");
+            log.error(String.format("Delete failed. File %s is not writable.", filename));
             return;
         }
 
@@ -285,7 +284,7 @@ public class IOUtil
             String[] files = file.list();
             if (files.length > 0)
             {
-                log.error("Delete failed. Directory "+filename+" is not empty.");
+                log.error(String.format("Delete failed. Directory %s is not empty.", filename));
                 return;
             }
         }
@@ -302,7 +301,7 @@ public class IOUtil
             
             if(!success)
             {
-                log.error("Delete failed. Could not delete file "+filename+".");
+                log.error(String.format("Delete failed. Could not delete file %s.", filename));
             }
         }
     }
@@ -318,13 +317,13 @@ public class IOUtil
 
         if (!file.exists())
         {
-            log.error("Rename failed. File "+oldname+" does not exist.");
+            log.error(String.format("Rename failed. File %s does not exist.", oldname));
             return;
         }
 
         if (!file.canWrite())
         {
-            log.error("Rename failed. File "+oldname+" is not writable.");
+            log.error(String.format("Rename failed. File %s is not writable.", oldname));
             return;
         }
 
@@ -334,7 +333,7 @@ public class IOUtil
             String[] files = file.list();
             if (files.length > 0)
             {
-                log.error("Rename failed. Directory "+oldname+" is not empty.");
+                log.error(String.format("Rename failed. Directory %s is not empty.", oldname));
                 return;
             }
         }
@@ -351,8 +350,7 @@ public class IOUtil
             
             if(!success)
             {
-                log.error("Rename failed. Could not rename file "+
-                        oldname+" to "+newname+".");
+                log.error(String.format("Rename failed. Could not rename file %1$s to %2$s.",oldname, newname));
             }
         }
     }

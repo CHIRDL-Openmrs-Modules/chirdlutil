@@ -15,8 +15,8 @@ package org.openmrs.module.chirdlutil.util;
 
 import java.io.File;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openmrs.module.chirdlutil.threadmgmt.ChirdlPrintJobRunnable;
 
 /**
@@ -26,7 +26,7 @@ import org.openmrs.module.chirdlutil.threadmgmt.ChirdlPrintJobRunnable;
  */
 public class PDFPrintRunnable implements ChirdlPrintJobRunnable {
     
-    private static Log log = LogFactory.getLog(PDFPrintRunnable.class);
+    private static final Logger log = LoggerFactory.getLogger(PDFPrintRunnable.class);
     
     private String printerName;
     private String pdfLocation;
@@ -52,10 +52,10 @@ public class PDFPrintRunnable implements ChirdlPrintJobRunnable {
             PrintServices.printPDFFileSynchronous(this.printerName, pdfFile);
         }
         catch (IllegalArgumentException e) {
-            log.error("Invalid parameter print PDF file " + this.pdfLocation + " to printer " + this.printerName, e);
+            log.error(String.format("Invalid parameter print PDF file %1$s to printer %2$s, %3$s", this.pdfLocation, this.printerName, e.getMessage()));
         }
         catch (Exception e) {
-            log.error("Unknown error occurred printing PDF file " + this.pdfLocation + " to printer " + this.printerName, e);
+            log.error(String.format("Unknown error occurred printing PDF file %1$s to printer %2$s, %3$s", this.pdfLocation, this.printerName, e.getMessage()));
         }
     }
     

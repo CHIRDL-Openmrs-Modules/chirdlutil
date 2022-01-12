@@ -15,8 +15,8 @@ package org.openmrs.module.chirdlutil.tools;
 
 import java.io.File;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openmrs.module.chirdlutil.util.ChirdlUtilConstants;
 import org.openmrs.module.chirdlutil.util.IOUtil;
 import org.openmrs.module.chirdlutil.util.PrintServices;
@@ -30,7 +30,7 @@ import org.openmrs.module.chirdlutil.util.Util;
  */
 public class PrintFile {
     
-    private static final Log LOG = LogFactory.getLog(PrintFile.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PrintFile.class);
     
     /**
      * Prints the specified file to the specified printer.  This method does perform any rendering for specialized file formats.  
@@ -116,12 +116,10 @@ public class PrintFile {
             Process p = pb.start();
             int exitValue = p.waitFor();
             if (exitValue != 0) {
-                LOG.error("The SumatraPDF command returned error code: " + exitValue + " file " + 
-                        pdfFileToPrint.getAbsolutePath() + " to printer " + printerName);
+                LOG.error(String.format("The SumatraPDF command returned error code: %1$d file %2$s to printer %3$s", exitValue, pdfFileToPrint.getAbsolutePath(), printerName));
                 String errorString = IOUtil.output(p.getErrorStream());
                 if (errorString.trim().length() > 0) {
-                    LOG.error("Error running SumatraPDF for printing file " + 
-                            pdfFileToPrint.getAbsolutePath() + " to printer " + printerName + " " + errorString);
+                    LOG.error(String.format("Error running SumatraPDF for printing file %1$s to printer %2$s, %3$s",pdfFileToPrint.getAbsolutePath(), printerName, errorString));
                 }
                 
                 System.exit(1);

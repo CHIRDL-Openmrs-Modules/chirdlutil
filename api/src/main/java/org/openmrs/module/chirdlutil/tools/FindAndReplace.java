@@ -30,8 +30,8 @@ import javax.swing.JTextField;
 import javax.swing.ProgressMonitor;
 import javax.swing.SpringLayout;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openmrs.module.chirdlutil.util.Util;
 
 /**
@@ -41,7 +41,7 @@ import org.openmrs.module.chirdlutil.util.Util;
  */
 public class FindAndReplace {
     
-    private static final Log LOG = LogFactory.getLog(FindAndReplace.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FindAndReplace.class);
     
     JTextField directoryField = new JTextField(30);
     JTextField findField = new JTextField(30);
@@ -218,7 +218,7 @@ public class FindAndReplace {
             File parentDirectory = sourceFile.getParentFile();
             File newFile = new File(parentDirectory, origFilename + System.currentTimeMillis());
             if (!newFile.createNewFile()) {
-                LOG.error("Could not create new file: " + newFile.getAbsolutePath());
+                LOG.error(String.format("Could not create new file: %s", newFile.getAbsolutePath()));
                 continue;
             }
             
@@ -265,18 +265,18 @@ public class FindAndReplace {
             }
             
             if (!sourceFile.delete()) {
-                LOG.error("Could not delete file: " + sourceFile.getAbsolutePath());
+                LOG.error(String.format("Could not delete file: %s", sourceFile.getAbsolutePath()));
                 continue;
             }
             
             if (!sourceFile.createNewFile()) {
-                LOG.error("Could not create new file: " + sourceFile.getAbsolutePath());
+                LOG.error(String.format("Could not create new file: %s", sourceFile.getAbsolutePath()));
                 continue;
             }
             
             copyFile(newFile, sourceFile);
             if (!newFile.delete()) {
-                LOG.error("Could not delete file: " + newFile.getAbsolutePath());
+                LOG.error(String.format("Could not delete file: %s", newFile.getAbsolutePath()));
             }
         }
     }
@@ -284,7 +284,7 @@ public class FindAndReplace {
     private void copyFile(File sourceFile, File destFile) throws IOException { 
         if(!destFile.exists()) {  
             if (!destFile.createNewFile()) {
-                LOG.error("Could not create new file: " + destFile.getAbsolutePath());
+                LOG.error(String.format("Could not create new file: %s", destFile.getAbsolutePath()));
                 return;
             }
         } 

@@ -20,8 +20,8 @@ import java.io.FileReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openmrs.module.chirdlutil.util.Util;
 
 /**
@@ -29,7 +29,7 @@ import org.openmrs.module.chirdlutil.util.Util;
  */
 public class ExtractPromptsForTranslation {
     
-    private static final Log LOG = LogFactory.getLog(ExtractPromptsForTranslation.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ExtractPromptsForTranslation.class);
     
     /**
      * Auto generated method comment

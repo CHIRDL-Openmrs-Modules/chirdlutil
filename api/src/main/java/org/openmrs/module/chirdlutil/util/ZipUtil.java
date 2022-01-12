@@ -21,8 +21,8 @@ import java.util.ArrayList;
 import java.util.UUID;
 import java.util.zip.ZipException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.context.Daemon;
 import org.openmrs.notification.Message;
@@ -39,7 +39,7 @@ import net.lingala.zip4j.util.Zip4jConstants;
  */
 public class ZipUtil {
     
-    protected static Log log = LogFactory.getLog(ZipUtil.class);
+    private static final Logger log = LoggerFactory.getLogger(ZipUtil.class);
     
     /**
      * Creates a zip file containing all the provided files.
@@ -63,7 +63,7 @@ public class ZipUtil {
             zipFile.addFiles(filesToAdd, parameters);
         }
         catch (net.lingala.zip4j.exception.ZipException e) {
-            log.error("Error zipping files", e);
+            log.error(String.format("Error zipping files %s", e));
             throw new ZipException(e.getMessage());
         }
     }
@@ -92,7 +92,7 @@ public class ZipUtil {
             zipFile.addFiles(filesToAdd, parameters);
         }
         catch (net.lingala.zip4j.exception.ZipException e) {
-            log.error("Error zipping files with password", e);
+            log.error(String.format("Error zipping files with password %s", e));
             throw new ZipException(e.getMessage());
         }
     }
@@ -119,7 +119,7 @@ public class ZipUtil {
             zipFile.addFolder(folder, parameters);
         }
         catch (net.lingala.zip4j.exception.ZipException e) {
-            log.error("Error zipping folder", e);
+            log.error(String.format("Error zipping folder %s", e));
             throw new ZipException(e.getMessage());
         }
     }
@@ -148,7 +148,7 @@ public class ZipUtil {
             zipFile.addFolder(folder, parameters);
         }
         catch (net.lingala.zip4j.exception.ZipException e) {
-            log.error("Error zipping folder with password", e);
+            log.error(String.format("Error zipping folder with password %s", e));
             throw new ZipException(e.getMessage());
         }
     }
@@ -170,7 +170,7 @@ public class ZipUtil {
             zip.extractAll(destinationFolder.getAbsolutePath());
         }
         catch (net.lingala.zip4j.exception.ZipException e) {
-            log.error("Error extracting all files from zip", e);
+            log.error(String.format("Error extracting all files from zip %s", e));
             throw new ZipException(e.getMessage());
         }
     }
@@ -196,7 +196,7 @@ public class ZipUtil {
             zip.extractAll(destinationFolder.getAbsolutePath());
         }
         catch (net.lingala.zip4j.exception.ZipException e) {
-            log.error("Error extracting all files from encrypted zip", e);
+            log.error(String.format("Error extracting all files from encrypted zip %s", e));
             throw new ZipException(e.getMessage());
         }
     }
@@ -219,7 +219,7 @@ public class ZipUtil {
             zip.extractFile(filenameInZip, destinationFolder.getAbsolutePath());
         }
         catch (net.lingala.zip4j.exception.ZipException e) {
-            log.error("Error extracting file from zip", e);
+            log.error(String.format("Error extracting file from zip %s", e));
             throw new ZipException(e.getMessage());
         }
     }
@@ -247,7 +247,7 @@ public class ZipUtil {
             zip.extractFile(filenameInZip, destinationFolder.getAbsolutePath());
         }
         catch (net.lingala.zip4j.exception.ZipException e) {
-            log.error("Error extracting file from encrypted zip", e);
+            log.error(String.format("Error extracting file from encrypted zip %s", e));
             throw new ZipException(e.getMessage());
         }
     }
@@ -326,12 +326,12 @@ public class ZipUtil {
                             Thread.sleep(1000);
                         }
                         catch (InterruptedException e) {
-                            log.error("Interrupted thread error", e);
+                            log.error(String.format("Interrupted thread error %s", e));
                             Thread.currentThread().interrupt();
                         }
                     }
                     if (!file.exists()) {
-                        log.error("Cannot find the following file to zip and email: " + file.getAbsolutePath());
+                        log.error(String.format("Cannot find the following file to zip and email: %s", file.getAbsolutePath()));
                         return;
                     }
                     
@@ -368,12 +368,12 @@ public class ZipUtil {
                     messageService.sendMessage(message);
                 }
                 catch (Exception e) {
-                    log.error("Error zipping and sending email", e);
+                    log.error(String.format("Error zipping and sending email %s", e));
                 }
                 finally {
                     if (targetZipFile != null && targetZipFile.exists()) {
                         if (!targetZipFile.delete()) {
-                            log.error("Unable to delete file: " + targetZipFile.getAbsolutePath());
+                            log.error(String.format("Unable to delete file: %s", targetZipFile.getAbsolutePath()));
                         }
                     }
                 }
