@@ -3,8 +3,8 @@ package org.openmrs.module.chirdlutil.tools;
 import java.io.File;
 import java.util.Calendar;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Utility class used to delete files matching a specific extension that are also older 
@@ -14,7 +14,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class DeleteFiles {
     
-    private static final Log LOG = LogFactory.getLog(DeleteFiles.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DeleteFiles.class);
     
     /**
      * Deletes the files in the specified directory (and sub-directories) that match 
@@ -39,9 +39,9 @@ public class DeleteFiles {
             if (file.isDirectory()) {
                 delete(file, extension, filter);
             } else {
-                LOG.info("Deleting: " + file.getAbsolutePath());
+                LOG.info(String.format("Deleting: %s", file.getAbsolutePath()));
                 if (!file.delete()) {
-                    LOG.error("Could not delete file " + file.getAbsolutePath());
+                    LOG.error(String.format("Could not delete file %s", file.getAbsolutePath()));
                 }
             }
         }
@@ -76,12 +76,12 @@ public class DeleteFiles {
         
         File directory = new File(directoryStr);
         if (!directory.exists()) {
-            LOG.error("The directory " + directoryStr + " does not exist");
+            LOG.error(String.format("The directory %s does not exist ", directoryStr));
             LOG.error("");
             delFiles.printUsage();
             System.exit(1);
         } else if (!directory.isDirectory()) {
-            LOG.error("The directory " + directoryStr + " is not a directory");
+            LOG.error(String.format("The directory %s is not a directory", directoryStr ));
             LOG.error("");
             delFiles.printUsage();
             System.exit(1);
@@ -91,7 +91,7 @@ public class DeleteFiles {
         try {
             daysOld = Integer.parseInt(daysOldStr);
         } catch (NumberFormatException e) {
-            LOG.error("The number of days is not an Integer: " + daysOldStr);
+            LOG.error(String.format("The number of days is not an Integer: %d", daysOldStr));
             LOG.error("");
             delFiles.printUsage();
             System.exit(1);

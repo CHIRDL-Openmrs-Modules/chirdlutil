@@ -26,8 +26,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openmrs.module.chirdlutil.util.Util;
 
 
@@ -37,7 +37,7 @@ import org.openmrs.module.chirdlutil.util.Util;
  */
 public class LogMonitor {
     
-    private static final Log LOG = LogFactory.getLog(LogMonitor.class);
+    private static final Logger LOG = LoggerFactory.getLogger(LogMonitor.class);
     
     private static final String LATEST_DATE = "latestDate";
     private static final String LAST_FILE_SIZE = "lastFileSize";

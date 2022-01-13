@@ -20,8 +20,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.chirdlutil.util.IOUtil;
@@ -51,7 +51,7 @@ public class LogArchiveCron extends AbstractTask
 	/**
 	 *  For logging messages.
 	 */
-	private Log log = LogFactory.getLog(this.getClass());
+    private static final Logger log = LoggerFactory.getLogger(LogArchiveCron.class);
 	
 	private String archiveDir = null;              
 	private String logDir = null;
@@ -73,9 +73,9 @@ public class LogArchiveCron extends AbstractTask
 		    init(config);
 		} catch (Exception e) 
 		{
-		    this.log.info("Failed to initialize Cron job for archiving the logs, please check error logs.");
-		    this.log.error("Initialization failed {" + e.getMessage() + "}");
-		    this.log.error(Util.getStackTrace(e));
+		    log.info("Failed to initialize Cron job for archiving the logs, please check error logs.");
+		    log.error(String.format("Initialization failed {%s}", e.getMessage()));
+		    log.error(Util.getStackTrace(e));
 		}
 		
 		Context.closeSession();
@@ -96,11 +96,11 @@ public class LogArchiveCron extends AbstractTask
 			
 			archiveFiles();
 			
-			log.info("LogArchiveCron job last run on: " + lastRunDate.toString());
+			log.info(String.format("LogArchiveCron job last run on: %s", lastRunDate.toString()));
 		} catch (Exception e)
 		{
-            this.log.error(e.getMessage());
-            this.log.error(Util.getStackTrace(e));
+            log.error(e.getMessage());
+            log.error(Util.getStackTrace(e));
 		} finally 
 		{
 			Context.closeSession();
@@ -131,7 +131,7 @@ public class LogArchiveCron extends AbstractTask
         cutoff.add(GregorianCalendar.DAY_OF_YEAR, (-1 * retention));
 
         if (fromDir == null || fromDir.equals("")) 
-            this.log.error("Please make sure both logfile and archivefile directories are defined either in global, task, or system scope.");
+            log.error("Please make sure both logfile and archivefile directories are defined either in global, task, or system scope.");
 
         files = (new File(fromDir)).listFiles();
 
@@ -160,7 +160,7 @@ public class LogArchiveCron extends AbstractTask
 	 */
 	private void init(TaskDefinition config) throws Exception
 	{
-	    this.log.info("Initializing Cron job for archiving the logs");
+	    log.info("Initializing Cron job for archiving the logs");
 	    
 	    AdministrationService adminSvc = Context.getAdministrationService();
         String tempStr;
@@ -168,7 +168,7 @@ public class LogArchiveCron extends AbstractTask
         
         // Get the original logfile directory
         if( (logDir = config.getProperty("logDirectory")) == null || logDir.equals("") 
-                                                                                                    || (aDir = new File(logDir)) == null ||  !aDir.exists() ) 
+                || (aDir = new File(logDir)) == null ||  !aDir.exists() ) 
         {
             if( (logDir = adminSvc.getGlobalProperty("chirdlutil.logDirectory")) == null || logDir.equals("")) 
                 logDir = System.getenv("TOMCAT_HOME") + File.separator + "logs";
@@ -197,10 +197,10 @@ public class LogArchiveCron extends AbstractTask
                     || (tempStr = adminSvc.getGlobalProperty("chirdlutil.archiveRetentionDays")) != null )
                 archiveRetentionDays = Integer.parseInt(tempStr);
         } catch(Exception e) {
-            ;
+            log.error(e.getMessage());
         }
 
-        this.log.info("Finished initializing Cron job for archiving the logs");
+        log.info("Finished initializing Cron job for archiving the logs");
 	}
 	
 	

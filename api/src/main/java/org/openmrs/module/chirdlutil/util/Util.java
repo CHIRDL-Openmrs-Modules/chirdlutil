@@ -43,8 +43,8 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.icepdf.core.exceptions.PDFException;
 import org.icepdf.core.exceptions.PDFSecurityException;
 import org.icepdf.core.pobjects.Document;
@@ -108,7 +108,7 @@ import com.google.zxing.multi.MultipleBarcodeReader;
  */
 public class Util
 {
-    protected static final Log log = LogFactory.getLog(Util.class);
+    private static final Logger log = LoggerFactory.getLogger(Util.class);
 
     
     public static final String MEASUREMENT_LB = "lb";
@@ -553,14 +553,13 @@ public class Util
                 obs.setValueNumeric(Double.parseDouble(value));
             }
             catch (NumberFormatException e) {
-                log.error("Could not save value: " + value + " to the database for concept "
-                        + currConcept.getName().getName());
+                log.error(String.format("Could not save value: %1$s to the database for concept %2$s", value, currConcept.getName().getName()));
             }
         } else if (datatypeName.equalsIgnoreCase("Coded")) {
             ConceptService conceptService = Context.getConceptService();
             Concept answer = conceptService.getConceptByName(value);
             if (answer == null) {
-                log.error(value + " is not a valid concept name. " + value + " will be stored as text.");
+                log.error(String.format("%1$s is not a valid concept name. %2$s will be stored as text.", value, value));
                 obs.setValueText(value);
             } else {
                 obs.setValueCoded(answer);
@@ -895,15 +894,15 @@ public class Util
             }
         }
         catch (NoSuchAlgorithmException e) {
-            log.error("Error creating " + ChirdlUtilConstants.ENCRYPTION_AES + " Cipher instance", e);
+            log.error(String.format("Error creating %s Cipher instance", ChirdlUtilConstants.ENCRYPTION_AES), e);
             return null;
         }
         catch (NoSuchPaddingException e) {
-            log.error("Error creating " + ChirdlUtilConstants.ENCRYPTION_AES + " Cipher instance", e);
+            log.error(String.format("Error creating %s Cipher instance", ChirdlUtilConstants.ENCRYPTION_AES), e);
             return null;
         }
         catch (UnsupportedEncodingException e) {
-            log.error("Unsupported Encoding: " + ChirdlUtilConstants.ENCODING_UTF8, e);
+            log.error(String.format("Unsupported Encoding: %s", ChirdlUtilConstants.ENCODING_UTF8), e);
             return null;
         }
         catch (InvalidKeyException e) {
@@ -945,15 +944,15 @@ public class Util
             return new String (encryptedBytes);
         }
         catch (UnsupportedEncodingException e) {
-            log.error("Unsupported Encoding: " + ChirdlUtilConstants.ENCODING_UTF8, e);
+            log.error(String.format("Unsupported Encoding: %s", ChirdlUtilConstants.ENCODING_UTF8), e);
             return null;
         }
         catch (NoSuchAlgorithmException e) {
-            log.error("Error creating " + ChirdlUtilConstants.ENCRYPTION_AES + " Cipher instance", e);
+            log.error(String.format("Error creating %s Cipher instance", ChirdlUtilConstants.ENCRYPTION_AES), e);
             return null;
         }
         catch (NoSuchPaddingException e) {
-            log.error("Error creating " + ChirdlUtilConstants.ENCRYPTION_AES + " Cipher instance", e);
+            log.error(String.format("Error creating %s Cipher instance", ChirdlUtilConstants.ENCRYPTION_AES), e);
             return null;
         }
         catch (InvalidKeyException e) {
@@ -1039,7 +1038,7 @@ public class Util
                     
                     if(iter.hasNext())
                     {
-                        log.info("More than one provider was found for encounter: " + encounter.getEncounterId());
+                        log.error(String.format("More than one provider was found for encounter: %d", encounter.getEncounterId()));
                     }
                 }
             }
@@ -1086,11 +1085,11 @@ public class Util
             input = strToHash.getBytes(ChirdlUtilConstants.ENCODING_UTF8);
         }
         catch (UnsupportedEncodingException e) {
-            log.error("Unsupported Encoding: " + ChirdlUtilConstants.ENCODING_UTF8, e);
+            log.error(String.format("Unsupported Encoding: %s", ChirdlUtilConstants.ENCODING_UTF8), e);
             return null;
         }
         catch (NoSuchAlgorithmException e) {
-            log.error("System cannot find encryption algorithm: " + ChirdlUtilConstants.SHA_256, e);
+            log.error(String.format("System cannot find encryption algorithm: %s", ChirdlUtilConstants.SHA_256), e);
             return null;
         }
        
@@ -1159,7 +1158,7 @@ public class Util
         }
         catch(Exception e)
         {
-            log.error("Error storing encounter attribute value encounterId: " + encounter.getEncounterId() + " attributeName: " + attributeName, e);
+            log.error(String.format("Error storing encounter attribute value encounterId: %1$d attributeName: %2$s", encounter.getEncounterId(), attributeName), e);
         }
     }
     
@@ -1179,7 +1178,6 @@ public class Util
                 }
             }
         }
-        
         return null;
     }
     

@@ -23,8 +23,8 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openmrs.module.chirdlutil.util.Util;
 
 /**
@@ -33,7 +33,7 @@ import org.openmrs.module.chirdlutil.util.Util;
  */
 public class ConvertRules {
     
-    private static final Log LOG = LogFactory.getLog(ConvertRules.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ConvertRules.class);
     
     /**
      * @param args
@@ -100,7 +100,7 @@ public class ConvertRules {
         
         String newFileName = outputDirectory + "\\" + file.getName();
         
-        LOG.info("Converting " + oldFileName + "...");
+        LOG.info(String.format("Converting %s...", oldFileName));
         Pattern p = null;
         Matcher m = null;
         boolean matches = false;
