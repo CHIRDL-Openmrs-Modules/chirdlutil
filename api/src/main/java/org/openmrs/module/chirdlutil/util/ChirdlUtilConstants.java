@@ -410,6 +410,8 @@ public final class ChirdlUtilConstants {
     public static final String PARAMETER_CAREGIVER = "caregiver";
     public static final String PARAMETER_SCREENER_COMPLETED_BY = "screener_completed_by";
     public static final String PARAMETER_PDF_VIEWER = "pdfViewer";
+    public static final String PARAMETER_CONCEPT = "concept";
+    public static final String PARAMETER_FORM_FIELD_ID = "formFieldId";
     
     /*
      * 
@@ -505,6 +507,7 @@ public final class ChirdlUtilConstants {
      * Form information
      */
     public static final String FORM_FIELD_TYPE_EXPORT = "Export Field";
+    public static final String FORM_FIELD_TYPE_MERGE_FIELD = "Merge Field";
     /*
      * 
      */
@@ -538,6 +541,7 @@ public final class ChirdlUtilConstants {
      */
     public static final String LOCATION_RIIUMG = "RIIUMG";
     public static final String LOCATION_PHEDMSR = "PHEDMSR";
+    public static final String LOCATION_UNKNOWN = "Unknown Locaton";
     /*
      * 
      */
@@ -631,6 +635,11 @@ public final class ChirdlUtilConstants {
     public static final String ENCOUNTER_ATTRIBUTE_ORIGINAL_LOCATION = "Original Location";
     public static final String ENCOUNTER_ATTRIBUTE_GLOOKO_DATA_TYPE = "Glooko Data Type";
     public static final String ENCOUNTER_ATTRIBUTE_VISIT_TYPE = "Visit Type";
+    public static final String ENCOUNTER_ATTRIBUTE_APPOINTMENT_TIME = "Appointment Time";
+    public static final String ENCOUNTER_ATTRIBUTE_PRINTER_LOCATION = "Printer Location";
+    public static final String ENCOUNTER_ATTRIBUTE_INSURANCE_SMS_CODE = "Insurance SMS Code";
+    public static final String ENCOUNTER_ATTRIBUTE_INSURANCE_PLAN_CODE = "Insurance Plan Code";
+    public static final String ENCOUNTER_ATTRIBUTE_INSURANCE_CARRIER_CODE = "Carrier Code";
     
     
     /*
@@ -654,6 +663,7 @@ public final class ChirdlUtilConstants {
     public static final String DATE_FORMAT_MM_dd_YYYY = "MM/dd/yyyy";
     public static final String DATE_FORMAT_HYPHEN_yyyy_MM_dd = "yyyy-MM-dd";
     public static final String DATE_FORMAT_MMM_dd_comma_yyyy = "MMM dd, yyyy";
+    public static final String DATE_FORMAT_HYPHEN_yyyy_MM_dd_hh_mm_ss = "yyyy-MM-dd hh:mm:ss";
     
     /*
      * Fax service
