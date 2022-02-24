@@ -116,11 +116,11 @@ public class ThreadManager {
 		try {
 			// Add the runnable to the pool so it can eventually get executed.
 			pool.execute(runnable);
-			log.info(String.format("Added the following to the Thread Manager's execution queue - name: %1$s - priority: %2$d - clinic: %3$d", name, priority, locationId));
+			log.info("Added the following to the Thread Manager's execution queue - name: {} - priority: {} - clinic: {}", name, priority, locationId);
 		} catch (RejectedExecutionException ree) {
-		    log.error(String.format("Thread Manager no longer accepting new threads. This thread has been rejected - name: %1$s - priority: %2$d - clinic: %3$d", name, priority, locationId), ree);
+		    log.error("Thread Manager no longer accepting new threads. This thread has been rejected - name: {} - priority: {} - clinic: {}", name, priority, locationId, ree);
 		} catch (Exception e) {
-		    log.error(String.format("Error executing thread - name: %1$s - priority: %2$d - clinic: %3$d", name, priority, locationId), e);
+		    log.error("Error executing thread - name: {} - priority: {} - clinic: {}", name, priority, locationId, e);
 		}
 	}
 	
@@ -208,11 +208,11 @@ public class ThreadManager {
 					try {
 						// Add the runnable to the pool so it can eventually get executed.
 						pool.execute(runnable);
-						log.info(String.format("Added the following to the Thread Manager's execution queue - name: %1$s - priority: %2$d - clinic: %3$d", name, priority, locationId));
+						log.info("Added the following to the Thread Manager's execution queue - name: {} - priority: {} - clinic: {}", name, priority, locationId);
 					} catch (RejectedExecutionException ree) {
-					    log.error(String.format("Thread Manager no longer accepting new threads.  This thread has been rejected - name: %1$s - priority: %2$d - clinic: %3$d", name, priority, locationId), ree);
+					    log.error("Thread Manager no longer accepting new threads.  This thread has been rejected - name: {} - priority: {} - clinic: {}", name, priority, locationId, ree);
 					} catch (Exception e) {
-					    log.error(String.format("Error executing thread - name: %1$s - priority: %2$d - clinic: %3$d", name, priority, locationId), e);
+					    log.error("Error executing thread - name: {} - priority: {} - clinic: {}", name, priority, locationId, e);
 					}
 				}
 			}
@@ -233,8 +233,8 @@ public class ThreadManager {
 		protected void beforeExecute(Thread t, Runnable r) {
 			if (r instanceof ChirdlRunnable) {
 				ChirdlRunnable cr = (ChirdlRunnable)r;
-				log.info(String.format("Thread Manager before execute - name: %1$s - priority: %2$d - time: %3$s - active threads: %4$d - threads in pool: %5$d - tasks in queue: %6$d", 
-				        cr.getName(), cr.getPriority(), new Timestamp(new Date().getTime()), getActiveCount(), getPoolSize(), getQueue().size()));
+				log.info("Thread Manager before execute - name: {} - priority: {} - time: {} - active threads: {} - threads in pool: {} - tasks in queue: {}", 
+				        cr.getName(), cr.getPriority(), new Timestamp(new Date().getTime()), getActiveCount(), getPoolSize(), getQueue().size());
 			}
 			
 			super.beforeExecute(t, r);
@@ -244,8 +244,8 @@ public class ThreadManager {
 		protected void afterExecute(Runnable r, Throwable t) {
 			if (r instanceof ChirdlRunnable) {
 				ChirdlRunnable cr = (ChirdlRunnable)r;
-				log.info(String.format("Thread Manager after execute - name: %1$s - priority: %2$d - time: %3$s - active threads: %4$d - threads in pool: %5$d - tasks in queue: %6$d", 
-                    cr.getName(), cr.getPriority(), new Timestamp(new Date().getTime()), getActiveCount(), getPoolSize(), getQueue().size()));
+				log.info("Thread Manager after execute - name: {} - priority: {} - time: {} - active threads: {} - threads in pool: {} - tasks in queue: {}", 
+                    cr.getName(), cr.getPriority(), new Timestamp(new Date().getTime()), getActiveCount(), getPoolSize(), getQueue().size());
 			}
 			
 			super.afterExecute(r, t);

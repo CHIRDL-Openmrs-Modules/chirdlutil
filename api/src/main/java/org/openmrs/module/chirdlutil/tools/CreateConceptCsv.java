@@ -86,7 +86,7 @@ public class CreateConceptCsv {
             createConceptFile(directories, set);
             exportConcepts(outputFile, set);
         } else {
-            LOG.error(String.format("Error writing to %s", outputFile));
+            LOG.error("Error writing to {}", outputFile);
         }
     }
 

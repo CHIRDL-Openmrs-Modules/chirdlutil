@@ -218,7 +218,7 @@ public class FindAndReplace {
             File parentDirectory = sourceFile.getParentFile();
             File newFile = new File(parentDirectory, origFilename + System.currentTimeMillis());
             if (!newFile.createNewFile()) {
-                LOG.error(String.format("Could not create new file: %s", newFile.getAbsolutePath()));
+                LOG.error("Could not create new file: {}", newFile.getAbsolutePath());
                 continue;
             }
             
@@ -265,18 +265,18 @@ public class FindAndReplace {
             }
             
             if (!sourceFile.delete()) {
-                LOG.error(String.format("Could not delete file: %s", sourceFile.getAbsolutePath()));
+                LOG.error("Could not delete file: {}", sourceFile.getAbsolutePath());
                 continue;
             }
             
             if (!sourceFile.createNewFile()) {
-                LOG.error(String.format("Could not create new file: %s", sourceFile.getAbsolutePath()));
+                LOG.error("Could not create new file: {}", sourceFile.getAbsolutePath());
                 continue;
             }
             
             copyFile(newFile, sourceFile);
             if (!newFile.delete()) {
-                LOG.error(String.format("Could not delete file: %s", newFile.getAbsolutePath()));
+                LOG.error("Could not delete file: {}", newFile.getAbsolutePath());
             }
         }
     }
@@ -284,7 +284,7 @@ public class FindAndReplace {
     private void copyFile(File sourceFile, File destFile) throws IOException { 
         if(!destFile.exists()) {  
             if (!destFile.createNewFile()) {
-                LOG.error(String.format("Could not create new file: %s", destFile.getAbsolutePath()));
+                LOG.error("Could not create new file: {}", destFile.getAbsolutePath());
                 return;
             }
         } 

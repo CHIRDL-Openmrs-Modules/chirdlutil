@@ -74,7 +74,7 @@ public class LogArchiveCron extends AbstractTask
 		} catch (Exception e) 
 		{
 		    log.info("Failed to initialize Cron job for archiving the logs, please check error logs.");
-		    log.error(String.format("Initialization failed {%s}", e.getMessage()));
+		    log.error("Initialization failed {{}}", e.getMessage());
 		    log.error(Util.getStackTrace(e));
 		}
 		
@@ -96,7 +96,7 @@ public class LogArchiveCron extends AbstractTask
 			
 			archiveFiles();
 			
-			log.info(String.format("LogArchiveCron job last run on: %s", lastRunDate.toString()));
+			log.info("LogArchiveCron job last run on: {}", lastRunDate.toString());
 		} catch (Exception e)
 		{
             log.error(e.getMessage());

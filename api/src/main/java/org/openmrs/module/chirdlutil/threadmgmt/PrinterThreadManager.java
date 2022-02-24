@@ -91,11 +91,11 @@ public class PrinterThreadManager {
 		try {
 			// Add the runnable to the pool so it can eventually get executed.
 			printerJobExecutor.execute(runnable);
-			log.info(String.format("Added the following to the Printer Thread Manager's execution queue - printer: %1$s - file: %2$s", printerName, pdfLocation));
+			log.info("Added the following to the Printer Thread Manager's execution queue - printer: {} - file: {}", printerName, pdfLocation);
 		} catch (RejectedExecutionException ree) {
-		    log.error(String.format("Printer Thread Manager no longer accepting new threads.  This thread has been rejected - printer: %1$s - file: %2$s", printerName, pdfLocation), ree);
+		    log.error("Printer Thread Manager no longer accepting new threads.  This thread has been rejected - printer: {} - file: {}", printerName, pdfLocation, ree);
 		} catch (Exception e) {
-		    log.error(String.format("Error executing Printer Thread Manager thread - printer: %1$s - file: %2$s", printerName, pdfLocation), e);
+		    log.error("Error executing Printer Thread Manager thread - printer: {} - file: {}", printerName, pdfLocation, e);
 		}
 	}
 	
@@ -180,14 +180,14 @@ public class PrinterThreadManager {
 		AdministrationService adminService = Context.getAdministrationService();
 		String poolSizeStr = adminService.getGlobalProperty(CHIRDLUTIL_PRINTER_THREAD_POOL_SIZE);
 		if (poolSizeStr == null || poolSizeStr.trim().length() == 0) {
-			log.error(String.format("Global property %s not defined.  A default pool size of 1 will be used.", CHIRDLUTIL_PRINTER_THREAD_POOL_SIZE));
+			log.error("Global property {} not defined.  A default pool size of 1 will be used.", CHIRDLUTIL_PRINTER_THREAD_POOL_SIZE);
 			return new Integer(1);
 		}
 		
 		try {
 			return Integer.parseInt(poolSizeStr);
 		} catch (NumberFormatException e) {
-		    log.error(String.format("Global property %s is not a valid integer. A default pool size of 1 will be used.", CHIRDLUTIL_PRINTER_THREAD_POOL_SIZE));
+		    log.error("Global property {} is not a valid integer. A default pool size of 1 will be used.", CHIRDLUTIL_PRINTER_THREAD_POOL_SIZE);
 			return new Integer(1);
 		}
 	}
@@ -217,8 +217,8 @@ public class PrinterThreadManager {
 		protected void beforeExecute(Thread t, Runnable r) {
 			if (r instanceof ChirdlPrintJobRunnable) {
 				ChirdlPrintJobRunnable cpr = (ChirdlPrintJobRunnable)r;
-				log.info(String.format("Printer Thread Manager before execute - printer: %1$s - file: %2$s - active threads: %3$d - threads in pool: %4$d - tasks in queue: %5$d", 
-				        cpr.getPrinterName(), cpr.getPDFFileLocation(), getActiveCount(), getPoolSize(), getQueue().size()));
+				log.info("Printer Thread Manager before execute - printer: {} - file: {} - active threads: {} - threads in pool: {} - tasks in queue: {}", 
+				        cpr.getPrinterName(), cpr.getPDFFileLocation(), getActiveCount(), getPoolSize(), getQueue().size());
 			}
 			
 			super.beforeExecute(t, r);
@@ -228,8 +228,8 @@ public class PrinterThreadManager {
 		protected void afterExecute(Runnable r, Throwable t) {
 			if (r instanceof ChirdlPrintJobRunnable) {
 				ChirdlPrintJobRunnable cpr = (ChirdlPrintJobRunnable)r;
-				log.info(String.format("Printer Thread Manager after execute - printer: %1$s - file: %2$s - active threads: %3$d - threads in pool: %4$d - tasks in queue: %5$d", 
-                    cpr.getPrinterName(), cpr.getPDFFileLocation(), getActiveCount(), getPoolSize(), getQueue().size()));
+				log.info("Printer Thread Manager after execute - printer: {} - file: {} - active threads: {} - threads in pool: {} - tasks in queue: {}", 
+                    cpr.getPrinterName(), cpr.getPDFFileLocation(), getActiveCount(), getPoolSize(), getQueue().size());
 			}
 			
 			super.afterExecute(r, t);

@@ -55,10 +55,10 @@ public class PrintServices {
 	 */
     public static void printFile(String printerName, File fileToPrint) throws IOException, PrintException {
     	if (printerName == null || printerName.trim().length() == 0) {
-    		log.error(String.format("A valid printerName parameter was not provided: %s", printerName));
+    		log.error("A valid printerName parameter was not provided: {}", printerName);
     		throw new IllegalArgumentException("A valid printerName parameter was not provided: " + printerName);
     	} else if (fileToPrint == null || !fileToPrint.exists() || !fileToPrint.canRead()) {
-    		log.error(String.format("A valid fileToPrint parameter was not provided: %s", fileToPrint));
+    		log.error("A valid fileToPrint parameter was not provided: {}", fileToPrint);
     		throw new IllegalArgumentException("A valid printerName parameter was not provided: " + fileToPrint);
     	}
     	
@@ -66,7 +66,7 @@ public class PrintServices {
         printServiceAttributeSet.add(new PrinterName(printerName, null)); 
         PrintService[] printServices = PrintServiceLookup.lookupPrintServices(DocFlavor.SERVICE_FORMATTED.PAGEABLE, printServiceAttributeSet);
         if (printServices == null || printServices.length == 0) {
-        	log.error(String.format("No printers found for %s", printerName));
+        	log.error("No printers found for {}", printerName);
         	throw new IllegalArgumentException("No printers found for " + printerName);
         }
         
@@ -100,17 +100,17 @@ public class PrintServices {
      */
     public static void printPDFFileSynchronous(String printerName, File pdfFile) throws Exception {
     	if (printerName == null || printerName.trim().length() == 0) {
-    		log.error(String.format("A valid printerName parameter was not provided: %s", printerName));
+    		log.error("A valid printerName parameter was not provided: {}", printerName);
     		throw new IllegalArgumentException("A valid printerName parameter was not provided: " + printerName);
     	} else if (pdfFile == null || !pdfFile.exists() || !pdfFile.canRead()) {
-    		log.error(String.format("A valid fileToPrint parameter was not provided (or unable to read): %s", pdfFile));
+    		log.error("A valid fileToPrint parameter was not provided (or unable to read): {}", pdfFile);
     		throw new IllegalArgumentException("A valid printerName parameter was not provided: " + pdfFile);
     	}
     	
     	try {
 	    	String sumatraPDFExecutable = Context.getAdministrationService().getGlobalProperty(CHIRDLUTIL_SUMATRA_PDF_EXECUTABLE);
 	    	if (sumatraPDFExecutable == null || sumatraPDFExecutable.trim().length() == 0) {
-	    		log.error(String.format("Unable to print PDF files.  Please set a value for the %s global property.", CHIRDLUTIL_SUMATRA_PDF_EXECUTABLE));
+	    		log.error("Unable to print PDF files.  Please set a value for the {} global property.", CHIRDLUTIL_SUMATRA_PDF_EXECUTABLE);
 	    		return;
 	    	}
 	    	
@@ -120,14 +120,14 @@ public class PrintServices {
 	    	pb.redirectErrorStream();
 	    	int exitValue = p.waitFor();
 	    	if (exitValue != 0) {
-	    		log.error(String.format("The SumatraPDF command returned error code: %1$d printing file %2$s to printer %3$s", exitValue, pdfFile.getAbsolutePath(), printerName));
+	    		log.error("The SumatraPDF command returned error code: {} printing file {} to printer {}", exitValue, pdfFile.getAbsolutePath(), printerName);
 	    		String errorString = IOUtil.output(p.getErrorStream());
 		    	if (errorString.trim().length() > 0) {
-		    		log.error(String.format("Error running SumatraPDF for printing file %1$s to printer %2$s, %3$s", pdfFile.getAbsolutePath(), printerName, errorString));
+		    		log.error("Error running SumatraPDF for printing file {} to printer {}, {}", pdfFile.getAbsolutePath(), printerName, errorString);
 		    	}
 	    	}
     	} catch (Exception e) {
-    		log.error(String.format("Error running SumatraPDF for printing file %1$s to printer %2$s", pdfFile.getAbsolutePath(), printerName), e);
+    		log.error("Error running SumatraPDF for printing file {} to printer {}", pdfFile.getAbsolutePath(), printerName, e);
     	}
     }
 }
