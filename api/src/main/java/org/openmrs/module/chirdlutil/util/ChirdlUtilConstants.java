@@ -89,6 +89,7 @@ public final class ChirdlUtilConstants {
     public static final String LOC_TAG_ATTR_AGE_LIMIT_AT_CHECKIN = "CheckinAgeLimit";
     public static final String LOC_TAG_ATTR_PRIMARY_PHYSICIAN_FORM = "primaryPhysicianForm"; 
     public static final String LOC_TAG_ATTR_PRIMARY_PATIENT_FORM = "primaryPatientForm"; 
+    public static final String LOC_TAG_ATTR_HIGH_RISK_CONTACT = "HighRiskContact"; 
     /*
      * 
      */
@@ -169,6 +170,7 @@ public final class ChirdlUtilConstants {
     public static final String FORM_ATTRIBUTE_REPRINT_STATE = "reprintState";
     public static final String FORM_ATTRIBUTE_IS_PRIMARY_PATIENT_FORM = "isPrimaryPatientForm";
     public static final String FORM_ATTRIBUTE_IS_PRIMARY_PHYSICIAN_FORM = "isPrimaryPhysicianForm";
+    public static final String FORM_ATTRIBUTE_NUMBER_OF_PROMPTS = "numPrompts";
     /*
      * 
      */
@@ -412,6 +414,8 @@ public final class ChirdlUtilConstants {
     public static final String PARAMETER_PDF_VIEWER = "pdfViewer";
     public static final String PARAMETER_CONCEPT = "concept";
     public static final String PARAMETER_FORM_FIELD_ID = "formFieldId";
+    public static final String PARAMETER_RULE_ID = "ruleId";
+    public static final String PARAMETER_FIELD_NAME = "fieldName";
     
     /*
      * 
@@ -508,6 +512,7 @@ public final class ChirdlUtilConstants {
      */
     public static final String FORM_FIELD_TYPE_EXPORT = "Export Field";
     public static final String FORM_FIELD_TYPE_MERGE_FIELD = "Merge Field";
+    public static final String FORM_FIELD_TYPE_PRIORITIZED_FIELD = "Prioritized Merge Field";
     /*
      * 
      */
