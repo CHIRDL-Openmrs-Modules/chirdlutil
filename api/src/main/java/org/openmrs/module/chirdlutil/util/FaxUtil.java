@@ -134,7 +134,7 @@ public class FaxUtil {
             }
         }
         catch (Exception e) {
-            log.error(String.format("Error faxing file: %s", fileToFax), e);
+            log.error("Error faxing file: {}", fileToFax, e);
             throw e;
         }
     }
@@ -226,13 +226,13 @@ public class FaxUtil {
                 fileContents = new byte[(int)fileToFax.length()];
                 int bytesRead = fin.read(fileContents);
                 if (bytesRead < 0) {
-                    log.error(String.format("File %s contains no content", fileToFax.getAbsolutePath()));
+                    log.error("File {} contains no content", fileToFax.getAbsolutePath());
                 }
                 
                 fin.close();
                 attachment.setFileContent(fileContents);
             } catch (IOException e) {
-                log.error(String.format("Exception reading contents of fax file: %s", fileToFax.getName()), e);
+                log.error("Exception reading contents of fax file: {}", fileToFax.getName(), e);
                 return null;
             }
             ArrayOfAttachment attachments = new ArrayOfAttachment();
@@ -259,15 +259,15 @@ public class FaxUtil {
                     memo, sender, recipients, attachments , tsi);
             
             if (rm != null) {
-                log.info(String.format("Fax sent for form: %s", rm.getDetail()));
+                log.info("Fax sent for form: {}", rm.getDetail());
                 
                 return rm.getData();
             }
         
-            log.error(String.format("Fax failed for file: %s", fileToFax.getAbsolutePath()));
+            log.error("Fax failed for file: {}", fileToFax.getAbsolutePath());
             return null;
         } catch (Exception e) {
-            log.error(String.format("Error faxing file: %s", fileToFax), e);
+            log.error("Error faxing file: {}", fileToFax, e);
             throw e;
         }
     

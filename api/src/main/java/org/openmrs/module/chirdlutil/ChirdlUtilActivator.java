@@ -54,7 +54,7 @@ public class ChirdlUtilActivator extends BaseModuleActivator implements DaemonTo
 					currValue = currProperty.getPropertyValue();
 					if (currValue == null || currValue.length() == 0)
 					{
-					    log.error(String.format("You must set a value for global property: %s", currName));
+					    log.error("You must set a value for global property: {}", currName);
 					}
 				}
 			}

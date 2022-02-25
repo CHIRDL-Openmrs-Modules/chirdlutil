@@ -19,9 +19,9 @@ public class ReadWriteManager
     private int readers = 0;
 
     public void logReadWriteInfo(){
-        LOG.info(String.format("Writing in progress: %s", this.writingInProgress));
-        LOG.info(String.format("# of writers waiting: %d", this.writersWaiting));
-        LOG.info(String.format("# of readers: %d", this.readers));
+        LOG.info("Writing in progress: {}", this.writingInProgress);
+        LOG.info("# of writers waiting: {}", this.writersWaiting);
+        LOG.info("# of readers: {}", this.readers);
     }
     
     /**

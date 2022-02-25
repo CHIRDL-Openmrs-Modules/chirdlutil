@@ -39,9 +39,9 @@ public class DeleteFiles {
             if (file.isDirectory()) {
                 delete(file, extension, filter);
             } else {
-                LOG.info(String.format("Deleting: %s", file.getAbsolutePath()));
+                LOG.info("Deleting: {}", file.getAbsolutePath());
                 if (!file.delete()) {
-                    LOG.error(String.format("Could not delete file %s", file.getAbsolutePath()));
+                    LOG.error("Could not delete file {}", file.getAbsolutePath());
                 }
             }
         }
@@ -76,12 +76,12 @@ public class DeleteFiles {
         
         File directory = new File(directoryStr);
         if (!directory.exists()) {
-            LOG.error(String.format("The directory %s does not exist ", directoryStr));
+            LOG.error("The directory {} does not exist ", directoryStr);
             LOG.error("");
             delFiles.printUsage();
             System.exit(1);
         } else if (!directory.isDirectory()) {
-            LOG.error(String.format("The directory %s is not a directory", directoryStr ));
+            LOG.error("The directory {} is not a directory", directoryStr );
             LOG.error("");
             delFiles.printUsage();
             System.exit(1);
@@ -91,7 +91,7 @@ public class DeleteFiles {
         try {
             daysOld = Integer.parseInt(daysOldStr);
         } catch (NumberFormatException e) {
-            LOG.error(String.format("The number of days is not an Integer: %d", daysOldStr));
+            LOG.error("The number of days is not an Integer: {}", daysOldStr);
             LOG.error("");
             delFiles.printUsage();
             System.exit(1);

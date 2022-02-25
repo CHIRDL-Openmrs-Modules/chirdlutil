@@ -331,7 +331,7 @@ public class ZipUtil {
                         }
                     }
                     if (!file.exists()) {
-                        log.error(String.format("Cannot find the following file to zip and email: %s", file.getAbsolutePath()));
+                        log.error("Cannot find the following file to zip and email: {}", file.getAbsolutePath());
                         return;
                     }
                     
@@ -373,7 +373,7 @@ public class ZipUtil {
                 finally {
                     if (targetZipFile != null && targetZipFile.exists()) {
                         if (!targetZipFile.delete()) {
-                            log.error(String.format("Unable to delete file: %s", targetZipFile.getAbsolutePath()));
+                            log.error("Unable to delete file: {}", targetZipFile.getAbsolutePath());
                         }
                     }
                 }
