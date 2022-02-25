@@ -22,7 +22,7 @@ public class ChangeFileExtensions {
                 String newName = subName + newExt;
                 File newFile = new File(file.getParentFile(), newName);
                 if (!file.renameTo(newFile)) {
-                    LOG.error(String.format("Unable to rename file %1$s to %2$s", file.getAbsolutePath(), newName));
+                    LOG.error("Unable to rename file {} to {}", file.getAbsolutePath(), newName);
                 }
             }
         }
@@ -59,12 +59,12 @@ public class ChangeFileExtensions {
         
         File directory = new File(directoryStr);
         if (!directory.exists()) {
-            LOG.error(String.format("The directory %s does not exist", directoryStr));
+            LOG.error("The directory {} does not exist", directoryStr);
             LOG.error("");
             changeExt.printUsage();
             System.exit(1);
         } else if (!directory.isDirectory()) {
-            LOG.error(String.format("The directory %s is not a directory", directoryStr));
+            LOG.error("The directory {} is not a directory", directoryStr);
             LOG.error("");
             changeExt.printUsage();
             System.exit(1);

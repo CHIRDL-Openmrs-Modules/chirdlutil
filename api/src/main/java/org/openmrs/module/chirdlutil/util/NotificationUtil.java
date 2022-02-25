@@ -110,20 +110,20 @@ public class NotificationUtil {
      */
     public static boolean send(String body, String recipients, String subject, String msg) {
         if (StringUtils.isBlank(recipients)) {
-            log.error(String.format("Email recipients not specified %s", msg));
+            log.error("Email recipients not specified {}", msg);
             return false;
         }
 
         String sender = Context.getAdministrationService().getGlobalProperty(ChirdlUtilConstants.GLOBAL_PROP_MAIL_FROM);
         if (StringUtils.isBlank(sender)) {
-            log.error(String.format("Global Property %1$s does not contain a valid email address %2$s", ChirdlUtilConstants.GLOBAL_PROP_SUPPORT_EMAIL, msg));
+            log.error("Global Property {} does not contain a valid email address {}", ChirdlUtilConstants.GLOBAL_PROP_SUPPORT_EMAIL, msg);
             return false;
         }
 
         try {
             Context.getMessageService().sendMessage(recipients, sender, subject, body);
         } catch (MessageException e) {
-            log.error(String.format("Error creating email message %s", msg), e);
+            log.error("Error creating email message {}", msg, e);
             return false;
         }
 

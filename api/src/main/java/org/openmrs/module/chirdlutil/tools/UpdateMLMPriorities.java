@@ -110,7 +110,7 @@ public class UpdateMLMPriorities {
             }
             
             if (result == null) {
-                LOG.error(String.format("Could not find file %s", ruleName));
+                LOG.error("Could not find file {}", ruleName);
             } else {
                 String mlmOldFileName = result.getPath();
                 String mlmNewFileName = mlmOldFileName + "new";

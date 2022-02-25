@@ -116,10 +116,10 @@ public class PrintFile {
             Process p = pb.start();
             int exitValue = p.waitFor();
             if (exitValue != 0) {
-                LOG.error(String.format("The SumatraPDF command returned error code: %1$d file %2$s to printer %3$s", exitValue, pdfFileToPrint.getAbsolutePath(), printerName));
+                LOG.error("The SumatraPDF command returned error code: {} file {} to printer {}", exitValue, pdfFileToPrint.getAbsolutePath(), printerName);
                 String errorString = IOUtil.output(p.getErrorStream());
                 if (errorString.trim().length() > 0) {
-                    LOG.error(String.format("Error running SumatraPDF for printing file %1$s to printer %2$s, %3$s",pdfFileToPrint.getAbsolutePath(), printerName, errorString));
+                    LOG.error("Error running SumatraPDF for printing file {} to printer {}, {}",pdfFileToPrint.getAbsolutePath(), printerName, errorString);
                 }
                 
                 System.exit(1);

@@ -81,7 +81,7 @@ public class AddPSFStoreNotes {
     //Make sure the new storeNotes file exists and is in the correct format
     public static void processFile(ArrayList<File> parentDirectories, File storeNotesFile) throws IOException {
         if (!storeNotesFile.exists()) {
-            LOG.error(String.format("File: %s does not exist.", storeNotesFile.getPath()));
+            LOG.error("File: {} does not exist.", storeNotesFile.getPath());
             return;
         }
         
@@ -107,7 +107,7 @@ public class AddPSFStoreNotes {
             
             if (ruleName == null || ruleName.length() == 0 || ((noHeading == null || noHeading.length() == 0)&&
                     (yesHeading == null || yesHeading.length() == 0))) {
-                LOG.error(String.format("Line %d was skipped because the rule name or headings were invalid.", lineNum));
+                LOG.error("Line {} was skipped because the rule name or headings were invalid.", lineNum);
                 continue;//skip because there is not enough content for a storeNote
             }
             
@@ -124,7 +124,7 @@ public class AddPSFStoreNotes {
             }
             
             if (result == null) {
-                LOG.error(String.format("Could not find file %s", ruleName));
+                LOG.error("Could not find file {}", ruleName);
             } else {
                 String mlmOldFileName = result.getPath();
                 String mlmNewFileName = mlmOldFileName + "new";

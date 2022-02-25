@@ -268,13 +268,13 @@ public class IOUtil
 
         if (!file.exists())
         {
-            log.error(String.format("Delete failed. File %s does not exist.", filename));
+            log.error("Delete failed. File {} does not exist.", filename);
             return;
         }
 
         if (!file.canWrite())
         {
-            log.error(String.format("Delete failed. File %s is not writable.", filename));
+            log.error("Delete failed. File {} is not writable.", filename);
             return;
         }
 
@@ -284,7 +284,7 @@ public class IOUtil
             String[] files = file.list();
             if (files.length > 0)
             {
-                log.error(String.format("Delete failed. Directory %s is not empty.", filename));
+                log.error("Delete failed. Directory {} is not empty.", filename);
                 return;
             }
         }
@@ -301,7 +301,7 @@ public class IOUtil
             
             if(!success)
             {
-                log.error(String.format("Delete failed. Could not delete file %s.", filename));
+                log.error("Delete failed. Could not delete file {}.", filename);
             }
         }
     }
@@ -317,13 +317,13 @@ public class IOUtil
 
         if (!file.exists())
         {
-            log.error(String.format("Rename failed. File %s does not exist.", oldname));
+            log.error("Rename failed. File {} does not exist.", oldname);
             return;
         }
 
         if (!file.canWrite())
         {
-            log.error(String.format("Rename failed. File %s is not writable.", oldname));
+            log.error("Rename failed. File {} is not writable.", oldname);
             return;
         }
 
@@ -333,7 +333,7 @@ public class IOUtil
             String[] files = file.list();
             if (files.length > 0)
             {
-                log.error(String.format("Rename failed. Directory %s is not empty.", oldname));
+                log.error("Rename failed. Directory {} is not empty.", oldname);
                 return;
             }
         }
@@ -350,7 +350,7 @@ public class IOUtil
             
             if(!success)
             {
-                log.error(String.format("Rename failed. Could not rename file %1$s to %2$s.",oldname, newname));
+                log.error("Rename failed. Could not rename file {} to {}.",oldname, newname);
             }
         }
     }
