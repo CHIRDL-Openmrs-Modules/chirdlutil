@@ -416,6 +416,7 @@ public final class ChirdlUtilConstants {
     public static final String PARAMETER_FORM_FIELD_ID = "formFieldId";
     public static final String PARAMETER_RULE_ID = "ruleId";
     public static final String PARAMETER_FIELD_NAME = "fieldName";
+    public static final String PARAMETER_FILE_NAME = "filename";
     
     /*
      * 
