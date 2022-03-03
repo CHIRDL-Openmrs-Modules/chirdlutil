@@ -17,7 +17,9 @@ package org.openmrs.module.chirdlutil.util;
  */
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.zip.ZipException;
 
@@ -28,9 +30,12 @@ import org.openmrs.api.context.Daemon;
 import org.openmrs.notification.Message;
 import org.openmrs.notification.MessageService;
 
-import net.lingala.zip4j.core.ZipFile;
+import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.model.ZipParameters;
-import net.lingala.zip4j.util.Zip4jConstants;
+import net.lingala.zip4j.model.enums.AesKeyStrength;
+import net.lingala.zip4j.model.enums.CompressionLevel;
+import net.lingala.zip4j.model.enums.CompressionMethod;
+import net.lingala.zip4j.model.enums.EncryptionMethod;
 
 /**
  * Utility class for handling zip files.
@@ -42,19 +47,22 @@ public class ZipUtil {
     private static final Logger log = LoggerFactory.getLogger(ZipUtil.class);
     
     /**
+     * Private constructor method
+     */
+    private ZipUtil() {
+    	// Intentionally left blank.
+    }
+    
+    /**
      * Creates a zip file containing all the provided files.
      * 
      * @param destinationZipFile The location of the new zip file.
      * @param filesToAdd The files to add to the zip file.
-     * @throws ZipException
+     * @throws IOException
      */
-    public static void zipFiles(File destinationZipFile, ArrayList<File> filesToAdd) throws ZipException {
-        ZipParameters parameters = generateParameters(false, null);
-        ZipFile zipFile;
-        try {
-            // Initiate ZipFile object with the path/name of the zip file.
-            zipFile = new ZipFile(destinationZipFile);
-            
+    public static void zipFiles(File destinationZipFile, List<File> filesToAdd) throws IOException {
+        ZipParameters parameters = generateParameters(false);
+        try (ZipFile zipFile = new ZipFile(destinationZipFile)) {
             // Now add files to the zip file
             // Note: To add a single file, the method addFile can be used
             // Note: If the zip file already exists and if this zip file is a split file
@@ -74,16 +82,12 @@ public class ZipUtil {
      * @param destinationZipFile The location of the new zip file.
      * @param filesToAdd The files to add to the zip file.
      * @param encryptionPassword The password for the zip file.
-     * @throws ZipException
+     * @throws IOException
      */
-    public static void zipFilesWithPassword(File destinationZipFile, ArrayList<File> filesToAdd, String encryptionPassword)
-                                                                                                                           throws ZipException {
-        ZipParameters parameters = generateParameters(true, encryptionPassword);
-        ZipFile zipFile;
-        try {
-            // Initiate ZipFile object with the path/name of the zip file.
-            zipFile = new ZipFile(destinationZipFile);
-            
+    public static void zipFilesWithPassword(File destinationZipFile, List<File> filesToAdd, String encryptionPassword)
+    throws IOException {
+        ZipParameters parameters = generateParameters(true);
+        try (ZipFile zipFile = new ZipFile(destinationZipFile, encryptionPassword.toCharArray())) {
             // Now add files to the zip file
             // Note: To add a single file, the method addFile can be used
             // Note: If the zip file already exists and if this zip file is a split file
@@ -102,15 +106,11 @@ public class ZipUtil {
      * 
      * @param destinationZipFile The location of the new zip file.
      * @param folder The folder to add to the zip file.
-     * @throws ZipException
+     * @throws IOException
      */
-    public static void zipFolder(File destinationZipFile, File folder) throws ZipException {
-        ZipParameters parameters = generateParameters(false, null);
-        ZipFile zipFile;
-        try {
-            // Initiate ZipFile object with the path/name of the zip file.
-            zipFile = new ZipFile(destinationZipFile);
-            
+    public static void zipFolder(File destinationZipFile, File folder) throws IOException {
+        ZipParameters parameters = generateParameters(false);
+        try (ZipFile zipFile = new ZipFile(destinationZipFile)) {
             // Now add files to the zip file
             // Note: To add a single file, the method addFile can be used
             // Note: If the zip file already exists and if this zip file is a split file
@@ -130,16 +130,12 @@ public class ZipUtil {
      * @param destinationZipFile The location of the new zip file.
      * @param folder The folder to add to the zip file.
      * @param encryptionPassword The password for the zip file.
-     * @throws ZipException
+     * @throws IOException
      */
     public static void zipFolderWithPassword(File destinationZipFile, File folder, String encryptionPassword)
-                                                                                                             throws ZipException {
-        ZipParameters parameters = generateParameters(true, encryptionPassword);
-        ZipFile zipFile;
-        try {
-            // Initiate ZipFile object with the path/name of the zip file.
-            zipFile = new ZipFile(destinationZipFile);
-            
+    throws IOException {
+        ZipParameters parameters = generateParameters(true);
+        try (ZipFile zipFile = new ZipFile(destinationZipFile, encryptionPassword.toCharArray())) {
             // Now add files to the zip file
             // Note: To add a single file, the method addFile can be used
             // Note: If the zip file already exists and if this zip file is a split file
@@ -158,14 +154,10 @@ public class ZipUtil {
      * 
      * @param zipFile The file to unzip.
      * @param destinationFolder The folder where the files will be placed.
-     * @throws ZipException
+     * @throws IOException
      */
-    public static void extractAllFiles(File zipFile, File destinationFolder) throws ZipException {
-        ZipFile zip;
-        try {
-            // Initiate ZipFile object with the path/name of the zip file.
-            zip = new ZipFile(zipFile);
-            
+    public static void extractAllFiles(File zipFile, File destinationFolder) throws IOException {
+        try (ZipFile zip = new ZipFile(zipFile)) {
             // Extract the ZipFile to the specified folder.
             zip.extractAll(destinationFolder.getAbsolutePath());
         }
@@ -181,17 +173,10 @@ public class ZipUtil {
      * @param zipFile The file to unzip.
      * @param destinationFolder The folder where the files will be placed.
      * @param password The password for the zip file.
-     * @throws ZipException
+     * @throws IOException
      */
-    public static void extractAllEncryptedFiles(File zipFile, File destinationFolder, String password) throws ZipException {
-        ZipFile zip;
-        try {
-            // Initiate ZipFile object with the path/name of the zip file.
-            zip = new ZipFile(zipFile);
-            
-            // Set the password
-            zip.setPassword(password);
-            
+    public static void extractAllEncryptedFiles(File zipFile, File destinationFolder, String password) throws IOException {
+        try (ZipFile zip = new ZipFile(zipFile, password.toCharArray())) {
             // Extract the ZipFile to the specified folder.
             zip.extractAll(destinationFolder.getAbsolutePath());
         }
@@ -207,14 +192,10 @@ public class ZipUtil {
      * @param zipFile The zip file containing the file to be extracted.
      * @param filenameInZip The filename of the file in the zip to be extracted.
      * @param destinationFolder The folder where the extracted file will be placed.
-     * @throws ZipException
+     * @throws IOException
      */
-    public static void extractFile(File zipFile, String filenameInZip, File destinationFolder) throws ZipException {
-        ZipFile zip;
-        try {
-            // Initiate ZipFile object with the path/name of the zip file.
-            zip = new ZipFile(zipFile);
-            
+    public static void extractFile(File zipFile, String filenameInZip, File destinationFolder) throws IOException {
+        try (ZipFile zip = new ZipFile(zipFile)) {
             // Extract the ZipFile to the specified folder.
             zip.extractFile(filenameInZip, destinationFolder.getAbsolutePath());
         }
@@ -231,18 +212,11 @@ public class ZipUtil {
      * @param filenameInZip The filename of the file in the zip to be extracted.
      * @param destinationFolder The folder where the extracted file will be placed.
      * @param password The password for the zip file.
-     * @throws ZipException
+     * @throws IOException
      */
     public static void extractEncryptedFile(File zipFile, String filenameInZip, File destinationFolder, String password)
-                                                                                                                        throws ZipException {
-        ZipFile zip;
-        try {
-            // Initiate ZipFile object with the path/name of the zip file.
-            zip = new ZipFile(zipFile);
-            
-            // Set the password
-            zip.setPassword(password);
-            
+    throws IOException {
+        try (ZipFile zip = new ZipFile(zipFile, password.toCharArray())) {
             // Extract the ZipFile to the specified folder.
             zip.extractFile(filenameInZip, destinationFolder.getAbsolutePath());
         }
@@ -257,15 +231,14 @@ public class ZipUtil {
      * 
      * @param encrypt Boolean explaining whether or not the encryption flag should be set on the
      *            parameters.
-     * @param encryptionPassword The password for the encryption.
      * @return
      */
-    private static ZipParameters generateParameters(boolean encrypt, String encryptionPassword) {
+    private static ZipParameters generateParameters(boolean encrypt) {
         // Initiate Zip Parameters which define various properties such
         // as compression method, etc. More parameters are explained in other
         // examples
         ZipParameters parameters = new ZipParameters();
-        parameters.setCompressionMethod(Zip4jConstants.COMP_DEFLATE); // set compression method to deflate compression
+        parameters.setCompressionMethod(CompressionMethod.DEFLATE); // set compression method to deflate compression
         
         // Set the compression level. This value has to be in between 0 to 9
         // Several predefined compression levels are available
@@ -274,7 +247,7 @@ public class ZipUtil {
         // DEFLATE_LEVEL_NORMAL - Optimal balance between compression level/speed
         // DEFLATE_LEVEL_MAXIMUM - High compression level with a compromise of speed
         // DEFLATE_LEVEL_ULTRA - Highest compression level but low speed
-        parameters.setCompressionLevel(Zip4jConstants.DEFLATE_LEVEL_NORMAL);
+        parameters.setCompressionLevel(CompressionLevel.NORMAL);
         
         if (encrypt) {
             // Set the encryption flag to true
@@ -282,7 +255,7 @@ public class ZipUtil {
             parameters.setEncryptFiles(true);
             
             // Set the encryption method to AES Zip Encryption
-            parameters.setEncryptionMethod(Zip4jConstants.ENC_METHOD_AES);
+            parameters.setEncryptionMethod(EncryptionMethod.AES);
             
             // Set AES Key strength. Key strengths available for AES encryption are:
             // AES_STRENGTH_128 - For both encryption and decryption
@@ -290,10 +263,7 @@ public class ZipUtil {
             // AES_STRENGTH_256 - For both encryption and decryption
             // Key strength 192 cannot be used for encryption. But if a zip file already has a
             // file encrypted with key strength of 192, then Zip4j can decrypt this file
-            parameters.setAesKeyStrength(Zip4jConstants.AES_STRENGTH_256);
-            
-            // Set password
-            parameters.setPassword(encryptionPassword);
+            parameters.setAesKeyStrength(AesKeyStrength.KEY_STRENGTH_256);
         }
         
         return parameters;
@@ -381,6 +351,7 @@ public class ZipUtil {
             catch (Exception e) {
                 log.error(e.getMessage());
                 log.error(org.openmrs.module.chirdlutil.util.Util.getStackTrace(e));
+                Thread.currentThread().interrupt();
             }
             
         };
