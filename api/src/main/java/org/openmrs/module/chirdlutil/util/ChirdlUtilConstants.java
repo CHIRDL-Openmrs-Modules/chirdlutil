@@ -513,7 +513,7 @@ public final class ChirdlUtilConstants {
      */
     public static final String FORM_FIELD_TYPE_EXPORT = "Export Field";
     public static final String FORM_FIELD_TYPE_MERGE_FIELD = "Merge Field";
-    public static final String FORM_FIELD_TYPE_PRIORITIZED_FIELD = "Prioritized Merge Field";
+    public static final String FORM_FIELD_TYPE_PRIORITIZED_MERGE_FIELD = "Prioritized Merge Field";
     /*
      * 
      */
