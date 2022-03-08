@@ -43,8 +43,6 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.icepdf.core.exceptions.PDFException;
 import org.icepdf.core.exceptions.PDFSecurityException;
 import org.icepdf.core.pobjects.Document;
@@ -89,6 +87,8 @@ import org.openmrs.module.chirdlutilbackports.hibernateBeans.EncounterAttribute;
 import org.openmrs.module.chirdlutilbackports.hibernateBeans.EncounterAttributeValue;
 import org.openmrs.module.chirdlutilbackports.hibernateBeans.FormAttributeValue;
 import org.openmrs.module.chirdlutilbackports.service.ChirdlUtilBackportsService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.DecodeHintType;
@@ -1150,9 +1150,48 @@ public class Util
             {
                 encounterAttributeValue = new EncounterAttributeValue(encounterAttribute, encounter.getEncounterId(), valueText);
                 encounterAttributeValue.setCreator(encounter.getCreator());
-                encounterAttributeValue.setDateCreated(encounter.getDateCreated());
+                encounterAttributeValue.setDateCreated(new Date());
                 encounterAttributeValue.setUuid(UUID.randomUUID().toString());
-                
+
+                chirdlutilbackportsService.saveEncounterAttributeValue(encounterAttributeValue);
+            }
+        }
+        catch(Exception e)
+        {
+            log.error("Error storing encounter attribute value encounterId: {} attributeName: {}", encounter.getEncounterId(), attributeName, e);
+        }
+    }
+            
+    public static void storeEncounterAttributeAsValueDate(org.openmrs.Encounter encounter, String attributeName, Date valueDateTime)
+    {
+        ChirdlUtilBackportsService chirdlutilbackportsService = Context.getService(ChirdlUtilBackportsService.class);
+
+        try
+        {
+            EncounterAttribute encounterAttribute = chirdlutilbackportsService.getEncounterAttributeByName(attributeName);
+            EncounterAttributeValue encounterAttributeValue = chirdlutilbackportsService.getEncounterAttributeValueByAttribute(encounter.getEncounterId(), encounterAttribute, false);
+            
+            boolean existingVoided = false;
+            if(encounterAttributeValue != null)
+            {    
+            	Date existingEncounterDateTime = encounterAttributeValue.getValueDateTime();
+            	if (existingEncounterDateTime != null && !existingEncounterDateTime.equals(valueDateTime)){
+            		 // Attribute already exists, void the old one, and create a new one
+                    encounterAttributeValue.setVoided(true);
+                    encounterAttributeValue.setVoidedBy(Context.getAuthenticatedUser());
+                    encounterAttributeValue.setVoidReason(ChirdlUtilConstants.ATTR_VALUE_VOID_REASON +  valueDateTime.toString());
+                    encounterAttributeValue.setDateVoided(new Date());
+                    chirdlutilbackportsService.saveEncounterAttributeValue(encounterAttributeValue);
+                    existingVoided = true;
+            	}
+            }
+            
+            if(encounterAttributeValue == null || existingVoided) // Create a new attribute if one didn't exist or if we voided an existing one
+            {
+                encounterAttributeValue = new EncounterAttributeValue(encounterAttribute, encounter.getEncounterId(), valueDateTime);
+                encounterAttributeValue.setCreator(encounter.getCreator());
+                encounterAttributeValue.setDateCreated(new Date());
+                encounterAttributeValue.setUuid(UUID.randomUUID().toString());
                 chirdlutilbackportsService.saveEncounterAttributeValue(encounterAttributeValue);
             }    
         }
