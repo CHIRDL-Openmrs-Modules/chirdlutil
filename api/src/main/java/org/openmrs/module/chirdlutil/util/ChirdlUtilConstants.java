@@ -89,6 +89,7 @@ public final class ChirdlUtilConstants {
     public static final String LOC_TAG_ATTR_AGE_LIMIT_AT_CHECKIN = "CheckinAgeLimit";
     public static final String LOC_TAG_ATTR_PRIMARY_PHYSICIAN_FORM = "primaryPhysicianForm"; 
     public static final String LOC_TAG_ATTR_PRIMARY_PATIENT_FORM = "primaryPatientForm"; 
+    public static final String LOC_TAG_ATTR_HIGH_RISK_CONTACT = "HighRiskContact"; 
     /*
      * 
      */
@@ -169,6 +170,7 @@ public final class ChirdlUtilConstants {
     public static final String FORM_ATTRIBUTE_REPRINT_STATE = "reprintState";
     public static final String FORM_ATTRIBUTE_IS_PRIMARY_PATIENT_FORM = "isPrimaryPatientForm";
     public static final String FORM_ATTRIBUTE_IS_PRIMARY_PHYSICIAN_FORM = "isPrimaryPhysicianForm";
+    public static final String FORM_ATTRIBUTE_NUMBER_OF_PROMPTS = "numPrompts";
     /*
      * 
      */
@@ -410,6 +412,11 @@ public final class ChirdlUtilConstants {
     public static final String PARAMETER_CAREGIVER = "caregiver";
     public static final String PARAMETER_SCREENER_COMPLETED_BY = "screener_completed_by";
     public static final String PARAMETER_PDF_VIEWER = "pdfViewer";
+    public static final String PARAMETER_CONCEPT = "concept";
+    public static final String PARAMETER_FORM_FIELD_ID = "formFieldId";
+    public static final String PARAMETER_RULE_ID = "ruleId";
+    public static final String PARAMETER_FIELD_NAME = "fieldName";
+    public static final String PARAMETER_FILE_NAME = "filename";
     
     /*
      * 
@@ -505,6 +512,8 @@ public final class ChirdlUtilConstants {
      * Form information
      */
     public static final String FORM_FIELD_TYPE_EXPORT = "Export Field";
+    public static final String FORM_FIELD_TYPE_MERGE_FIELD = "Merge Field";
+    public static final String FORM_FIELD_TYPE_PRIORITIZED_MERGE_FIELD = "Prioritized Merge Field";
     /*
      * 
      */
@@ -538,6 +547,7 @@ public final class ChirdlUtilConstants {
      */
     public static final String LOCATION_RIIUMG = "RIIUMG";
     public static final String LOCATION_PHEDMSR = "PHEDMSR";
+    public static final String LOCATION_UNKNOWN = "Unknown Locaton";
     /*
      * 
      */
@@ -631,6 +641,11 @@ public final class ChirdlUtilConstants {
     public static final String ENCOUNTER_ATTRIBUTE_ORIGINAL_LOCATION = "Original Location";
     public static final String ENCOUNTER_ATTRIBUTE_GLOOKO_DATA_TYPE = "Glooko Data Type";
     public static final String ENCOUNTER_ATTRIBUTE_VISIT_TYPE = "Visit Type";
+    public static final String ENCOUNTER_ATTRIBUTE_APPOINTMENT_TIME = "Appointment Time";
+    public static final String ENCOUNTER_ATTRIBUTE_PRINTER_LOCATION = "Printer Location";
+    public static final String ENCOUNTER_ATTRIBUTE_INSURANCE_SMS_CODE = "Insurance SMS Code";
+    public static final String ENCOUNTER_ATTRIBUTE_INSURANCE_PLAN_CODE = "Insurance Plan Code";
+    public static final String ENCOUNTER_ATTRIBUTE_INSURANCE_CARRIER_CODE = "Carrier Code";
     
     
     /*
@@ -654,6 +669,7 @@ public final class ChirdlUtilConstants {
     public static final String DATE_FORMAT_MM_dd_YYYY = "MM/dd/yyyy";
     public static final String DATE_FORMAT_HYPHEN_yyyy_MM_dd = "yyyy-MM-dd";
     public static final String DATE_FORMAT_MMM_dd_comma_yyyy = "MMM dd, yyyy";
+    public static final String DATE_FORMAT_HYPHEN_yyyy_MM_dd_hh_mm_ss = "yyyy-MM-dd hh:mm:ss";
     
     /*
      * Fax service
