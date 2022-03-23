@@ -33,8 +33,10 @@ public class CreateFlowsheetConceptMapping {
 	private static final String SQL_WHERE_NAME = "\t\t\twhere name = '";
 	private static final String FLOWSHEET_CONCEPT_SOURCE_DISPLAY = "flowsheetDisplayConceptSource";
 	private static final String FLOWSHEET_CONCEPT_SOURCE_CODE = "flowsheetCodeConceptSource";
+	private static final String FLOWSHEET_CONCEPT_SOURCE_SYSTEM = "flowsheetSystemConceptSource";
 	private static final String SOURCE_TYPE_DISPLAY = "Display";
 	private static final String SOURCE_TYPE_CODE = "Code";
+	private static final String SOURCE_TYPE_SYSTEM = "System";
 	private static final Logger LOG = Logger.getLogger(CreateFlowsheetConceptMapping.class);
 	private static final String INPUT_ARG = "-input";
 	private static final String OUTPUT_ARG = "-output";
@@ -55,17 +57,12 @@ public class CreateFlowsheetConceptMapping {
 		try (InputStreamReader inStreamReader = new InputStreamReader(new FileInputStream(mappingArgs.getInput()));
 				CSVReader reader = new CSVReader(inStreamReader, ','); 
 				PrintWriter writer = new PrintWriter(new FileWriter(mappingArgs.getOutput()));) {
-			// Write the Flowsheet ID insert statement
-			writeFlowsheetIdSql(reader, writer, mappingArgs);
 			
 			// Write the concept source insert statements
 			writeConceptSourcesSql(writer, mappingArgs);
 			
 			// Write the concept source location attribute values insert statements
 			writeFlowsheetLocationAttributesSql(writer, mappingArgs);
-			
-			// The next line is blank
-			reader.readNext();
 			
 			// The remainder of the file contains the concept mapping information
 			HeaderColumnNameTranslateMappingStrategy<FlowsheetDescriptor> strat = 
@@ -77,6 +74,7 @@ public class CreateFlowsheetConceptMapping {
 			map.put("Description", "conceptDescription");
 			map.put("Epic Code", "code");
 			map.put("Epic Display", "display");
+			map.put("Epic Flowsheet System OID", "system");
 			
 			strat.setType(FlowsheetDescriptor.class);
 			strat.setColumnMapping(map);
@@ -92,44 +90,6 @@ public class CreateFlowsheetConceptMapping {
 	}
 	
 	/**
-	 * Creates and writes the SQL statement to insert the flowsheet ID for the location.
-	 * 
-	 * @param reader The CSV reader
-	 * @param writer The print writer to write to the output file
-	 * @param mappingArgs The program arguments
-	 * @throws IOException
-	 */
-	private void writeFlowsheetIdSql(CSVReader reader, PrintWriter writer, FlowsheetConceptMappingArgs mappingArgs) 
-			throws IOException {
-		// The first line contains the following text: Flowsheet System OID
-		reader.readNext();
-		
-		// The second line contains the flowsheet system OID
-		String[] items = reader.readNext();
-		if (items == null || items.length == 0) {
-			throw new IOException("The file does not contain a flowsheet system OID on line 2, column 1");
-		}
-		
-		String flowsheetId = items[0];
-		writer.println("/* Insert the flowsheet ID into the location attribute value table */");
-		writer.println(
-			"insert into chirdlutilbackports_location_attribute_value (location_id, value, location_attribute_id)");
-		writer.println("values ((select location_id");
-		writer.println("\t\t\tfrom location");
-		writer.print(SQL_WHERE_NAME);
-		writer.print(mappingArgs.getLocation());
-		writer.println("'), ");
-		writer.print("\t\t'");
-		writer.print(flowsheetId);
-		writer.println("', ");
-		writer.println("\t\t(select location_attribute_id");
-		writer.println("\t\t\tfrom chirdlutilbackports_location_attribute");
-		writer.println("\t\t\twhere name = 'flowsheetSystem'));");
-		writer.println();
-		writer.flush();
-	}
-	
-	/**
 	 * Creates and writes the SQL statement to insert the code and display concept sources.
 	 * 
 	 * @param writer The print writer to write to the output file
@@ -138,15 +98,16 @@ public class CreateFlowsheetConceptMapping {
 	private void writeConceptSourcesSql(PrintWriter writer, FlowsheetConceptMappingArgs mappingArgs) {
 		writeConceptSourceSql(writer, mappingArgs, SOURCE_TYPE_CODE);
 		writeConceptSourceSql(writer, mappingArgs, SOURCE_TYPE_DISPLAY);
+		writeConceptSourceSql(writer, mappingArgs, SOURCE_TYPE_SYSTEM);
 		writer.flush();
 	}
 	
 	/**
-	 * Creates and writes the sQL statement to insert a concept source.
+	 * Creates and writes the SQL statement to insert a concept source.
 	 * 
 	 * @param writer The print writer to write the output file
 	 * @param mappingArgs The program arguments
-	 * @param sourceType The source type, either "Code" or "Display"
+	 * @param sourceType The source type, either "Code", "Display", or "System"
 	 */
 	private void writeConceptSourceSql(
 			PrintWriter writer, FlowsheetConceptMappingArgs mappingArgs, String sourceType) {
@@ -175,6 +136,7 @@ public class CreateFlowsheetConceptMapping {
 	private void writeFlowsheetLocationAttributesSql(PrintWriter writer, FlowsheetConceptMappingArgs mappingArgs) {
 		writeFlowsheetLocationAttributeSql(writer, mappingArgs, SOURCE_TYPE_CODE, FLOWSHEET_CONCEPT_SOURCE_CODE);
 		writeFlowsheetLocationAttributeSql(writer, mappingArgs, SOURCE_TYPE_DISPLAY, FLOWSHEET_CONCEPT_SOURCE_DISPLAY);
+		writeFlowsheetLocationAttributeSql(writer, mappingArgs, SOURCE_TYPE_SYSTEM, FLOWSHEET_CONCEPT_SOURCE_SYSTEM);
 		writer.flush();
 	}
 	
@@ -223,9 +185,9 @@ public class CreateFlowsheetConceptMapping {
 			PrintWriter writer, List<FlowsheetDescriptor> mappings, FlowsheetConceptMappingArgs mappingArgs) {
 		for (FlowsheetDescriptor mapping : mappings) {
 			if (StringUtils.isBlank(mapping.getCode()) || StringUtils.isBlank(mapping.getConceptName()) 
-					|| StringUtils.isBlank(mapping.getDisplay())) {
-				LOG.warn("Invalid mapping found.  Please ensure the Concept Name, Epic Code, and Epic "
-						+ "Display values exist: " + mapping);
+					|| StringUtils.isBlank(mapping.getDisplay()) || StringUtils.isBlank(mapping.getSystem())) {
+				LOG.warn("Invalid mapping found.  Please ensure the Concept Name, Epic Code, Epic "
+						+ "Display, and Epic Flowsheet System OID values exist: " + mapping);
 				continue;
 			}
 			
@@ -264,6 +226,18 @@ public class CreateFlowsheetConceptMapping {
 		writer.print(SQL_ADD_THE);
 		writer.write(mapping.getConceptName());
 		writer.println(" display concept reference term mapping for the flowsheet display concept source */");
+		writeConceptRefTermMapping(writer, mapping);
+		
+		// Write the insert statements for the system concept reference term
+		writer.print(SQL_ADD_THE);
+		writer.write(mapping.getConceptName());
+		writer.println(" system concept reference term for the flowsheet system concept source */");
+		writeConceptRefTermSql(writer, SOURCE_TYPE_SYSTEM, mapping.getSystem(), mappingArgs);
+		
+		// Write the concept term mapping for the system concept reference term
+		writer.print(SQL_ADD_THE);
+		writer.write(mapping.getConceptName());
+		writer.println(" system concept reference term mapping for the flowsheet system concept source */");
 		writeConceptRefTermMapping(writer, mapping);
 	}
 	
