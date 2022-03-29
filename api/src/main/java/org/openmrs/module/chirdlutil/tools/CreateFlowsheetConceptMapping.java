@@ -8,8 +8,10 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.BasicConfigurator;
@@ -28,6 +30,7 @@ import au.com.bytecode.opencsv.bean.HeaderColumnNameTranslateMappingStrategy;
  */
 public class CreateFlowsheetConceptMapping {
 	
+	private static final String IF_IT_DOESNT_EXIST = " if it doesn't exist */";
 	private static final String SQL_ADD_THE = "/* Add the ";
 	private static final String SQL_FLOWSHEET = " Flowsheet ";
 	private static final String SQL_WHERE_NAME = "\t\t\twhere name = '";
@@ -183,6 +186,9 @@ public class CreateFlowsheetConceptMapping {
 	 */
 	private void writeConceptMappingsSql(
 			PrintWriter writer, List<FlowsheetDescriptor> mappings, FlowsheetConceptMappingArgs mappingArgs) {
+		Set<String> usedCodes = new HashSet<>();
+		Set<String> usedDisplays = new HashSet<>();
+		Set<String> usedSystems = new HashSet<>();
 		for (FlowsheetDescriptor mapping : mappings) {
 			if (StringUtils.isBlank(mapping.getCode()) || StringUtils.isBlank(mapping.getConceptName()) 
 					|| StringUtils.isBlank(mapping.getDisplay()) || StringUtils.isBlank(mapping.getSystem())) {
@@ -191,8 +197,12 @@ public class CreateFlowsheetConceptMapping {
 				continue;
 			}
 			
-			writeConceptMappingSql(writer, mapping, mappingArgs);
+			writeConceptMappingSql(writer, mapping, mappingArgs, usedCodes, usedDisplays, usedSystems);
 		}
+		
+		usedCodes.clear();
+		usedDisplays.clear();
+		usedSystems.clear();
 	}
 	
 	/**
@@ -201,77 +211,105 @@ public class CreateFlowsheetConceptMapping {
 	 * @param writer The print writer to write the output file
 	 * @param mapping The concept mapping
 	 * @param mappingArgs The program arguments
+	 * @param usedCodes Set containing codes that have already been written to prevent duplicate code insertions.
+	 * @param usedDisplays Set containing displays that have already been written to prevent duplicate display 
+	 * insertions.
+	 * @param usedSystems Set containing systems that have already been written to prevent duplicate system insertions.
 	 */
-	private void writeConceptMappingSql
-	(PrintWriter writer, FlowsheetDescriptor mapping, FlowsheetConceptMappingArgs mappingArgs) {
+	private void writeConceptMappingSql(PrintWriter writer, FlowsheetDescriptor mapping, 
+			FlowsheetConceptMappingArgs mappingArgs, Set<String> usedCodes, Set<String> usedDisplays, 
+			Set<String> usedSystems) {
 		// Write the insert statements for the code concept reference term
 		writer.print(SQL_ADD_THE);
 		writer.write(mapping.getConceptName());
-		writer.println(" code concept reference term for the flowsheet code concept source */");
-		writeConceptRefTermSql(writer, SOURCE_TYPE_CODE, mapping.getCode(), mappingArgs);
+		writer.print(" code concept reference term for the flowsheet code concept source");
+		writer.println(IF_IT_DOESNT_EXIST);
+		writeConceptRefTermSql(writer, SOURCE_TYPE_CODE, mapping.getCode(), mappingArgs, usedCodes);
 		
 		// Write the concept term mapping for the code concept reference term
 		writer.print(SQL_ADD_THE);
 		writer.write(mapping.getConceptName());
-		writer.println(" code concept reference term mapping for the flowsheet code concept source */");
-		writeConceptRefTermMapping(writer, mapping);
+		writer.print(" code concept reference term mapping for the flowsheet code concept source");
+		writer.println(IF_IT_DOESNT_EXIST);
+		writeConceptRefTermMapping(writer, mappingArgs, mapping, SOURCE_TYPE_CODE, mapping.getCode());
 		
 		// Write the insert statements for the display concept reference term
 		writer.print(SQL_ADD_THE);
 		writer.write(mapping.getConceptName());
-		writer.println(" display concept reference term for the flowsheet display concept source */");
-		writeConceptRefTermSql(writer, SOURCE_TYPE_DISPLAY, mapping.getDisplay(), mappingArgs);
+		writer.print(" display concept reference term for the flowsheet display concept source");
+		writer.println(IF_IT_DOESNT_EXIST);
+		writeConceptRefTermSql(writer, SOURCE_TYPE_DISPLAY, mapping.getDisplay(), mappingArgs, usedDisplays);
 		
 		// Write the concept term mapping for the display concept reference term
 		writer.print(SQL_ADD_THE);
 		writer.write(mapping.getConceptName());
-		writer.println(" display concept reference term mapping for the flowsheet display concept source */");
-		writeConceptRefTermMapping(writer, mapping);
+		writer.print(" display concept reference term mapping for the flowsheet display concept source");
+		writer.println(IF_IT_DOESNT_EXIST);
+		writeConceptRefTermMapping(writer, mappingArgs, mapping, SOURCE_TYPE_DISPLAY, mapping.getDisplay());
 		
 		// Write the insert statements for the system concept reference term
 		writer.print(SQL_ADD_THE);
 		writer.write(mapping.getConceptName());
-		writer.println(" system concept reference term for the flowsheet system concept source */");
-		writeConceptRefTermSql(writer, SOURCE_TYPE_SYSTEM, mapping.getSystem(), mappingArgs);
+		writer.print(" system concept reference term for the flowsheet system concept source");
+		writer.println(IF_IT_DOESNT_EXIST);
+		writeConceptRefTermSql(writer, SOURCE_TYPE_SYSTEM, mapping.getSystem(), mappingArgs, usedSystems);
 		
 		// Write the concept term mapping for the system concept reference term
 		writer.print(SQL_ADD_THE);
 		writer.write(mapping.getConceptName());
-		writer.println(" system concept reference term mapping for the flowsheet system concept source */");
-		writeConceptRefTermMapping(writer, mapping);
+		writer.print(" system concept reference term mapping for the flowsheet system concept source");
+		writer.println(IF_IT_DOESNT_EXIST);
+		writeConceptRefTermMapping(writer, mappingArgs, mapping, SOURCE_TYPE_SYSTEM, mapping.getSystem());
 	}
 	
 	/**
 	 * Writes the concept reference term SQL for the provided concept source and code.
 	 * 
 	 * @param writer The print writer to write the output file
-	 * @param sourceType The source type, either "Code" or "Display"
+	 * @param sourceType The source type, either "Code", "Display", or "System"
 	 * @param code The concept reference term code (value)
+	 * @param mappingArgs The flowsheet mapping values
+	 * @param usedCodes Previously used values so we don't insert them again.
 	 */
-	private void writeConceptRefTermSql(
-			PrintWriter writer, String sourceType, String code, FlowsheetConceptMappingArgs mappingArgs) {
-		writer.println("insert into concept_reference_term (concept_source_id, code, creator, date_created, uuid)");
-		writer.print("values((select concept_source_id \n\t\t\tfrom concept_reference_source \n\t\t\twhere name = '");
-		writer.print(mappingArgs.getLocation());
-		writer.print(SQL_FLOWSHEET);
-		writer.print(sourceType);
-		writer.print("'), \n\t\t'");
-		writer.print(code);
-		writer.println("', 1, NOW(), UUID());");
-		writer.println();
+	private void writeConceptRefTermSql(PrintWriter writer, String sourceType, String code, 
+			FlowsheetConceptMappingArgs mappingArgs, Set<String> usedCodes) {
+		if (!usedCodes.contains(code)) {
+			writer.println("insert into concept_reference_term (concept_source_id, code, creator, date_created, uuid)");
+			writer.print("values((select concept_source_id \n\t\t\tfrom concept_reference_source \n\t\t\twhere name = '");
+			writer.print(mappingArgs.getLocation());
+			writer.print(SQL_FLOWSHEET);
+			writer.print(sourceType);
+			writer.print("'), \n\t\t'");
+			writer.print(code);
+			writer.println("', 1, NOW(), UUID());");
+			writer.println();
+			usedCodes.add(code);
+		}
 	}
 	
 	/**
 	 * Writes the concept reference term mapping SQL for the provided mapping.
 	 * 
 	 * @param writer The print writer to write the output file
+	 * @param mappingArgs The program arguments
 	 * @param mapping The concept mapping
+	 * @param sourceType The source type, either "Code", "Display", or "System"
+	 * @param code The reference term code value
 	 */
-	private void writeConceptRefTermMapping(PrintWriter writer, FlowsheetDescriptor mapping) {
+	private void writeConceptRefTermMapping(PrintWriter writer, FlowsheetConceptMappingArgs mappingArgs, 
+			FlowsheetDescriptor mapping, String sourceType, String code) {
 		writer.print("insert into concept_reference_map (concept_reference_term_id, concept_map_type_id, creator, ");
 		writer.println("date_created, concept_id, uuid)");
-		writer.println("values((select MAX(concept_reference_term_id) \n\t\t\tfrom concept_reference_term),");
-		writer.print("\t\t(select concept_map_type_id \n\t\t\tfrom concept_map_type \n\t\t\twhere name = ");
+		writer.println("values((select concept_reference_term_id \n\t\t\tfrom concept_reference_term");
+		writer.print("\t\t\twhere concept_source_id = (select concept_source_id\n\t\t\t\t\t\t\t\t\t\tfrom concept_reference_source");
+		writer.print("\n\t\t\t\t\t\t\t\t\t\twhere name = '");
+		writer.print(mappingArgs.getLocation());
+		writer.print(SQL_FLOWSHEET);  
+		writer.print(sourceType);
+		writer.print("')\n\t\t\tand code = '");
+		writer.print(code);
+		writer.print("'),");
+		writer.print("\n\t\t(select concept_map_type_id \n\t\t\tfrom concept_map_type \n\t\t\twhere name = ");
 		writer.println("'NARROWER-THAN'), 1, NOW(),");
 		writer.print("\t\t(select concept_id \n\t\t\tfrom concept_name \n\t\t\twhere name = '");
 		writer.print(mapping.getConceptName());
