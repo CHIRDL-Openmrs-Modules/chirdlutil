@@ -12,6 +12,7 @@ public class FlowsheetDescriptor {
 	private String conceptDescription = null;
 	private String code = null;
 	private String display = null;
+	private String system = null;
 	
 	/**
 	 * Constructor Method
@@ -22,13 +23,14 @@ public class FlowsheetDescriptor {
 	 * @param code The flowsheet code
 	 * @param display the flowsheet display value
 	 */
-	public FlowsheetDescriptor(
-			String conceptName, String conceptValueType, String conceptDescription, String code, String display) {
+	public FlowsheetDescriptor(String conceptName, String conceptValueType, String conceptDescription, String code, 
+			String display, String system) {
 		this.conceptName = conceptName;
 		this.conceptValueType = conceptValueType;
 		this.conceptDescription = conceptDescription;
 		this.code = code;
 		this.display = display;
+		this.system = system;
 	}
 	
 	/**
@@ -107,6 +109,20 @@ public class FlowsheetDescriptor {
 	public void setDisplay(String display) {
 		this.display = display;
 	}
+	
+	/**
+	 * @return the system
+	 */
+	public String getSystem() {
+		return this.system;
+	}
+	
+	/**
+	 * @param system the system to set
+	 */
+	public void setSystem(String system) {
+		this.system = system;
+	}
 
 	/**
 	 * @see java.lang.Object#hashCode()
@@ -120,6 +136,7 @@ public class FlowsheetDescriptor {
 		result = prime * result + ((this.conceptName == null) ? 0 : this.conceptName.hashCode());
 		result = prime * result + ((this.conceptValueType == null) ? 0 : this.conceptValueType.hashCode());
 		result = prime * result + ((this.display == null) ? 0 : this.display.hashCode());
+		result = prime * result + ((this.system == null) ? 0 : this.system.hashCode());
 		return result;
 	}
 
@@ -160,6 +177,11 @@ public class FlowsheetDescriptor {
 				return false;
 		} else if (!this.display.equals(other.display))
 			return false;
+		if (this.system == null) {
+			if (other.system != null)
+				return false;
+		} else if (!this.system.equals(other.system))
+			return false;
 		return true;
 	}
 
@@ -169,6 +191,7 @@ public class FlowsheetDescriptor {
 	@Override
 	public String toString() {
 		return "FlowsheetDescriptor [conceptName=" + this.conceptName + ", conceptValueType=" + this.conceptValueType
-		        + ", conceptDescription=" + this.conceptDescription + ", code=" + this.code + ", display=" + this.display + "]";
+		        + ", conceptDescription=" + this.conceptDescription + ", code=" + this.code + ", display=" 
+				+ this.display+ ", system=" + this.system + "]";
 	}
 }

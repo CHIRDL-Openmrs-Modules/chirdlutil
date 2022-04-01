@@ -68,25 +68,13 @@ public class CreateFlowsheetReport {
 	 * @throws IOException
 	 */
 	private void createHeaders(CSVWriter csvWriter) throws IOException {
-		 String[] item = new String[1];
-         item[0] = "Flowsheet System OID";
-         csvWriter.writeNext(item);
-         csvWriter.flush();
-         
-         item[0] = "Please provide the flowsheet system OID here.";
-         csvWriter.writeNext(item);
-         csvWriter.flush();
-         
-         item[0] = ChirdlUtilConstants.GENERAL_INFO_EMPTY_STRING;
-         csvWriter.writeNext(item);
-         csvWriter.flush();
-         
-         item = new String[5];
+		 String[] item = new String[6];
          item[0] = "Concept Name";
          item[1] = "Value Type";
          item[2] = "Description";
          item[3] = "Epic Code";
          item[4] = "Epic Display";
+         item[5] = "Epic Flowsheet System OID";
          csvWriter.writeNext(item);
          csvWriter.flush();
 	}
