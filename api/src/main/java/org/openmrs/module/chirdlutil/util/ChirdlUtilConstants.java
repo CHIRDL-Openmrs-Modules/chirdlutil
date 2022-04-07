@@ -433,6 +433,7 @@ public final class ChirdlUtilConstants {
     public static final String HTTP_CACHE_CONTROL_PUBLIC = "public";
     public static final String HTTP_CACHE_CONTROL_MAX_AGE = "max-age";
     public static final String HTTP_HEADER_ATTACHMENT = "attachment; filename=\"%s\"";
+    public static final String HTTP_HEADER_USER_AGENT = "User-Agent";
     
     /*
      * 
