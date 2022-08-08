@@ -43,8 +43,6 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.icepdf.core.exceptions.PDFException;
 import org.icepdf.core.exceptions.PDFSecurityException;
 import org.icepdf.core.pobjects.Document;
@@ -89,6 +87,8 @@ import org.openmrs.module.chirdlutilbackports.hibernateBeans.EncounterAttribute;
 import org.openmrs.module.chirdlutilbackports.hibernateBeans.EncounterAttributeValue;
 import org.openmrs.module.chirdlutilbackports.hibernateBeans.FormAttributeValue;
 import org.openmrs.module.chirdlutilbackports.service.ChirdlUtilBackportsService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.DecodeHintType;
@@ -108,7 +108,7 @@ import com.google.zxing.multi.MultipleBarcodeReader;
  */
 public class Util
 {
-    protected static final Log log = LogFactory.getLog(Util.class);
+    private static final Logger log = LoggerFactory.getLogger(Util.class);
 
     
     public static final String MEASUREMENT_LB = "lb";
@@ -553,14 +553,13 @@ public class Util
                 obs.setValueNumeric(Double.parseDouble(value));
             }
             catch (NumberFormatException e) {
-                log.error("Could not save value: " + value + " to the database for concept "
-                        + currConcept.getName().getName());
+                log.error("Could not save value: {} to the database for concept {}", value, currConcept.getName().getName());
             }
         } else if (datatypeName.equalsIgnoreCase("Coded")) {
             ConceptService conceptService = Context.getConceptService();
             Concept answer = conceptService.getConceptByName(value);
             if (answer == null) {
-                log.error(value + " is not a valid concept name. " + value + " will be stored as text.");
+                log.error("{} is not a valid concept name. {} will be stored as text.", value, value);
                 obs.setValueText(value);
             } else {
                 obs.setValueCoded(answer);
@@ -895,15 +894,15 @@ public class Util
             }
         }
         catch (NoSuchAlgorithmException e) {
-            log.error("Error creating " + ChirdlUtilConstants.ENCRYPTION_AES + " Cipher instance", e);
+            log.error("Error creating {} Cipher instance", ChirdlUtilConstants.ENCRYPTION_AES, e);
             return null;
         }
         catch (NoSuchPaddingException e) {
-            log.error("Error creating " + ChirdlUtilConstants.ENCRYPTION_AES + " Cipher instance", e);
+            log.error("Error creating {} Cipher instance", ChirdlUtilConstants.ENCRYPTION_AES, e);
             return null;
         }
         catch (UnsupportedEncodingException e) {
-            log.error("Unsupported Encoding: " + ChirdlUtilConstants.ENCODING_UTF8, e);
+            log.error("Unsupported Encoding: {}", ChirdlUtilConstants.ENCODING_UTF8, e);
             return null;
         }
         catch (InvalidKeyException e) {
@@ -945,15 +944,15 @@ public class Util
             return new String (encryptedBytes);
         }
         catch (UnsupportedEncodingException e) {
-            log.error("Unsupported Encoding: " + ChirdlUtilConstants.ENCODING_UTF8, e);
+            log.error("Unsupported Encoding: {}", ChirdlUtilConstants.ENCODING_UTF8, e);
             return null;
         }
         catch (NoSuchAlgorithmException e) {
-            log.error("Error creating " + ChirdlUtilConstants.ENCRYPTION_AES + " Cipher instance", e);
+            log.error("Error creating {} Cipher instance", ChirdlUtilConstants.ENCRYPTION_AES, e);
             return null;
         }
         catch (NoSuchPaddingException e) {
-            log.error("Error creating " + ChirdlUtilConstants.ENCRYPTION_AES + " Cipher instance", e);
+            log.error("Error creating {} Cipher instance", ChirdlUtilConstants.ENCRYPTION_AES, e);
             return null;
         }
         catch (InvalidKeyException e) {
@@ -1039,7 +1038,7 @@ public class Util
                     
                     if(iter.hasNext())
                     {
-                        log.info("More than one provider was found for encounter: " + encounter.getEncounterId());
+                        log.error("More than one provider was found for encounter: {}", encounter.getEncounterId());
                     }
                 }
             }
@@ -1086,11 +1085,11 @@ public class Util
             input = strToHash.getBytes(ChirdlUtilConstants.ENCODING_UTF8);
         }
         catch (UnsupportedEncodingException e) {
-            log.error("Unsupported Encoding: " + ChirdlUtilConstants.ENCODING_UTF8, e);
+            log.error("Unsupported Encoding: {}", ChirdlUtilConstants.ENCODING_UTF8, e);
             return null;
         }
         catch (NoSuchAlgorithmException e) {
-            log.error("System cannot find encryption algorithm: " + ChirdlUtilConstants.SHA_256, e);
+            log.error("System cannot find encryption algorithm: {}", ChirdlUtilConstants.SHA_256, e);
             return null;
         }
        
@@ -1151,15 +1150,54 @@ public class Util
             {
                 encounterAttributeValue = new EncounterAttributeValue(encounterAttribute, encounter.getEncounterId(), valueText);
                 encounterAttributeValue.setCreator(encounter.getCreator());
-                encounterAttributeValue.setDateCreated(encounter.getDateCreated());
+                encounterAttributeValue.setDateCreated(new Date());
                 encounterAttributeValue.setUuid(UUID.randomUUID().toString());
-                
+
+                chirdlutilbackportsService.saveEncounterAttributeValue(encounterAttributeValue);
+            }
+        }
+        catch(Exception e)
+        {
+            log.error("Error storing encounter attribute value encounterId: {} attributeName: {}", encounter.getEncounterId(), attributeName, e);
+        }
+    }
+            
+    public static void storeEncounterAttributeAsValueDate(org.openmrs.Encounter encounter, String attributeName, Date valueDateTime)
+    {
+        ChirdlUtilBackportsService chirdlutilbackportsService = Context.getService(ChirdlUtilBackportsService.class);
+
+        try
+        {
+            EncounterAttribute encounterAttribute = chirdlutilbackportsService.getEncounterAttributeByName(attributeName);
+            EncounterAttributeValue encounterAttributeValue = chirdlutilbackportsService.getEncounterAttributeValueByAttribute(encounter.getEncounterId(), encounterAttribute, false);
+            
+            boolean existingVoided = false;
+            if(encounterAttributeValue != null)
+            {    
+            	Date existingEncounterDateTime = encounterAttributeValue.getValueDateTime();
+            	if (existingEncounterDateTime != null && !existingEncounterDateTime.equals(valueDateTime)){
+            		 // Attribute already exists, void the old one, and create a new one
+                    encounterAttributeValue.setVoided(true);
+                    encounterAttributeValue.setVoidedBy(Context.getAuthenticatedUser());
+                    encounterAttributeValue.setVoidReason(ChirdlUtilConstants.ATTR_VALUE_VOID_REASON +  valueDateTime.toString());
+                    encounterAttributeValue.setDateVoided(new Date());
+                    chirdlutilbackportsService.saveEncounterAttributeValue(encounterAttributeValue);
+                    existingVoided = true;
+            	}
+            }
+            
+            if(encounterAttributeValue == null || existingVoided) // Create a new attribute if one didn't exist or if we voided an existing one
+            {
+                encounterAttributeValue = new EncounterAttributeValue(encounterAttribute, encounter.getEncounterId(), valueDateTime);
+                encounterAttributeValue.setCreator(encounter.getCreator());
+                encounterAttributeValue.setDateCreated(new Date());
+                encounterAttributeValue.setUuid(UUID.randomUUID().toString());
                 chirdlutilbackportsService.saveEncounterAttributeValue(encounterAttributeValue);
             }    
         }
         catch(Exception e)
         {
-            log.error("Error storing encounter attribute value encounterId: " + encounter.getEncounterId() + " attributeName: " + attributeName, e);
+            log.error("Error storing encounter attribute value encounterId: {} attributeName: {}", encounter.getEncounterId(), attributeName, e);
         }
     }
     
@@ -1179,7 +1217,6 @@ public class Util
                 }
             }
         }
-        
         return null;
     }
     

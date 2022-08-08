@@ -1,8 +1,8 @@
 package org.openmrs.module.chirdlutil.web.controller;
 
 import javax.servlet.http.HttpServletRequest;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.chirdlutil.util.ChirdlUtilConstants;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class ThreadPoolMonitorController {
 	
-	private static final Log LOG = LogFactory.getLog(ThreadPoolMonitorController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ThreadPoolMonitorController.class);
 	
 	/** Form view name */
 	private static final String THREAD_POOL_FORM_VIEW = "/module/chirdlutil/threadPoolMonitor";
@@ -43,13 +43,12 @@ public class ThreadPoolMonitorController {
 			try {
 				refreshRate = Integer.parseInt(refreshRateStr);
 			} catch (NumberFormatException e) {
-			    LOG.error("Error parsing the data in the " + ChirdlUtilConstants.GLOBAL_PROP_THREAD_POOL_MONITOR_REFRESH_RATE + " global property.  The " +
-						"refresh rate is being defaulted to 10 seconds.", e);
+			    LOG.error("Error parsing the data in the {} global property. The refresh rate is being defaulted to 10 seconds.", 
+			            ChirdlUtilConstants.GLOBAL_PROP_THREAD_POOL_MONITOR_REFRESH_RATE, e);
 				refreshRate = 10;
 			}
 		} else {
-		    LOG.error("The global property " + ChirdlUtilConstants.GLOBAL_PROP_THREAD_POOL_MONITOR_REFRESH_RATE + " is not specified.  It is being defaulted " + 
-				"to 10 seconds.");
+		    LOG.error("The global property {} is not specified. It is being defaulted to 10 seconds.", ChirdlUtilConstants.GLOBAL_PROP_THREAD_POOL_MONITOR_REFRESH_RATE);
 		}
 		
 		map.put(PARAM_REFRESH_RATE, refreshRate);

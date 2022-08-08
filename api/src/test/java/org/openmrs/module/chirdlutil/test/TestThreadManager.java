@@ -1,14 +1,14 @@
 package org.openmrs.module.chirdlutil.test;
 
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.openmrs.module.chirdlutil.threadmgmt.ChirdlRunnable;
 import org.openmrs.module.chirdlutil.threadmgmt.ThreadManager;
 
 public class TestThreadManager {
 	
 	@Test
-	@Ignore
+	@Disabled
 	public void testThreadManager() {
 		ThreadManager manager = ThreadManager.getInstance();
 		for (int i = 0; i < 1000; i++) {

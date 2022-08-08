@@ -23,8 +23,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.zip.ZipException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.context.Daemon;
 import org.openmrs.notification.Message;
@@ -44,7 +44,7 @@ import net.lingala.zip4j.model.enums.EncryptionMethod;
  */
 public class ZipUtil {
     
-    protected static Log log = LogFactory.getLog(ZipUtil.class);
+    private static final Logger log = LoggerFactory.getLogger(ZipUtil.class);
     
     /**
      * Private constructor method
@@ -301,7 +301,7 @@ public class ZipUtil {
                         }
                     }
                     if (!file.exists()) {
-                        log.error("Cannot find the following file to zip and email: " + file.getAbsolutePath());
+                        log.error("Cannot find the following file to zip and email: {}", file.getAbsolutePath());
                         return;
                     }
                     
@@ -343,7 +343,7 @@ public class ZipUtil {
                 finally {
                     if (targetZipFile != null && targetZipFile.exists()) {
                         if (!targetZipFile.delete()) {
-                            log.error("Unable to delete file: " + targetZipFile.getAbsolutePath());
+                            log.error("Unable to delete file: {}", targetZipFile.getAbsolutePath());
                         }
                     }
                 }

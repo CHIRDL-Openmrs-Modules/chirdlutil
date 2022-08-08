@@ -3,8 +3,6 @@ package org.openmrs.module.chirdlutil.impl;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.openmrs.module.chirdlutil.db.ChirdlUtilDAO;
 import org.openmrs.module.chirdlutil.hibernateBeans.EventLog;
 import org.openmrs.module.chirdlutil.service.ChirdlUtilService;
@@ -15,8 +13,6 @@ import org.openmrs.module.chirdlutil.service.ChirdlUtilService;
  * @author Tammy Dugan
  */
 public class ChirdlUtilServiceImpl implements ChirdlUtilService {
-	
-	private Log log = LogFactory.getLog(this.getClass());
 	
 	private ChirdlUtilDAO dao;
 	

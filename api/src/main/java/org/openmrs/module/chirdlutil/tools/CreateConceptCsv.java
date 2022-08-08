@@ -25,8 +25,8 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openmrs.module.chirdlutil.util.Util;
 
 import au.com.bytecode.opencsv.CSVWriter;
@@ -36,7 +36,7 @@ import au.com.bytecode.opencsv.CSVWriter;
  */
 public class CreateConceptCsv {
     
-    private static final Log LOG = LogFactory.getLog(CreateConceptCsv.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CreateConceptCsv.class);
 
     /**
      * @param args
@@ -45,8 +45,7 @@ public class CreateConceptCsv {
 
         try {
             if (args == null || args.length < 2) {
-                LOG.error(
-                        "A minimum number of two arguments (a rule directory and an output filename) are required.");
+                LOG.error("A minimum number of two arguments (a rule directory and an output filename) are required.");
                 return;
             }
 
@@ -87,7 +86,7 @@ public class CreateConceptCsv {
             createConceptFile(directories, set);
             exportConcepts(outputFile, set);
         } else {
-            LOG.error("Error writing to " + outputFile);
+            LOG.error("Error writing to {}", outputFile);
         }
     }
 

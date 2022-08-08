@@ -1,13 +1,13 @@
 package org.openmrs.module.chirdlutil.test.util;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.chirdlutil.util.Util;
 import org.openmrs.module.chirdlutil.xmlBeans.serverconfig.ImageForm;
@@ -17,7 +17,7 @@ import org.openmrs.module.chirdlutil.xmlBeans.serverconfig.MobileForm;
 import org.openmrs.module.chirdlutil.xmlBeans.serverconfig.PDFImageMerge;
 import org.openmrs.module.chirdlutil.xmlBeans.serverconfig.SecondaryForm;
 import org.openmrs.module.chirdlutil.xmlBeans.serverconfig.ServerConfig;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
+import org.openmrs.test.jupiter.BaseModuleContextSensitiveTest;
 
 /**
  * @author davely
@@ -125,7 +125,7 @@ public class TestUtil extends BaseModuleContextSensitiveTest {
 				testOriginalGetAgeInUnits(birthdate, 
 						today, Util.YEAR_ABBR) + " " + Util.YEAR_ABBR);
 		System.out.println("Age in units using Joda-Time: " + ageInUnits + " " + Util.YEAR_ABBR);
-		assertEquals("testGetAgeInUnits failed - " + Util.YEAR_ABBR + " units", expectedYears, ageInUnits);
+		assertEquals(expectedYears, ageInUnits, "testGetAgeInUnits failed - " + Util.YEAR_ABBR + " units");
 
 		// Months old
 		ageInUnits = Util.getAgeInUnits(birthdate, today, Util.MONTH_ABBR);
@@ -133,7 +133,7 @@ public class TestUtil extends BaseModuleContextSensitiveTest {
 				testOriginalGetAgeInUnits(birthdate, 
 						today, Util.MONTH_ABBR) + " " + Util.MONTH_ABBR);
 		System.out.println("Age in units using Joda-Time: " + ageInUnits + " " + Util.MONTH_ABBR);
-		assertEquals("testGetAgeInUnits failed - " + Util.MONTH_ABBR + " units", expectedMonths, ageInUnits);
+		assertEquals(expectedMonths, ageInUnits, "testGetAgeInUnits failed - " + Util.MONTH_ABBR + " units");
 
 		// Weeks old
 		ageInUnits = Util.getAgeInUnits(birthdate, today, Util.WEEK_ABBR);
@@ -141,7 +141,7 @@ public class TestUtil extends BaseModuleContextSensitiveTest {
 				testOriginalGetAgeInUnits(birthdate, 
 						today, Util.WEEK_ABBR) + " " + Util.WEEK_ABBR);
 		System.out.println("Age in units using Joda-Time: " + ageInUnits + " " + Util.WEEK_ABBR);
-		assertEquals("testGetAgeInUnits failed - " + Util.WEEK_ABBR + " units", expectedWeeks, ageInUnits);
+		assertEquals(expectedWeeks, ageInUnits,"testGetAgeInUnits failed - " + Util.WEEK_ABBR + " units");
 
 		// Days old
 		ageInUnits = Util.getAgeInUnits(birthdate, today, Util.DAY_ABBR);
@@ -149,7 +149,7 @@ public class TestUtil extends BaseModuleContextSensitiveTest {
 				testOriginalGetAgeInUnits(birthdate, 
 						today, Util.DAY_ABBR) + " " + Util.DAY_ABBR);
 		System.out.println("Age in units using Joda-Time: " + ageInUnits + " " + Util.DAY_ABBR);
-		assertEquals("testGetAgeInUnits failed - " + Util.DAY_ABBR + " units", expectedDays, ageInUnits);
+		assertEquals(expectedDays, ageInUnits, "testGetAgeInUnits failed - " + Util.DAY_ABBR + " units");
 		
 		System.out.println("Finished test case...\n\n");
 	}
@@ -559,69 +559,69 @@ public class TestUtil extends BaseModuleContextSensitiveTest {
 		initializeInMemoryDatabase();
 		Context.getAdministrationService().setGlobalProperty("chirdlutil.serverConfigFile", "src/test/resources/ServerConfig.xml");
 		ServerConfig serverConfig = Util.getServerConfig();
-		Assert.assertNotNull(serverConfig);
+		assertNotNull(serverConfig);
 		
 		List<MobileClient> mobileClients = serverConfig.getMobileClients().getMobileClients();
-		Assert.assertEquals(2, mobileClients.size());
+		assertEquals(2, mobileClients.size());
 		
 		MobileClient mobileClient = serverConfig.getMobileClient("user1");
-		Assert.assertEquals("form1", mobileClient.getPrimaryFormId());
+		assertEquals("form1", mobileClient.getPrimaryFormId());
 		
 		SecondaryForm[] secondaryForms = mobileClient.getSecondaryForms();
-		Assert.assertEquals(3, secondaryForms.length);
+		assertEquals(3, secondaryForms.length);
 		
 		Integer formNameCount = 4;
 		Integer priority = 1;
 		for (SecondaryForm secondaryForm : secondaryForms) {
 			// Verify they come back in the correct order by priority;
-			Assert.assertEquals("form" + formNameCount, secondaryForm.getId());
-			Assert.assertEquals(priority, secondaryForm.getPriority());
+		    assertEquals("form" + formNameCount, secondaryForm.getId());
+		    assertEquals(priority, secondaryForm.getPriority());
 			formNameCount--;
 			priority++;
 		}
 		
-		Assert.assertEquals(new Double("0.5"), serverConfig.getMobileFormById("form4").getWeight());
-		Assert.assertEquals(new Double("0.4"), serverConfig.getMobileFormById("form3").getWeight());
-		Assert.assertEquals(new Double("0.3"), serverConfig.getMobileFormById("form2").getWeight());
+		assertEquals(new Double("0.5"), serverConfig.getMobileFormById("form4").getWeight());
+		assertEquals(new Double("0.4"), serverConfig.getMobileFormById("form3").getWeight());
+		assertEquals(new Double("0.3"), serverConfig.getMobileFormById("form2").getWeight());
 		
 		MobileForm mobileForm = serverConfig.getMobileFormById("form1");
-		Assert.assertNotNull(mobileForm);
-		Assert.assertEquals("Form1", mobileForm.getName());
-		Assert.assertEquals("Form1_create", mobileForm.getStartState());
-		Assert.assertEquals("JIT_FINISHED", mobileForm.getEndState());
-		Assert.assertEquals("/openmrs/module/chica/form1.form", mobileForm.getPageUrl());
+		assertNotNull(mobileForm);
+		assertEquals("Form1", mobileForm.getName());
+		assertEquals("Form1_create", mobileForm.getStartState());
+		assertEquals("JIT_FINISHED", mobileForm.getEndState());
+		assertEquals("/openmrs/module/chica/form1.form", mobileForm.getPageUrl());
 		
 		List<MobileForm> mobileForms = serverConfig.getAllMobileForms("user1");
-		Assert.assertNotNull(mobileForms);
-		Assert.assertEquals(4, mobileForms.size());
+		assertNotNull(mobileForms);
+		assertEquals(4, mobileForms.size());
 		
 		mobileForm = serverConfig.getMobileFormByName("Form1");
-		Assert.assertNotNull(mobileForm);
+		assertNotNull(mobileForm);
 		
 		mobileForm = serverConfig.getPrimaryForm("user2");
-		Assert.assertNotNull(mobileForm);
-		Assert.assertEquals("form1", mobileForm.getId());
+		assertNotNull(mobileForm);
+		assertEquals("form1", mobileForm.getId());
 		
 		PDFImageMerge pdfImageMerge = serverConfig.getPdfImageMerge();
-		Assert.assertNotNull(pdfImageMerge);
+		assertNotNull(pdfImageMerge);
 		
 		List<ImageForm> imageForms = pdfImageMerge.getImageForms();
-		Assert.assertNotNull(imageForms);
-		Assert.assertEquals(1, imageForms.size());
+		assertNotNull(imageForms);
+		assertEquals(1, imageForms.size());
 		
 		ImageForm imageForm = serverConfig.getPDFImageForm("imageForm");
-		Assert.assertNotNull(imageForm);
+		assertNotNull(imageForm);
 		
 		List<ImageMerge> imageMerges = imageForm.getImageMerges();
-		Assert.assertNotNull(imageMerges);
-		Assert.assertEquals(2, imageMerges.size());
+		assertNotNull(imageMerges);
+		assertEquals(2, imageMerges.size());
 		
 		for (ImageMerge imageMerge : imageMerges) {
 			if ("PCX_FilenameBack".equals(imageMerge.getFieldName())) {
-				Assert.assertEquals(new Integer(2), imageMerge.getPageNumber());
-				Assert.assertEquals(new Float(3), imageMerge.getPositionX());
-				Assert.assertEquals(new Float(4), imageMerge.getPositionY());
-				Assert.assertEquals(new Float(180), imageMerge.getRotation());
+				assertEquals(new Integer(2), imageMerge.getPageNumber());
+				assertEquals(new Float(3), imageMerge.getPositionX());
+				assertEquals(new Float(4), imageMerge.getPositionY());
+				assertEquals(new Float(180), imageMerge.getRotation());
 			}
 		}
 	}
