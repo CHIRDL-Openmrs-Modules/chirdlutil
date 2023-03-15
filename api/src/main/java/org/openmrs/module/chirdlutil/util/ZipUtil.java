@@ -379,7 +379,7 @@ public class ZipUtil {
      */
     private static List<File> createFileList(final File[] files, final int fileSearchTime){
     	
-         ArrayList<File> filesToZip = new ArrayList<>();
+        ArrayList<File> filesToZip = new ArrayList<>();
          
         int maxTime = -1;
         for (File file : files) {
@@ -394,7 +394,7 @@ public class ZipUtil {
                 }
             }
             if (!file.exists()) {
-                log.error("Cannot find the following file to zip and email: {}", file.getAbsolutePath());
+                log.error("Cannot find the file to zip and email: {}", file.getAbsolutePath());
                 return filesToZip;
             }
             
