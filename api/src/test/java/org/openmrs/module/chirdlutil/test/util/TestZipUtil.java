@@ -45,7 +45,7 @@ public class TestZipUtil extends BaseModuleContextSensitiveTest {
 	static final String NEW_ZIP_FILE_CONTAINING_FOLDER = "ZipFileWithFolder.zip";
 	static final String NEW_ZIP_FILE_CONTAINING_FOLDER_FULL = DESTINATION_DIR + NEW_ZIP_FILE_CONTAINING_FOLDER;
 	static final String EXTRACT_FILE_DIRECTORY = DESTINATION_DIR + "temp/";
-	static final String ENCRYPTION_PASSWORD = "EncryptionPassword";
+	static final String ENCRYPTION_PASSWORD = "EncrYpT1onP@ssw0rd";
 
 	
 	/**
@@ -56,23 +56,28 @@ public class TestZipUtil extends BaseModuleContextSensitiveTest {
 	public void zipFiles_shouldZipFilesAndSave() throws Exception {
 
 		List<File> filesToZip = this.createFileList();
+		
+		File destinationZipFile = new File(FILE_NAME_ZIP_FULL);
+		
+		// Verify that zip file does NOT exist yet
+		if (destinationZipFile.exists()) {
+			destinationZipFile.delete();
+		}
 
 		// ChirdUtil method to test
 		ZipUtil.zipFiles(new File(FILE_NAME_ZIP_FULL), filesToZip);
 
-		// Check if the new zip file exists without using Zip4j api
+		// Get the new zip file as File
 		File newFile = new File(FILE_NAME_ZIP_FULL);
 
-		// Get File as ZipFile
+		// Get the new zip file as ZipFile (Zip4j)
 		ZipFile newZipFile = new ZipFile(newFile);
 
-		// This try/finally is required to close ZipFiles and delete temporary files and
-		// directories after an assert
 		try {
 
 			assertTrue(newFile.exists() && !newFile.isDirectory(), "Zip file " + FILE_NAME_ZIP + " was not created.");
 
-			// Verify zip file and content is correct
+			// Verify zip file and content is correct by reading zip headers
 			assertTrue(this.isZipValid(newZipFile, this.createFileNamesList()),
 			        "The zip file  (" + FILE_NAME_ZIP + ") is invalid or content does not contain expected files.");
 
@@ -91,14 +96,21 @@ public class TestZipUtil extends BaseModuleContextSensitiveTest {
 	public void zipFilesWithPassword_shouldCreatePasswordProtectedZipFile() throws Exception {
 
 		List<File> filesToZip = this.createFileList();
+		
+		File destinationZipFile = new File(FILE_NAME_ZIP_FULL);
+		
+		// Verify that zip file does NOT exist yet
+		if (destinationZipFile.exists()) {
+			destinationZipFile.delete();
+		}
 
 		// Method to test
-		ZipUtil.zipFilesWithPassword(new File(FILE_NAME_ZIP_FULL), filesToZip, ENCRYPTION_PASSWORD);
+		ZipUtil.zipFilesWithPassword(destinationZipFile, filesToZip, ENCRYPTION_PASSWORD);
 
-		// Get the pre-test zipped file
+		// Get file as File
 		File newFile = new File(FILE_NAME_ZIP_FULL);
 
-		// Get File as ZipFile with and without password
+		// Get file as ZipFile with and without password
 		ZipFile newZipFileNoPassword = new ZipFile(FILE_NAME_ZIP_FULL);
 		ZipFile newZipFileWithPassword = new ZipFile(FILE_NAME_ZIP_FULL, ENCRYPTION_PASSWORD.toCharArray());
 
@@ -111,14 +123,14 @@ public class TestZipUtil extends BaseModuleContextSensitiveTest {
 			assertTrue(newZipFileWithPassword.isEncrypted(),
 			        "Zip file " + FILE_NAME_ZIP_FULL + "should be encrypted, but it is not encrypted.");
 
-			// Verify by trying to extract files with and without using password.
+			// Verify encryption by trying to extract files with and without using password.
 			assertThrows(net.lingala.zip4j.exception.ZipException.class,
 			        () -> newZipFileNoPassword.extractAll(EXTRACT_FILE_DIRECTORY),
 			        "ZipException should have been thrown because no password was used.");
 			assertDoesNotThrow(() -> newZipFileWithPassword.extractAll(EXTRACT_FILE_DIRECTORY),
 			        "Exception should not have been thrown because a password was used.");
 
-			// Verify zip file content
+			// Verify zip file and content is correct by reading zip headers
 			assertTrue(this.isZipValid(newZipFileWithPassword, this.createFileNamesList()),
 			        "The zip file  (" + FILE_NAME_ZIP + ") is invalid or content does not contain expected files.");
 
@@ -126,7 +138,6 @@ public class TestZipUtil extends BaseModuleContextSensitiveTest {
 
 			newZipFileNoPassword.close();
 			newZipFileWithPassword.close();
-			// File tempDir = new File (EXTRACT_FILE_DIRECTORY);
 			this.deleteDirectory(new File(EXTRACT_FILE_DIRECTORY));
 			newFile.delete();
 		}
@@ -143,14 +154,15 @@ public class TestZipUtil extends BaseModuleContextSensitiveTest {
 		File destinationZipFile = new File(NEW_ZIP_FILE_CONTAINING_FOLDER_FULL);
 
 		// Verify that zip file does NOT exist yet
-		assertTrue(!destinationZipFile.exists(), "Zip file already exists.");
+		if (destinationZipFile.exists()) {
+			destinationZipFile.delete();
+		}
 
 		// Method to test
 		ZipUtil.zipFolder(destinationZipFile, new File(FOLDER_PATH));
 
 		ZipFile zipFileToCheck = new ZipFile(NEW_ZIP_FILE_CONTAINING_FOLDER_FULL);
 
-		// try/finally required for clean-up after the assert
 		try {
 
 			// Verify the new zip file exists
@@ -239,17 +251,17 @@ public class TestZipUtil extends BaseModuleContextSensitiveTest {
 			File[] files = extractedDir.listFiles();
 
 			int fileCount = 0;
-			// Verify that all
+			// Verify that all files were zipped
 			for (File file : files) {
 
-				assertTrue(
-				        !file.isDirectory()
-				                && (file.getName().equals(FILE_NAME_ONE) || file.getName().equals(FILE_NAME_TWO)),
-				        "Expected files (" + FILE_NAME_ONE + "," + FILE_NAME_TWO + ") where not extracted.");
+				assertTrue(!file.isDirectory() &&
+						(file.getName().equals(FILE_NAME_ONE) || file.getName().equals(FILE_NAME_TWO)),
+						"Expected files (" + FILE_NAME_ONE + "," + FILE_NAME_TWO + ") where not extracted.");
 				fileCount++;
 			}
 
-			assertEquals(2, fileCount, "Incorrect number of files extracted from zip file " + FILE_NAME_ZIP + ".");
+			assertEquals(files.length, fileCount, "Incorrect number of files extracted from zip file " 
+					+ FILE_NAME_ZIP + ".");
 
 		} finally {
 			newFile.delete();
@@ -398,11 +410,11 @@ public class TestZipUtil extends BaseModuleContextSensitiveTest {
 
 		String[] invalidEmailAddresses = new String[] { "123.example.com", "456.example.com", "789.example.com" };
 		File[] filesToZip = new File[] { new File(FILE_NAME_ONE_FULL), new File(FILE_NAME_TWO_FULL) };
-		String subject = "Test zip email delivery";
-		String body = "This email tests zipped file email delivery";
+		String subject = "Test email subject";
+		String body = "Test email body.";
 
 		Context.getAdministrationService().setGlobalProperty(ChirdlUtilConstants.GLOBAL_PROP_MAIL_FROM,
-		        "msheley@iu.edu");
+		        "test@example.com");
 
 		try {
 			ZipUtil.executeZipAndEmailFiles(filesToZip, invalidEmailAddresses, subject, body, ENCRYPTION_PASSWORD,
@@ -436,7 +448,7 @@ public class TestZipUtil extends BaseModuleContextSensitiveTest {
 	
 	
 	/**
-	 * Creates a list of test file names
+	 * Creates a list of expected test folder and file names
 	 *
 	 * @return the list of test file names
 	 */
@@ -455,6 +467,10 @@ public class TestZipUtil extends BaseModuleContextSensitiveTest {
 
 	}
 	
+	/**
+	 * Creates is list of expected test file names
+	 * @return
+	 */
 	private List<String> createFileNamesList() {
 
 		String fileNameOne = (TestZipUtil.FILE_NAME_ONE).replace("//", "\\");
@@ -478,7 +494,7 @@ public class TestZipUtil extends BaseModuleContextSensitiveTest {
 	 */
 	private boolean isZipValid(ZipFile zipFile, List<String> fileNames) {
 
-		// Check if valid zip if zip4j can read the headers
+		// Check if valid zip file by checking zip headers.
 		List<FileHeader> fileHeaders = new ArrayList<>();
 		if (zipFile == null || !zipFile.isValidZipFile()) {
 			return false;
@@ -488,7 +504,6 @@ public class TestZipUtil extends BaseModuleContextSensitiveTest {
 		try {
 			fileHeaders = zipFile.getFileHeaders();
 		} catch (ZipException e) {
-			// Do not want to handle the exception
 			return false;
 		}
 
@@ -504,13 +519,10 @@ public class TestZipUtil extends BaseModuleContextSensitiveTest {
 		int fileMatchCount = 0;
 		for (FileHeader fileHeader : fileHeaders) {
 			for (String fileName : fileNames) {
-				System.out.println("file " + fileName + " file header  " + fileHeader.getFileName());
 				if (fileHeader.getFileName().equals(fileName)) {
 					fileMatchCount++;
-					System.out.println("match " + fileMatchCount);
 					break;
 				}
-
 			}
 
 		}
@@ -519,6 +531,7 @@ public class TestZipUtil extends BaseModuleContextSensitiveTest {
 		if (fileMatchCount != fileNames.size()) {
 			return false;
 		}
+
 		return true;
 
 	}
@@ -530,14 +543,14 @@ public class TestZipUtil extends BaseModuleContextSensitiveTest {
 	 * @param directory the directory to be deleted
 	 * @return true if the file or directory is successfully deleted
 	 */
-	private boolean deleteDirectory(File directory) {
-		File[] contents = directory.listFiles();
+	private boolean deleteDirectory(File fileOrDirectory) {
+		File[] contents = fileOrDirectory.listFiles();
 		if (contents != null) {
 			for (File file : contents) {
 				deleteDirectory(file);
 			}
 		}
-		return directory.delete();
+		return fileOrDirectory.delete();
 	}
 	
 }

@@ -349,7 +349,7 @@ public class ZipUtil {
 				}
 
 			} catch (net.lingala.zip4j.exception.ZipException e) {
-				log.error("Error extracting file from encrypted zip {}", targetZipFile, e);
+				log.error("Error extracting file from encrypted zip file {}", targetZipFile, e);
 				throw new ZipException(e.getMessage());
 			}
 
