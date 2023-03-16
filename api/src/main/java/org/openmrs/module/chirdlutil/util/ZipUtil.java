@@ -315,7 +315,7 @@ public class ZipUtil {
      * @param zipFilename
      * @param fileSearchTime
      * @throws MessageException 
-     * @throws Exception 
+     * @throws IOException 
      * 
      **/
 	public static void executeZipAndEmailFiles(final File[] files, final String[] emailAddresses, final String subject,
