@@ -1437,4 +1437,20 @@ public class Util
 		
 		return obsList.get(0);
 	}
+	
+
+	/**
+	 * Recursive method to delete a directory and all its files and sub-directories.
+	 * @param fileOrDirectory The file or directory to be deleted
+	 * @return true if the file or directory is successfully deleted
+	 */
+	public static boolean deleteDirectory(File fileOrDirectory) {
+		File[] contents = fileOrDirectory.listFiles();
+		if (contents != null) {
+			for (File file : contents) {
+				deleteDirectory(file);
+			}
+		}
+		return fileOrDirectory.delete();
+	}
 }

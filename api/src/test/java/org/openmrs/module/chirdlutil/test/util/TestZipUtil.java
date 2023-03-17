@@ -1,5 +1,20 @@
 package org.openmrs.module.chirdlutil.test.util;
 
+/*
+ * Copyright 2010 Srikanth Reddy Lingala  
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); 
+ * you may not use this file except in compliance with the License. 
+ * You may obtain a copy of the License at 
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0 
+ * 
+ * Unless required by applicable law or agreed to in writing, 
+ * software distributed under the License is distributed on an "AS IS" BASIS, 
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+ * See the License for the specific language governing permissions and 
+ * limitations under the License. 
+ */
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -22,8 +37,11 @@ import net.lingala.zip4j.exception.ZipException;
 import net.lingala.zip4j.model.FileHeader;
 
 /**
- * @author davely
+ * Tests the utility class for handling zip files.
+ * @see org.openmrs.module.chirdlutil.util.ZipUtil
+ * @author Meena Sheley
  */
+
 public class TestZipUtil extends BaseModuleContextSensitiveTest {
 	
 	static final String DESTINATION_DIR = "src/test/resources/TestFiles/ZipUtilTest/";
@@ -75,11 +93,11 @@ public class TestZipUtil extends BaseModuleContextSensitiveTest {
 
 		try {
 
-			assertTrue(newFile.exists() && !newFile.isDirectory(), "Zip file " + FILE_NAME_ZIP + " was not created.");
+			assertTrue(newFile.exists() && !newFile.isDirectory(), "Zip file " + FILE_NAME_ZIP_FULL + " was not created.");
 
 			// Verify zip file and content is correct by reading zip headers
 			assertTrue(this.isZipValid(newZipFile, this.createFileNamesList()),
-			        "The zip file  (" + FILE_NAME_ZIP + ") is invalid or content does not contain expected files.");
+			        "The zip file  (" + FILE_NAME_ZIP_FULL + ") is invalid or content does not contain expected files.");
 
 		} finally {
 			newZipFile.close();
@@ -132,13 +150,13 @@ public class TestZipUtil extends BaseModuleContextSensitiveTest {
 
 			// Verify zip file and content is correct by reading zip headers
 			assertTrue(this.isZipValid(newZipFileWithPassword, this.createFileNamesList()),
-			        "The zip file  (" + FILE_NAME_ZIP + ") is invalid or content does not contain expected files.");
+			        "The zip file  (" + FILE_NAME_ZIP_FULL + ") is invalid or content does not contain expected files.");
 
 		} finally {
 
 			newZipFileNoPassword.close();
 			newZipFileWithPassword.close();
-			this.deleteDirectory(new File(EXTRACT_FILE_DIRECTORY));
+			Util.deleteDirectory(new File(EXTRACT_FILE_DIRECTORY));
 			newFile.delete();
 		}
 
@@ -166,18 +184,19 @@ public class TestZipUtil extends BaseModuleContextSensitiveTest {
 		try {
 
 			// Verify the new zip file exists
-			assertTrue(destinationZipFile.exists(), "Zip file (" + destinationZipFile.getName() + ") was not created.");
+			assertTrue(destinationZipFile.exists(), "Zip file (" + destinationZipFile.getAbsolutePath() + ") was not created.");
 
 			// Verify zip file content
 			assertTrue(isZipValid(zipFileToCheck, this.createFileFolderNamesList()), "The zip file with folder ("
-			        + NEW_ZIP_FILE_CONTAINING_FOLDER + ") is invalid or content does not contain expected files.");
+			        + NEW_ZIP_FILE_CONTAINING_FOLDER_FULL + ") is invalid or content does not contain expected files.");
 
 		} finally {
 			zipFileToCheck.close();
 			if (destinationZipFile.exists()) {
-				assertTrue(destinationZipFile.exists() && destinationZipFile.delete(), "Unable to delete zip file.");
+				assertTrue(destinationZipFile.exists() && destinationZipFile.delete(), "Unable to delete zip file "
+						+ destinationZipFile.getAbsolutePath() + ".");
 			}
-			this.deleteDirectory(new File(EXTRACT_FILE_DIRECTORY));
+			Util.deleteDirectory(new File(EXTRACT_FILE_DIRECTORY));
 		}
 
 	}
@@ -193,7 +212,7 @@ public class TestZipUtil extends BaseModuleContextSensitiveTest {
 
 		ZipUtil.zipFolderWithPassword(destinationZipFile, new File(FOLDER_PATH), ENCRYPTION_PASSWORD);
 
-		assertTrue(destinationZipFile.exists(), "Zip file (" + destinationZipFile.getName() + ") was not created.");
+		assertTrue(destinationZipFile.exists(), "Zip file (" + destinationZipFile.getAbsolutePath() + ") was not created.");
 
 		// Get ZipFile with and without password
 		ZipFile newZipFileNotUsingPassword = new ZipFile(destinationZipFile);
@@ -202,7 +221,7 @@ public class TestZipUtil extends BaseModuleContextSensitiveTest {
 		try {
 
 			assertTrue(newZipFileUsingPassword.isEncrypted(),
-			        "Zip file (" + NEW_ZIP_FILE_CONTAINING_FOLDER + ") should be encrypted, but it is not encrypted.");
+			        "Zip file (" + NEW_ZIP_FILE_CONTAINING_FOLDER_FULL + ") should be encrypted, but it is not encrypted.");
 
 			// Verify an exception when trying to extract files without using password.
 			assertThrows(net.lingala.zip4j.exception.ZipException.class,
@@ -215,14 +234,14 @@ public class TestZipUtil extends BaseModuleContextSensitiveTest {
 
 			// Verify zip file with folder content.
 			assertTrue(isZipValid(newZipFileUsingPassword, this.createFileFolderNamesList()),
-			        "The zip file with folder (" + NEW_ZIP_FILE_CONTAINING_FOLDER
+			        "The zip file with folder (" + NEW_ZIP_FILE_CONTAINING_FOLDER_FULL
 			                + ") is not a valid zipfile,  or content does not contain expected files.");
 
 		} finally {
 			newZipFileNotUsingPassword.close();
 			newZipFileUsingPassword.close();
 			destinationZipFile.delete();
-			this.deleteDirectory(new File(EXTRACT_FILE_DIRECTORY));
+			Util.deleteDirectory(new File(EXTRACT_FILE_DIRECTORY));
 		}
 
 	}
@@ -242,7 +261,7 @@ public class TestZipUtil extends BaseModuleContextSensitiveTest {
 
 		try {
 			// Verify that the file to unzip exists
-			assertTrue(newFile.exists(), "Zip file " + newFile.getName() + " was not created prior to test.");
+			assertTrue(newFile.exists(), "Zip file " + newFile.getAbsolutePath() + " was not created prior to test.");
 
 			// ZipUtil method to test
 			ZipUtil.extractAllFiles(newFile, new File(EXTRACT_FILE_DIRECTORY));
@@ -261,11 +280,11 @@ public class TestZipUtil extends BaseModuleContextSensitiveTest {
 			}
 
 			assertEquals(files.length, fileCount, "Incorrect number of files extracted from zip file " 
-					+ FILE_NAME_ZIP + ".");
+					+ FILE_NAME_ZIP_FULL + ".");
 
 		} finally {
 			newFile.delete();
-			this.deleteDirectory(new File(EXTRACT_FILE_DIRECTORY));
+			Util.deleteDirectory(new File(EXTRACT_FILE_DIRECTORY));
 		}
 
 	}
@@ -285,7 +304,7 @@ public class TestZipUtil extends BaseModuleContextSensitiveTest {
 
 		try {
 
-			assertTrue(testFile.exists(), "Zip file " + testFile.getName()
+			assertTrue(testFile.exists(), "Zip file " + testFile.getAbsolutePath()
 			        + " was not created prior to extracting all encrypted files test.");
 
 			// ZipUtil method to test
@@ -302,7 +321,7 @@ public class TestZipUtil extends BaseModuleContextSensitiveTest {
 				        "Expected files (" + FILE_NAME_ONE + "," + FILE_NAME_TWO + ") where not extracted.");
 			}
 
-			this.deleteDirectory(new File(EXTRACT_FILE_DIRECTORY));
+			Util.deleteDirectory(new File(EXTRACT_FILE_DIRECTORY));
 
 			assertThrows(
 			        java.util.zip.ZipException.class, () -> ZipUtil.extractAllEncryptedFiles(new File(FILE_NAME_ZIP),
@@ -311,7 +330,7 @@ public class TestZipUtil extends BaseModuleContextSensitiveTest {
 
 		} finally {
 			testFile.delete();
-			this.deleteDirectory(new File(EXTRACT_FILE_DIRECTORY));
+			Util.deleteDirectory(new File(EXTRACT_FILE_DIRECTORY));
 		}
 
 	}
@@ -330,7 +349,7 @@ public class TestZipUtil extends BaseModuleContextSensitiveTest {
 		File testFile = new File(FILE_NAME_ZIP_FULL);
 
 		try {
-			assertTrue(testFile.exists(), "Zip file " + testFile.getName() + " was not created prior to test.");
+			assertTrue(testFile.exists(), "Zip file " + testFile.getAbsolutePath() + " was not created prior to test.");
 			// Method to test
 			ZipUtil.extractFile(new File(FILE_NAME_ZIP_FULL), FILE_NAME_ONE, new File(EXTRACT_FILE_DIRECTORY));
 
@@ -344,7 +363,7 @@ public class TestZipUtil extends BaseModuleContextSensitiveTest {
 
 		} finally {
 			testFile.delete();
-			this.deleteDirectory(new File(EXTRACT_FILE_DIRECTORY));
+			Util.deleteDirectory(new File(EXTRACT_FILE_DIRECTORY));
 		}
 	}
 	
@@ -367,7 +386,7 @@ public class TestZipUtil extends BaseModuleContextSensitiveTest {
 
 			// Verify pre-test zipped file exists
 			assertTrue(testFile.exists(),
-			        "Pre-test zip file " + testFile.getName() + " was not created prior to test.");
+			        "Pre-test zip file " + testFile.getAbsolutePath() + " was not created prior to test.");
 
 			// ZipUtil method to test
 			ZipUtil.extractEncryptedFile(new File(FILE_NAME_ZIP_FULL), FILE_NAME_ONE, new File(EXTRACT_FILE_DIRECTORY),
@@ -384,7 +403,7 @@ public class TestZipUtil extends BaseModuleContextSensitiveTest {
 				        "Expected file (" + FILE_NAME_ONE + ") was not extracted.");
 			}
 
-			this.deleteDirectory(new File(EXTRACT_FILE_DIRECTORY));
+			Util.deleteDirectory(new File(EXTRACT_FILE_DIRECTORY));
 
 			// Test extraction with the wrong password.
 			assertThrows(java.util.zip.ZipException.class,
@@ -397,7 +416,7 @@ public class TestZipUtil extends BaseModuleContextSensitiveTest {
 				testFile.delete();
 			}
 
-			this.deleteDirectory(new File(EXTRACT_FILE_DIRECTORY));
+			Util.deleteDirectory(new File(EXTRACT_FILE_DIRECTORY));
 		}
 	}
 	
@@ -534,23 +553,6 @@ public class TestZipUtil extends BaseModuleContextSensitiveTest {
 
 		return true;
 
-	}
-	
-
-	
-	/**
-	 * Recursive method to delete a directory and all its files and sub-directories.
-	 * @param directory the directory to be deleted
-	 * @return true if the file or directory is successfully deleted
-	 */
-	private boolean deleteDirectory(File fileOrDirectory) {
-		File[] contents = fileOrDirectory.listFiles();
-		if (contents != null) {
-			for (File file : contents) {
-				deleteDirectory(file);
-			}
-		}
-		return fileOrDirectory.delete();
 	}
 	
 }
