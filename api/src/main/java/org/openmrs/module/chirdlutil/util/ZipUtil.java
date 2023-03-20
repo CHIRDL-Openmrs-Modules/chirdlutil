@@ -18,6 +18,7 @@ package org.openmrs.module.chirdlutil.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -364,9 +365,11 @@ public class ZipUtil {
 			messageService.sendMessage(message);
 
 		} finally {
-			if (targetZipFile != null && targetZipFile.exists() && !targetZipFile.delete()) {
-				log.error("Unable to delete file: {}", targetZipFile.getAbsolutePath());
+			
+			if (targetZipFile != null) {
+				Files.delete(targetZipFile.toPath());
 			}
+			
 		}
 	}
 

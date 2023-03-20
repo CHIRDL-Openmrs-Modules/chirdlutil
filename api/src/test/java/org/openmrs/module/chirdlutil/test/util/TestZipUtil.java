@@ -1,26 +1,12 @@
 package org.openmrs.module.chirdlutil.test.util;
 
-/*
- * Copyright 2010 Srikanth Reddy Lingala  
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- * http://www.apache.org/licenses/LICENSE-2.0 
- * 
- * Unless required by applicable law or agreed to in writing, 
- * software distributed under the License is distributed on an "AS IS" BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
- */
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,7 +65,7 @@ public class TestZipUtil extends BaseModuleContextSensitiveTest {
 		
 		// Verify that zip file does NOT exist yet
 		if (destinationZipFile.exists()) {
-			destinationZipFile.delete();
+			Files.delete(destinationZipFile.toPath());
 		}
 
 		// ChirdUtil method to test
@@ -101,7 +87,9 @@ public class TestZipUtil extends BaseModuleContextSensitiveTest {
 
 		} finally {
 			newZipFile.close();
-			newFile.delete();
+			if (newFile.exists()) {
+				Files.delete(newFile.toPath());
+			}
 		}
 
 	}
@@ -119,7 +107,7 @@ public class TestZipUtil extends BaseModuleContextSensitiveTest {
 		
 		// Verify that zip file does NOT exist yet
 		if (destinationZipFile.exists()) {
-			destinationZipFile.delete();
+			Files.delete(destinationZipFile.toPath());
 		}
 
 		// Method to test
@@ -157,7 +145,9 @@ public class TestZipUtil extends BaseModuleContextSensitiveTest {
 			newZipFileNoPassword.close();
 			newZipFileWithPassword.close();
 			Util.deleteDirectory(new File(EXTRACT_FILE_DIRECTORY));
-			newFile.delete();
+			if (newFile.exists()) {
+				Files.delete(newFile.toPath());
+			}
 		}
 
 	}
@@ -173,7 +163,7 @@ public class TestZipUtil extends BaseModuleContextSensitiveTest {
 
 		// Verify that zip file does NOT exist yet
 		if (destinationZipFile.exists()) {
-			destinationZipFile.delete();
+			Files.delete(destinationZipFile.toPath());
 		}
 
 		// Method to test
@@ -193,8 +183,7 @@ public class TestZipUtil extends BaseModuleContextSensitiveTest {
 		} finally {
 			zipFileToCheck.close();
 			if (destinationZipFile.exists()) {
-				assertTrue(destinationZipFile.exists() && destinationZipFile.delete(), "Unable to delete zip file "
-						+ destinationZipFile.getAbsolutePath() + ".");
+				Files.delete(destinationZipFile.toPath());
 			}
 			Util.deleteDirectory(new File(EXTRACT_FILE_DIRECTORY));
 		}
@@ -240,7 +229,8 @@ public class TestZipUtil extends BaseModuleContextSensitiveTest {
 		} finally {
 			newZipFileNotUsingPassword.close();
 			newZipFileUsingPassword.close();
-			destinationZipFile.delete();
+			if (destinationZipFile.exists())
+				Files.delete(destinationZipFile.toPath());
 			Util.deleteDirectory(new File(EXTRACT_FILE_DIRECTORY));
 		}
 
@@ -283,7 +273,7 @@ public class TestZipUtil extends BaseModuleContextSensitiveTest {
 					+ FILE_NAME_ZIP_FULL + ".");
 
 		} finally {
-			newFile.delete();
+			Files.delete(newFile.toPath());
 			Util.deleteDirectory(new File(EXTRACT_FILE_DIRECTORY));
 		}
 
@@ -329,7 +319,7 @@ public class TestZipUtil extends BaseModuleContextSensitiveTest {
 			        "ZipException should be thrown for wrong password.");
 
 		} finally {
-			testFile.delete();
+			Files.delete(testFile.toPath());
 			Util.deleteDirectory(new File(EXTRACT_FILE_DIRECTORY));
 		}
 
@@ -362,7 +352,7 @@ public class TestZipUtil extends BaseModuleContextSensitiveTest {
 			}
 
 		} finally {
-			testFile.delete();
+			Files.delete(testFile.toPath());
 			Util.deleteDirectory(new File(EXTRACT_FILE_DIRECTORY));
 		}
 	}
@@ -413,9 +403,8 @@ public class TestZipUtil extends BaseModuleContextSensitiveTest {
 
 		} finally {
 			if (testFile.exists()) {
-				testFile.delete();
+				Files.delete(testFile.toPath());
 			}
-
 			Util.deleteDirectory(new File(EXTRACT_FILE_DIRECTORY));
 		}
 	}
