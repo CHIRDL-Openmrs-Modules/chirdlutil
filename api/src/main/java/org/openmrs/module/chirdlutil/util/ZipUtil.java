@@ -18,17 +18,20 @@ package org.openmrs.module.chirdlutil.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.zip.ZipException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.lang3.StringUtils;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.context.Daemon;
 import org.openmrs.notification.Message;
+import org.openmrs.notification.MessageException;
 import org.openmrs.notification.MessageService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.model.ZipParameters;
@@ -99,6 +102,7 @@ public class ZipUtil {
             log.error("Error zipping files with password", e);
             throw new ZipException(e.getMessage());
         }
+
     }
     
     /**
@@ -119,7 +123,7 @@ public class ZipUtil {
             zipFile.addFolder(folder, parameters);
         }
         catch (net.lingala.zip4j.exception.ZipException e) {
-            log.error("Error zipping folder", e);
+            log.error("Error zipping folder {}",folder, e);
             throw new ZipException(e.getMessage());
         }
     }
@@ -144,7 +148,7 @@ public class ZipUtil {
             zipFile.addFolder(folder, parameters);
         }
         catch (net.lingala.zip4j.exception.ZipException e) {
-            log.error("Error zipping folder with password", e);
+            log.error("Error zipping folder {} with password", folder, e);
             throw new ZipException(e.getMessage());
         }
     }
@@ -162,7 +166,7 @@ public class ZipUtil {
             zip.extractAll(destinationFolder.getAbsolutePath());
         }
         catch (net.lingala.zip4j.exception.ZipException e) {
-            log.error("Error extracting all files from zip", e);
+            log.error("Error extracting all files from zip {}", zipFile , e);
             throw new ZipException(e.getMessage());
         }
     }
@@ -181,7 +185,7 @@ public class ZipUtil {
             zip.extractAll(destinationFolder.getAbsolutePath());
         }
         catch (net.lingala.zip4j.exception.ZipException e) {
-            log.error("Error extracting all files from encrypted zip", e);
+            log.error("Error extracting all files from encrypted zip {}", zipFile, e);
             throw new ZipException(e.getMessage());
         }
     }
@@ -200,7 +204,7 @@ public class ZipUtil {
             zip.extractFile(filenameInZip, destinationFolder.getAbsolutePath());
         }
         catch (net.lingala.zip4j.exception.ZipException e) {
-            log.error("Error extracting file from zip", e);
+            log.error("Error extracting file from zip {}", zipFile, e);
             throw new ZipException(e.getMessage());
         }
     }
@@ -221,7 +225,7 @@ public class ZipUtil {
             zip.extractFile(filenameInZip, destinationFolder.getAbsolutePath());
         }
         catch (net.lingala.zip4j.exception.ZipException e) {
-            log.error("Error extracting file from encrypted zip", e);
+            log.error("Error extracting file from encrypted zip {}", zipFile, e);
             throw new ZipException(e.getMessage());
         }
     }
@@ -270,7 +274,7 @@ public class ZipUtil {
     }
     
     /**
-     * Zips a given list of files and sends them via email.
+     * Implements a runnable thread to zip a given list of files and sends them via email.
      * 
      * @param files The files to zip and email.
      * @param emailAddresses The list of email recipients.
@@ -286,76 +290,122 @@ public class ZipUtil {
                                         final String body, final String zipPassword, final String zipFilename,
                                         final int fileSearchTime) {
         Runnable emailRunnable = () -> {
-            try{
-                int maxTime = -1;
-                ArrayList<File> filesToZip = new ArrayList<>();
-                for (File file : files) {
-                    while (!file.exists() && maxTime < fileSearchTime) {
-                        maxTime++;
-                        try {
-                            Thread.sleep(1000);
-                        }
-                        catch (InterruptedException e) {
-                            log.error("Interrupted thread error", e);
-                            Thread.currentThread().interrupt();
-                        }
-                    }
-                    if (!file.exists()) {
-                        log.error("Cannot find the following file to zip and email: {}", file.getAbsolutePath());
-                        return;
-                    }
-                    
-                    filesToZip.add(file);
-                }
-                
-                File targetZipFile = null;
-                try {
-                    // The zip utility does not work when creating a file using File.createTempFile(name, extension).  A file with 
-                    // the specified name cannot already exist or it will fail.
-                    File baseDir = new File(System.getProperty("java.io.tmpdir"));
-                    String extension = ".zip";
-                    String newzipFilename = zipFilename + "_" + UUID.randomUUID();
-                    targetZipFile = new File(baseDir, newzipFilename + extension);
-                    while (targetZipFile.exists()) {
-                    	newzipFilename = zipFilename + "_" + UUID.randomUUID();
-                        targetZipFile = new File(baseDir, newzipFilename + extension);
-                    }
-                    
-                    if (zipPassword != null && zipPassword.trim().length() > 0) {
-                        zipFilesWithPassword(targetZipFile, filesToZip, zipPassword);
-                    } else {
-                        zipFiles(targetZipFile, filesToZip);
-                    }
-                    
-                    String addresses = String.join(ChirdlUtilConstants.GENERAL_INFO_COMMA, emailAddresses);
-                    String emailFrom = Context.getAdministrationService().getGlobalProperty(
-                    	ChirdlUtilConstants.GLOBAL_PROP_MAIL_FROM);
-                    
-                    MessageService messageService = Context.getMessageService();
-                    Message message = messageService.createMessage(
-                    	addresses, emailFrom, subject, body, newzipFilename, 
-                    	ChirdlUtilConstants.MIME_TYPE_ZIP, targetZipFile.getAbsolutePath());
-                    messageService.sendMessage(message);
-                }
-                catch (Exception e) {
-                    log.error("Error zipping and sending email", e);
-                }
-                finally {
-                    if (targetZipFile != null && targetZipFile.exists()) {
-                        if (!targetZipFile.delete()) {
-                            log.error("Unable to delete file: {}", targetZipFile.getAbsolutePath());
-                        }
-                    }
-                }
-            }
-            catch (Exception e) {
+        	try{
+        		executeZipAndEmailFiles(files, emailAddresses, subject, body, zipPassword, zipFilename, fileSearchTime);
+        	} catch (Exception e) {
                 log.error(e.getMessage());
                 log.error(org.openmrs.module.chirdlutil.util.Util.getStackTrace(e));
                 Thread.currentThread().interrupt();
             }
-            
         };
-        
+        	
         Daemon.runInDaemonThread(emailRunnable, Util.getDaemonToken());
+    }
+    
+    
+    
+    /**
+     * Zips a given list of files and sends them via email.
+     * Recommend to execute in a Daemon thread.
+     * @see ZipUtil#zipAndEmailFiles(File[], String[], String, String, String, String, int)
+     * @param files
+     * @param emailAddresses
+     * @param subject
+     * @param body
+     * @param zipPassword
+     * @param zipFilename
+     * @param fileSearchTime
+     * @throws MessageException 
+     * @throws IOException 
+     * 
+     **/
+	public static void executeZipAndEmailFiles(final File[] files, final String[] emailAddresses, final String subject,
+	        final String body, final String zipPassword, final String zipFilename, final int fileSearchTime)
+	        throws IOException, MessageException {
+
+		List<File> filesToZip = createFileList(files, fileSearchTime);
+		if (filesToZip.isEmpty()) {
+			return;
+		}
+
+		File targetZipFile = null;
+		try {
+			// The zip utility does not work when creating a file using
+			// File.createTempFile(name, extension). A file with
+			// the specified name cannot already exist or it will fail.
+			File baseDir = new File(System.getProperty("java.io.tmpdir"));
+			String extension = ".zip";
+			String newzipFilename = zipFilename + "_" + UUID.randomUUID();
+			targetZipFile = new File(baseDir, newzipFilename + extension);
+			while (targetZipFile.exists()) {
+				newzipFilename = zipFilename + "_" + UUID.randomUUID();
+				targetZipFile = new File(baseDir, newzipFilename + extension);
+			}
+
+			try {
+				if (!StringUtils.isBlank(zipPassword)) {
+					zipFilesWithPassword(targetZipFile, filesToZip, zipPassword);
+				} else {
+					zipFiles(targetZipFile, filesToZip);
+				}
+
+			} catch (net.lingala.zip4j.exception.ZipException e) {
+				log.error("Error extracting file from encrypted zip file {}", targetZipFile, e);
+				throw new ZipException(e.getMessage());
+			}
+
+			String addresses = String.join(ChirdlUtilConstants.GENERAL_INFO_COMMA, emailAddresses);
+			String emailFrom = Context.getAdministrationService()
+			        .getGlobalProperty(ChirdlUtilConstants.GLOBAL_PROP_MAIL_FROM);
+
+			MessageService messageService = Context.getMessageService();
+
+			Message message = messageService.createMessage(addresses, emailFrom, subject, body, newzipFilename,
+			        ChirdlUtilConstants.MIME_TYPE_ZIP, targetZipFile.getAbsolutePath());
+			messageService.sendMessage(message);
+
+		} finally {
+			
+			if (targetZipFile != null) {
+				Files.delete(targetZipFile.toPath());
+			}
+			
+		}
+	}
+
+    
+    /**
+     * Searches for files to zip and adds to a list if found.
+     * @param files Array of files to add to to list
+     * @param fileSearchTime Number of times to retry search for files to zip.
+     * @return List of files to zip. Returns an empty list if no files were found.
+     */
+    private static List<File> createFileList(final File[] files, final int fileSearchTime){
+    	
+        ArrayList<File> filesToZip = new ArrayList<>();
+         
+        int maxTime = -1;
+        for (File file : files) {
+            while (!file.exists() && maxTime < fileSearchTime) {
+                maxTime++;
+                try {
+                    Thread.sleep(1000);
+                }
+                catch (InterruptedException e) {
+                    log.error("Interrupted thread error", e);
+                    Thread.currentThread().interrupt();
+                }
+            }
+            if (!file.exists()) {
+                log.error("Cannot find the file to zip and email: {}", file.getAbsolutePath());
+                return filesToZip;
+            }
+            
+            filesToZip.add(file);
+            
+        }
+        
+        return filesToZip;
+        
     }
 }
