@@ -314,4 +314,15 @@ drop TABLE IF EXISTS chirdlutil_location_tag_attribute;
 			Values('Manage CHIRDLUTIL', 'CHIRDLUTIL Module privilege', UUID());
         </sql>
     </diff>
+    <diff>
+        <version>1.1.4</version>
+        <author>Steve McKee</author>
+        <date>March 11, 2021</date>
+        <description>
+            CHICA-1475 Delete the chirdlutil.smtpMailHost global property
+        </description>
+        <sql>
+            delete from global_property where property = 'chirdlutil.smtpMailHost';
+        </sql>
+    </diff>
 </sqldiff>

@@ -1,21 +1,14 @@
 package org.openmrs.module.chirdlutil.db.hibernate;
 
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hibernate.Criteria;
-import org.hibernate.SQLQuery;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Restrictions;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 import org.openmrs.module.chirdlutil.db.ChirdlUtilDAO;
 import org.openmrs.module.chirdlutil.hibernateBeans.EventLog;
 
@@ -25,8 +18,7 @@ import org.openmrs.module.chirdlutil.hibernateBeans.EventLog;
  * @author Tammy Dugan
  */
 public class HibernateChirdlUtilDAO implements ChirdlUtilDAO {
-	
-	protected final Log log = LogFactory.getLog(getClass());
+
 	
 	/**
 	 * Hibernate session factory

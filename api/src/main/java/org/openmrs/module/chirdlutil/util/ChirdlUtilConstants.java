@@ -89,6 +89,7 @@ public final class ChirdlUtilConstants {
     public static final String LOC_TAG_ATTR_AGE_LIMIT_AT_CHECKIN = "CheckinAgeLimit";
     public static final String LOC_TAG_ATTR_PRIMARY_PHYSICIAN_FORM = "primaryPhysicianForm"; 
     public static final String LOC_TAG_ATTR_PRIMARY_PATIENT_FORM = "primaryPatientForm"; 
+    public static final String LOC_TAG_ATTR_HIGH_RISK_CONTACT = "HighRiskContact"; 
     /*
      * 
      */
@@ -169,6 +170,7 @@ public final class ChirdlUtilConstants {
     public static final String FORM_ATTRIBUTE_REPRINT_STATE = "reprintState";
     public static final String FORM_ATTRIBUTE_IS_PRIMARY_PATIENT_FORM = "isPrimaryPatientForm";
     public static final String FORM_ATTRIBUTE_IS_PRIMARY_PHYSICIAN_FORM = "isPrimaryPhysicianForm";
+    public static final String FORM_ATTRIBUTE_NUMBER_OF_PROMPTS = "numPrompts";
     /*
      * 
      */
@@ -201,6 +203,8 @@ public final class ChirdlUtilConstants {
     public static final String LOCATION_ATTR_CLINIC_DISPLAY_NAME = "clinicDisplayName";
     public static final String LOCATION_ATTR_DISPLAY_CONFIDENTIALITY_NOTICE = "displayConfidentialityNoticeMobileGreaseBoard";
     public static final String LOCATION_ATTR_FILTER_HL7_BY_APPOINTMENT = "filterHL7ByAppointment";
+    public static final String LOCATION_ATTRIBUTE_PDF_VIEWER = "pdfViewer";
+    
     /*
      * 
      */
@@ -271,10 +275,10 @@ public final class ChirdlUtilConstants {
     public static final String GLOBAL_PROP_FORM_TIME_LIMIT = "chica.formTimeLimit";
     public static final String GLOBAL_PROP_FHIR_CONFIG_FILE = "chirdl_fhir.fhirConfigFile";
     public static final String GLOBAL_PROP_EXPORT_OBS_HOST = "chica.exportObsHost";
+    public static final String GLOBAL_PROP_SUPPORT_EMAIL = "chirdlutil.supportEmail";
     public static final String GLOBAL_PROP_EXPORT_OBS_PORT = "chica.exportObsPort";
     public static final String GLOBAL_PROP_EXPORT_PHYSICIAN_OBS_HOST = "chica.exportPhysicianObsHost";
     public static final String GLOBAL_PROP_EXPORT_PHYSICIAN_OBS_PORT = "chica.exportPhysicianObsPort";
-    public static final String GLOBAL_PROP_EMAIL_SMTP_HOST = "chirdlutil.smtpMailHost";
     public static final String GLOBAL_PROP_GREASEBOARD_CHECKOUT_STATE = "chica.greaseboardCheckoutState";
     public static final String GLOBAL_PROP_PARSE_INSURANCE_CODE_FROM_IN1_35= "chica.parseInsurancePlanCodeFrom_IN1-35";
     public static final String GLOBAL_PROP_PARSE_CARRIER_CODE = "chica.parseCarrierCode";
@@ -285,6 +289,8 @@ public final class ChirdlUtilConstants {
     public static final String GLOBAL_PROP_THREAD_POOL_MONITOR_REFRESH_RATE = "chirdlutil.threadMonitorRefreshRate";
     public static final String GLOBAL_PROP_EXPORT_REGENSTRIEF_OBS_HOST = "chica.exportRegenstriefObsHost";
     public static final String GLOBAL_PROP_EXPORT_REGENSTRIEF_OBS_PORT = "chica.exportRegenstriefObsPort";
+    public static final String GLOBAL_PROP_MAIL_FROM = "mail.from";
+    public static final String GLOBAL_PROP_MESSAGE_FREQUENCY_THRESHOLD = "chirdlutil.messageFrequencyThreshold";
     
     /*
      * 
@@ -313,6 +319,9 @@ public final class ChirdlUtilConstants {
     public static final String GENERAL_INFO_OPEN_PAREN = "(";
     public static final String GENERAL_INFO_CLOSE_PAREN = ")";
     public static final String GENERAL_INFO_PERIOD = ".";
+    public static final String GENERAL_INFO_COLON = ":";
+
+	
     
     /*
      * 
@@ -326,6 +335,7 @@ public final class ChirdlUtilConstants {
     public static final String PARAMETER_2 = "param2";
     public static final String PARAMETER_3 = "param3";
     public static final String PARAMETER_4 = "param4";
+    public static final String PARAMETER_5 = "param5";
     public static final String PARAMETER_SESSION_ID = "sessionId";
     public static final String PARAMETER_LOCATION_TAG_ID = "locationTagId";
     public static final String PARAMETER_FORM_INSTANCE = "formInstance";
@@ -396,6 +406,17 @@ public final class ChirdlUtilConstants {
     public static final String PARAMETER_HL7_EVENT_TYPE_CODE = "HL7EventTypeCode";
     public static final String PARAMETER_LAST_MRN = "lastMRN";
     public static final String PARAMETER_ERROR_MESSAGE = "errorMessage";
+    public static final String PARAMETER_INCORRECT_PATIENT = "incorrectPatient";
+    public static final String PARAMETER_PATIENT_AGE = "age";
+    public static final String PARAMETER_COMPLETED_BY = "completedby";
+    public static final String PARAMETER_CAREGIVER = "caregiver";
+    public static final String PARAMETER_SCREENER_COMPLETED_BY = "screener_completed_by";
+    public static final String PARAMETER_PDF_VIEWER = "pdfViewer";
+    public static final String PARAMETER_CONCEPT = "concept";
+    public static final String PARAMETER_FORM_FIELD_ID = "formFieldId";
+    public static final String PARAMETER_RULE_ID = "ruleId";
+    public static final String PARAMETER_FIELD_NAME = "fieldName";
+    public static final String PARAMETER_FILE_NAME = "filename";
     
     /*
      * 
@@ -419,6 +440,7 @@ public final class ChirdlUtilConstants {
     public static final String HTTP_CACHE_CONTROL_PUBLIC = "public";
     public static final String HTTP_CACHE_CONTROL_MAX_AGE = "max-age";
     public static final String HTTP_HEADER_ATTACHMENT = "attachment; filename=\"%s\"";
+    public static final String HTTP_HEADER_USER_AGENT = "User-Agent";
     
     /*
      * 
@@ -461,8 +483,7 @@ public final class ChirdlUtilConstants {
     /*
      * Global property constants
      */
-    public static final String GLOBAL_PROPERTY_SCHEDULER_USERNAME = "scheduler.username";
-    public static final String GLOBAL_PROPERTY_SCHEDULER_PASSPHRASE = "scheduler.password";
+    public static final String GLOBAL_PROPERTY_MAIL_SMTP_HOST = "mail.smtp_host";
     
     /*
      * Concept information
@@ -492,6 +513,8 @@ public final class ChirdlUtilConstants {
      * Form information
      */
     public static final String FORM_FIELD_TYPE_EXPORT = "Export Field";
+    public static final String FORM_FIELD_TYPE_MERGE_FIELD = "Merge Field";
+    public static final String FORM_FIELD_TYPE_PRIORITIZED_MERGE_FIELD = "Prioritized Merge Field";
     /*
      * 
      */
@@ -525,6 +548,7 @@ public final class ChirdlUtilConstants {
      */
     public static final String LOCATION_RIIUMG = "RIIUMG";
     public static final String LOCATION_PHEDMSR = "PHEDMSR";
+    public static final String LOCATION_UNKNOWN = "Unknown Locaton";
     /*
      * 
      */
@@ -618,6 +642,11 @@ public final class ChirdlUtilConstants {
     public static final String ENCOUNTER_ATTRIBUTE_ORIGINAL_LOCATION = "Original Location";
     public static final String ENCOUNTER_ATTRIBUTE_GLOOKO_DATA_TYPE = "Glooko Data Type";
     public static final String ENCOUNTER_ATTRIBUTE_VISIT_TYPE = "Visit Type";
+    public static final String ENCOUNTER_ATTRIBUTE_APPOINTMENT_TIME = "Appointment Time";
+    public static final String ENCOUNTER_ATTRIBUTE_PRINTER_LOCATION = "Printer Location";
+    public static final String ENCOUNTER_ATTRIBUTE_INSURANCE_SMS_CODE = "Insurance SMS Code";
+    public static final String ENCOUNTER_ATTRIBUTE_INSURANCE_PLAN_CODE = "Insurance Plan Code";
+    public static final String ENCOUNTER_ATTRIBUTE_INSURANCE_CARRIER_CODE = "Carrier Code";
     
     
     /*
@@ -641,6 +670,7 @@ public final class ChirdlUtilConstants {
     public static final String DATE_FORMAT_MM_dd_YYYY = "MM/dd/yyyy";
     public static final String DATE_FORMAT_HYPHEN_yyyy_MM_dd = "yyyy-MM-dd";
     public static final String DATE_FORMAT_MMM_dd_comma_yyyy = "MMM dd, yyyy";
+    public static final String DATE_FORMAT_HYPHEN_yyyy_MM_dd_hh_mm_ss = "yyyy-MM-dd hh:mm:ss";
     
     /*
      * Fax service
@@ -702,11 +732,7 @@ public final class ChirdlUtilConstants {
     public static final String OPTION_PRINT_PATIENT_FORM = "Print Pre-Screener";
     public static final String OPTION_PRINT_PHYSICIAN_FORM = "Print Physician Worksheet";
     
-    /*
-     * Email constants
-     */
-    public static final String EMAIL_SMTP_HOST_PROPERTY = "mail.smtp.host";
-    
+
     /*
      * Sorting constants
      */
@@ -714,5 +740,22 @@ public final class ChirdlUtilConstants {
     public static final String SORT_DESC = "DESC";
     
     public static final String ATTR_VALUE_VOID_REASON = "New Value: ";
+    
+    /*
+     * Constants for sending notifications
+     * */
+    public static final String EMAIL_SMTP_HOST_PROPERTY = "mail.smtp.host";
+    public static final String EMAIL_SMTP_PORT_PROPERTY = "mail.smtp.port";
+    public static final String EMAIL_SMTP_AUTH_PROPERTY = "mail.smtp.auth";
+    
+    /*
+     * Regular expressions
+     */
+    public static final String REGEX_MATCH_NON_ALPHANUMERIC_CHARACTERS = "[^a-zA-Z0-9]+";
+    
+    /*
+     * MIME types
+     */
+    public static final String MIME_TYPE_ZIP = "application/zip";
 }
 

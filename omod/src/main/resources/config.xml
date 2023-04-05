@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE module PUBLIC "-//OpenMRS//DTD OpenMRS Config 1.0//EN" "http://resources.openmrs.org/doctype/config-1.0.dtd">
+<!DOCTYPE module PUBLIC "-//OpenMRS//DTD OpenMRS Config 1.0//EN" "http://resources.openmrs.org/doctype/config-1.2.dtd">
 
-<module configVersion="1.0">
+<module configVersion="1.2">
 	
 	<!-- chirdlutil Module Properties -->
 	<id>@MODULE_ID@</id>
@@ -20,7 +20,7 @@
 	
 	<require_version>2.0.6</require_version>
 		<require_modules>
-		<require_module version="2.12.0">org.openmrs.module.chirdlutilbackports</require_module>
+		<require_module version="2.13.0">org.openmrs.module.chirdlutilbackports</require_module>
 		<require_module version="1.3.1">org.openmrs.module.legacyui</require_module>
 	</require_modules>	
 	
@@ -72,11 +72,6 @@
         </description>
     </globalProperty>
     <globalProperty>
-        <property>chirdlutil.smtpMailHost</property>
-        <description>SMTP email host used to send outgoing messages.
-        </description>
-    </globalProperty>
-    <globalProperty>
         <property>chirdlutil.zipEncryptionPassword</property>
         <description>Password used when zipping files.
         </description>
@@ -95,6 +90,19 @@
         <property>chirdlutil.SumatraPDFExecutable</property>
         <description>The location of the SumatraPDF executable for PDF printing.</description>
     </globalProperty>
+     <globalProperty>
+        <property>chirdlutil.supportEmail</property>
+        <defaultValue></defaultValue>
+        <description>Comma delimited email list of support recipients.
+        </description>
+    </globalProperty>
+    <globalProperty>
+        <property>chirdlutil.messageFrequencyThreshold</property>
+        <defaultValue>60</defaultValue>
+        <description>Frequency threshold for sending messages in minutes.
+        </description>
+    </globalProperty>
+    
     
     <!-- Servlets -->  
     <!-- Accessed through the url /pageContext()/moduleServlet/<moduleId>/<servlet-name> -->

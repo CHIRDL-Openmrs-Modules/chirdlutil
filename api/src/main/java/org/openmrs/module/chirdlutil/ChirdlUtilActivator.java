@@ -2,12 +2,14 @@ package org.openmrs.module.chirdlutil;
 
 import java.util.Iterator;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openmrs.GlobalProperty;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.BaseModuleActivator;
+import org.openmrs.module.DaemonToken;
+import org.openmrs.module.DaemonTokenAware;
 import org.openmrs.module.chirdlutil.util.Util;
 
 /**
@@ -16,15 +18,16 @@ import org.openmrs.module.chirdlutil.util.Util;
  * @author Tammy Dugan
  *
  */
-public class ChirdlUtilActivator extends BaseModuleActivator {
+public class ChirdlUtilActivator extends BaseModuleActivator implements DaemonTokenAware {
 
-	private Log log = LogFactory.getLog(this.getClass());
+    private static final Logger log = LoggerFactory.getLogger(ChirdlUtilActivator.class);
 
 	/**
 	 * @see org.openmrs.module.BaseModuleActivator#started()
 	 */
+	@Override
 	public void started() {
-		this.log.info("Starting ChirdlUtil Module");
+		log.info("Starting ChirdlUtil Module");
 		
 		//check that all the required global properties are set
 		checkGlobalProperties();
@@ -51,16 +54,15 @@ public class ChirdlUtilActivator extends BaseModuleActivator {
 					currValue = currProperty.getPropertyValue();
 					if (currValue == null || currValue.length() == 0)
 					{
-						this.log.error("You must set a value for global property: "
-								+ currName);
+					    log.error("You must set a value for global property: {}", currName);
 					}
 				}
 			}
 		} catch (Exception e)
 		{
-			this.log.error("Error checking global properties for chirdlutil module");
-			this.log.error(e.getMessage());
-			this.log.error(Util.getStackTrace(e));
+			log.error("Error checking global properties for chirdlutil module");
+			log.error(e.getMessage());
+			log.error(Util.getStackTrace(e));
 
 		}
 	}
@@ -68,12 +70,21 @@ public class ChirdlUtilActivator extends BaseModuleActivator {
 	/**
 	 * @see org.openmrs.module.BaseModuleActivator#stopped()
 	 */
+	@Override
 	public void stopped() {
-		this.log.info("Shutting down ChirdlUtil Module");
+		log.info("Shutting down ChirdlUtil Module");
 		
 		// CHICA-961 Add calls to shutdown() to allow the application to shutdown faster
 		org.openmrs.module.chirdlutil.threadmgmt.ThreadManager.getInstance().shutdown();
 		org.openmrs.module.chirdlutil.threadmgmt.PrinterThreadManager.getInstance().shutdown();
+	}
+
+	/**
+	 * @see org.openmrs.module.DaemonTokenAware#setDaemonToken(org.openmrs.module.DaemonToken)
+	 */
+	@Override
+	public void setDaemonToken(DaemonToken token) {
+		Util.setDaemonToken(token);
 	}
 
 }

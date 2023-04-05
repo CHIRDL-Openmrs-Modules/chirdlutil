@@ -4,20 +4,16 @@
 package org.openmrs.module.chirdlutil.util;
 
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.openmrs.api.APIException;
-import org.openmrs.api.context.Context;
-import org.openmrs.messagesource.MessageSourceService;
-
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.openmrs.api.APIException;
+import org.openmrs.api.context.Context;
+import org.openmrs.messagesource.MessageSourceService;
 
 /**
  * This class contains utility methods to aide in IO processing.
@@ -27,7 +23,6 @@ import java.util.Map;
  */
 public class DateUtil
 {
-	protected static Log log = LogFactory.getLog(DateUtil.class);
 
 	// Common periods of time
 	final static int DAILY = 0;

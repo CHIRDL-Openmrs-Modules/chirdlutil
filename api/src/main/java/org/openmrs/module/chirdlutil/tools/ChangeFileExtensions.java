@@ -2,13 +2,13 @@ package org.openmrs.module.chirdlutil.tools;
 
 import java.io.File;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class ChangeFileExtensions {
     
-    private static final Log LOG = LogFactory.getLog(ChangeFileExtensions.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ChangeFileExtensions.class);
     
     public void changeExtensions(File directory, String origExt, String newExt) {
         for (File file : directory.listFiles()) {
@@ -22,7 +22,7 @@ public class ChangeFileExtensions {
                 String newName = subName + newExt;
                 File newFile = new File(file.getParentFile(), newName);
                 if (!file.renameTo(newFile)) {
-                    LOG.error("Unable to rename file " + file.getAbsolutePath() + " to " + newName);
+                    LOG.error("Unable to rename file {} to {}", file.getAbsolutePath(), newName);
                 }
             }
         }
@@ -59,12 +59,12 @@ public class ChangeFileExtensions {
         
         File directory = new File(directoryStr);
         if (!directory.exists()) {
-            LOG.error("The directory " + directoryStr + " does not exist");
+            LOG.error("The directory {} does not exist", directoryStr);
             LOG.error("");
             changeExt.printUsage();
             System.exit(1);
         } else if (!directory.isDirectory()) {
-            LOG.error("The directory " + directoryStr + " is not a directory");
+            LOG.error("The directory {} is not a directory", directoryStr);
             LOG.error("");
             changeExt.printUsage();
             System.exit(1);

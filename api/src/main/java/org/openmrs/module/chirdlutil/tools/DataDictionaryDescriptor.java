@@ -25,6 +25,10 @@ public class DataDictionaryDescriptor {
 	private String answer = null;
 	private String leafText = null;
 	private String promptText = null;
+	private String ageMin = null;
+	private String ageMinUnits = null;
+	private String ageMax = null;
+	private String ageMaxUnits = null;
 	
     /**
      * @return the filename
@@ -95,6 +99,61 @@ public class DataDictionaryDescriptor {
     public void setPromptText(String promptText) {
     	this.promptText = promptText;
     }
+
+	/**
+	 * @return the ageMin
+	 */
+	public String getAgeMin() {
+		return ageMin;
+	}
+
+	/**
+	 * @param ageMin the ageMin to set
+	 */
+	public void setAgeMin(String ageMin) {
+		this.ageMin = ageMin;
+	}
 	
+	/**
+	 * @return the ageMinUnits
+	 */
+	public String getAgeMinUnits() {
+		return ageMinUnits;
+	}
+	
+	/**
+	 * @param ageMinUnits the ageMinUnits to set
+	 */
+	public void setAgeMinUnits(String ageMinUnits) {
+		this.ageMinUnits = ageMinUnits;
+	}
+	
+	/**
+	 * @return the ageMax
+	 */
+	public String getAgeMax() {
+		return ageMax;
+	}
+	
+	/**
+	 * @param ageMax the ageMax to set
+	 */
+	public void setAgeMax(String ageMax) {
+		this.ageMax = ageMax;
+	}
+	
+	/**
+	 * @return the ageMaxUnits
+	 */
+	public String getAgeMaxUnits() {
+		return ageMaxUnits;
+	}
+	
+	/**
+	 * @param ageMaxUnits the ageMaxUnits to set
+	 */
+	public void setAgeMaxUnits(String ageMaxUnits) {
+		this.ageMaxUnits = ageMaxUnits;
+	}
 	
 }

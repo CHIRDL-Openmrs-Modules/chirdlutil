@@ -28,11 +28,11 @@ import javax.print.attribute.HashPrintServiceAttributeSet;
 import javax.print.attribute.PrintServiceAttributeSet;
 import javax.print.attribute.standard.PrinterName;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openmrs.api.context.Context;
+import org.openmrs.api.context.Daemon;
 import org.openmrs.module.chirdlutil.threadmgmt.ChirdlPrintJobRunnable;
-import org.openmrs.module.chirdlutil.threadmgmt.PrinterThreadManager;
 
 /**
  * Utility class for printing needs.
@@ -42,7 +42,7 @@ import org.openmrs.module.chirdlutil.threadmgmt.PrinterThreadManager;
 public class PrintServices {
 
 	private static final String CHIRDLUTIL_SUMATRA_PDF_EXECUTABLE = "chirdlutil.SumatraPDFExecutable";
-	private static Log log = LogFactory.getLog(PrintServices.class);
+	private static final Logger log = LoggerFactory.getLogger(PrintServices.class);
 	
 	/**
 	 * Prints the specified file to the specified printer.  This method does perform any rendering for specialized file formats.  
@@ -55,10 +55,10 @@ public class PrintServices {
 	 */
     public static void printFile(String printerName, File fileToPrint) throws IOException, PrintException {
     	if (printerName == null || printerName.trim().length() == 0) {
-    		log.error("A valid printerName parameter was not provided: " + printerName);
+    		log.error("A valid printerName parameter was not provided: {}", printerName);
     		throw new IllegalArgumentException("A valid printerName parameter was not provided: " + printerName);
     	} else if (fileToPrint == null || !fileToPrint.exists() || !fileToPrint.canRead()) {
-    		log.error("A valid fileToPrint parameter was not provided: " + fileToPrint);
+    		log.error("A valid fileToPrint parameter was not provided: {}", fileToPrint);
     		throw new IllegalArgumentException("A valid printerName parameter was not provided: " + fileToPrint);
     	}
     	
@@ -66,7 +66,7 @@ public class PrintServices {
         printServiceAttributeSet.add(new PrinterName(printerName, null)); 
         PrintService[] printServices = PrintServiceLookup.lookupPrintServices(DocFlavor.SERVICE_FORMATTED.PAGEABLE, printServiceAttributeSet);
         if (printServices == null || printServices.length == 0) {
-        	log.error("No printers found for " + printerName);
+        	log.error("No printers found for {}", printerName);
         	throw new IllegalArgumentException("No printers found for " + printerName);
         }
         
@@ -88,8 +88,7 @@ public class PrintServices {
      */
     public static void printPDFFileAsynchronous(String printerName, File pdfFile) {
     	ChirdlPrintJobRunnable printRunnable = new PDFPrintRunnable(printerName, pdfFile.getAbsolutePath());
-    	PrinterThreadManager threadManager = PrinterThreadManager.getInstance();
-    	threadManager.execute(printRunnable);
+    	Daemon.runInDaemonThread(printRunnable, Util.getDaemonToken());
     }
     
     /**
@@ -101,17 +100,17 @@ public class PrintServices {
      */
     public static void printPDFFileSynchronous(String printerName, File pdfFile) throws Exception {
     	if (printerName == null || printerName.trim().length() == 0) {
-    		log.error("A valid printerName parameter was not provided: " + printerName);
+    		log.error("A valid printerName parameter was not provided: {}", printerName);
     		throw new IllegalArgumentException("A valid printerName parameter was not provided: " + printerName);
     	} else if (pdfFile == null || !pdfFile.exists() || !pdfFile.canRead()) {
-    		log.error("A valid fileToPrint parameter was not provided (or unable to read): " + pdfFile);
+    		log.error("A valid fileToPrint parameter was not provided (or unable to read): {}", pdfFile);
     		throw new IllegalArgumentException("A valid printerName parameter was not provided: " + pdfFile);
     	}
     	
     	try {
 	    	String sumatraPDFExecutable = Context.getAdministrationService().getGlobalProperty(CHIRDLUTIL_SUMATRA_PDF_EXECUTABLE);
 	    	if (sumatraPDFExecutable == null || sumatraPDFExecutable.trim().length() == 0) {
-	    		log.error("Unable to print PDF files.  Please set a value for the " + CHIRDLUTIL_SUMATRA_PDF_EXECUTABLE + " global property.");
+	    		log.error("Unable to print PDF files.  Please set a value for the {} global property.", CHIRDLUTIL_SUMATRA_PDF_EXECUTABLE);
 	    		return;
 	    	}
 	    	
@@ -121,17 +120,14 @@ public class PrintServices {
 	    	pb.redirectErrorStream();
 	    	int exitValue = p.waitFor();
 	    	if (exitValue != 0) {
-	    		log.error("The SumatraPDF command returned error code: " + exitValue + " printing file " + 
-	    				pdfFile.getAbsolutePath() + " to printer " + printerName);
+	    		log.error("The SumatraPDF command returned error code: {} printing file {} to printer {}", exitValue, pdfFile.getAbsolutePath(), printerName);
 	    		String errorString = IOUtil.output(p.getErrorStream());
 		    	if (errorString.trim().length() > 0) {
-		    		log.error("Error running SumatraPDF for printing file " + 
-		    				pdfFile.getAbsolutePath() + " to printer " + printerName + " " + errorString);
+		    		log.error("Error running SumatraPDF for printing file {} to printer {}, {}", pdfFile.getAbsolutePath(), printerName, errorString);
 		    	}
 	    	}
     	} catch (Exception e) {
-    		log.error("Error running SumatraPDF for printing file " + 
-	    				pdfFile.getAbsolutePath() + " to printer " + printerName, e);
+    		log.error("Error running SumatraPDF for printing file {} to printer {}", pdfFile.getAbsolutePath(), printerName, e);
     	}
     }
 }

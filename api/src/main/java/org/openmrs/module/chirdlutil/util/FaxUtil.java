@@ -19,8 +19,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.UUID;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openmrs.Patient;
 import org.openmrs.PatientIdentifier;
 import org.openmrs.api.AdministrationService;
@@ -51,7 +51,7 @@ public class FaxUtil {
     private static final String ADDITIONAL_MEMO_TEXT = "DO NOT SCAN";
 
     /** Logger for this class and subclasses */
-    private static Log log = LogFactory.getLog(FaxUtil.class);
+    private static final Logger log = LoggerFactory.getLogger(FaxUtil.class);
     
     /**
      * Faxes a file.
@@ -134,7 +134,7 @@ public class FaxUtil {
             }
         }
         catch (Exception e) {
-            log.error("Error faxing file: " + fileToFax, e);
+            log.error("Error faxing file: {}", fileToFax, e);
             throw e;
         }
     }
@@ -226,13 +226,13 @@ public class FaxUtil {
                 fileContents = new byte[(int)fileToFax.length()];
                 int bytesRead = fin.read(fileContents);
                 if (bytesRead < 0) {
-                    log.error("File + " + fileToFax.getAbsolutePath() + " contains no content");
+                    log.error("File {} contains no content", fileToFax.getAbsolutePath());
                 }
                 
                 fin.close();
                 attachment.setFileContent(fileContents);
             } catch (IOException e) {
-                log.error("Exception reading contents of fax file: " + fileToFax.getName(), e);
+                log.error("Exception reading contents of fax file: {}", fileToFax.getName(), e);
                 return null;
             }
             ArrayOfAttachment attachments = new ArrayOfAttachment();
@@ -259,15 +259,15 @@ public class FaxUtil {
                     memo, sender, recipients, attachments , tsi);
             
             if (rm != null) {
-                log.info("Fax sent for form: " + rm.getDetail());
+                log.info("Fax sent for form: {}", rm.getDetail());
                 
                 return rm.getData();
             }
         
-            log.error("Fax failed for file: " + fileToFax.getAbsolutePath());
+            log.error("Fax failed for file: {}", fileToFax.getAbsolutePath());
             return null;
         } catch (Exception e) {
-            log.error("Error faxing file: " + fileToFax, e);
+            log.error("Error faxing file: {}", fileToFax, e);
             throw e;
         }
     

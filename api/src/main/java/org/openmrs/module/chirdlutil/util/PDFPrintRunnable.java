@@ -15,10 +15,8 @@ package org.openmrs.module.chirdlutil.util;
 
 import java.io.File;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.openmrs.api.AdministrationService;
-import org.openmrs.api.context.Context;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openmrs.module.chirdlutil.threadmgmt.ChirdlPrintJobRunnable;
 
 /**
@@ -28,7 +26,7 @@ import org.openmrs.module.chirdlutil.threadmgmt.ChirdlPrintJobRunnable;
  */
 public class PDFPrintRunnable implements ChirdlPrintJobRunnable {
     
-    private static Log log = LogFactory.getLog(PDFPrintRunnable.class);
+    private static final Logger log = LoggerFactory.getLogger(PDFPrintRunnable.class);
     
     private String printerName;
     private String pdfLocation;
@@ -49,23 +47,15 @@ public class PDFPrintRunnable implements ChirdlPrintJobRunnable {
      */
     @Override
     public void run() {
-        Context.openSession();
         try {
-            AdministrationService adminService = Context.getAdministrationService();
-            Context.authenticate(adminService
-                    .getGlobalProperty(ChirdlUtilConstants.GLOBAL_PROPERTY_SCHEDULER_USERNAME), adminService
-                    .getGlobalProperty(ChirdlUtilConstants.GLOBAL_PROPERTY_SCHEDULER_PASSPHRASE));
             File pdfFile = new File(this.pdfLocation);
             PrintServices.printPDFFileSynchronous(this.printerName, pdfFile);
         }
         catch (IllegalArgumentException e) {
-            log.error("Invalid parameter print PDF file " + this.pdfLocation + " to printer " + this.printerName, e);
+            log.error("Invalid parameter print PDF file {} to printer {}", this.pdfLocation, this.printerName, e);
         }
         catch (Exception e) {
-            log.error("Unknown error occurred printing PDF file " + this.pdfLocation + " to printer " + this.printerName, e);
-        }
-        finally {
-            Context.closeSession();
+            log.error("Unknown error occurred printing PDF file {} to printer {}", this.pdfLocation, this.printerName, e);
         }
     }
     
