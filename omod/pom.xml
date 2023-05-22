@@ -49,10 +49,6 @@
 			<artifactId>zip4j</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>joda-time</groupId>
-			<artifactId>joda-time</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>au.com.bytecode</groupId>
 			<artifactId>opencsv</artifactId>
 		</dependency>
