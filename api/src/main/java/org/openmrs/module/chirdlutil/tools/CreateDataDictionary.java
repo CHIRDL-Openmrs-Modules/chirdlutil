@@ -113,10 +113,12 @@ public class CreateDataDictionary {
         Pattern writePattern = Pattern.compile("write\\s*\\(\\s*\"(.*)\"\\s*\\)\\s*;",Pattern.CASE_INSENSITIVE);
         Pattern ageMinPattern = Pattern.compile("age_min:\\s*(.*)\\s*\\s*;;",Pattern.CASE_INSENSITIVE);
         Pattern ageMaxPattern = Pattern.compile("age_max:\\s*(.*)\\s*\\s*;;",Pattern.CASE_INSENSITIVE);
+        Pattern promptTextPattern = Pattern.compile("\\|\\|\\s*prompt_text\\s*\\|\\|\\s*=\\s*\"(.*)\";",Pattern.CASE_INSENSITIVE);
+        String promptTextVar = "";
         
         //loop through the mlms
         for (File file : files) {
-            
+            promptTextVar = "";
             String currFilename = file.getName();
             
             //skip the retired folder
@@ -153,12 +155,22 @@ public class CreateDataDictionary {
                         continue;
                     }
                     
+                    Matcher m = null;
+                    boolean matches = false;
+                    
+                    // Get the prompt_text
+                    m = promptTextPattern.matcher(line);
+                    matches = m.find();
+                    if (matches) {
+                    	if (m.group(1).trim().length() > 0) {
+                    		promptTextVar = m.group(1);
+                        }
+                    }
+                    
                     if(line.toLowerCase().trim().startsWith("action:")){
                         currentBoxes = new ArrayList<>();
                     }
                     
-                    Matcher m = null;
-                    boolean matches = false;
                     
                     //Look for Box* if statement
                     m = ifBoxPattern.matcher(line);
@@ -269,6 +281,7 @@ public class CreateDataDictionary {
                             ddDescriptor.setAnswer(answer);
                             ddDescriptor.setFilename(currFilename);
                             ddDescriptor.setLeafText(leafText.trim());
+                            promptText = promptText.replace("|| prompt_text ||", promptTextVar);
                             ddDescriptor.setPromptText(promptText.trim());
                             ddDescriptor.setQuestion(question);
                             ddDescriptor.setAgeMin(ageMin);
