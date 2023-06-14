@@ -4,11 +4,7 @@
 
 	<groupId>org.openmrs.module</groupId>
 	<artifactId>chirdlutil</artifactId>
-<<<<<<< HEAD
 	<version>1.23.0</version>
-=======
-	<version>1.22.0</version>
->>>>>>> branch 'Prod_Release_20.0' of https://github.com/chirdl-openmrs-modules/chirdlutil
 	<packaging>pom</packaging>
 	<name>chirdlutil</name>
 	<description>Parent project for chirdlutil</description>
